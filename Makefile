@@ -11,7 +11,7 @@ SRCS_DIR = src
 INCLUDE_DIR = include
 
 #the .c (.c is here)
-SRCS = 
+SRCS = $(SRCS_DIR)/ main.c \
 
 #.c to .o
 OBJS = $(SRCS:.c=.o)
