@@ -3,10 +3,10 @@ NAME = minishell
 
 #compile and flags
 CC = cc
-CFLAGS = -g -Wall -Wextra -Werror
+CFLAGS = -g -Wall -Wextra -Werror -I$(INCLUDE_DIR) -I$(LIBFT_DIR)
 
 #were is everyone
-LIBFT_DIR = lib
+LIBFT_DIR = lib/libft
 SRCS_DIR = src
 INCLUDE_DIR = include
 
