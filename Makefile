@@ -8,19 +8,16 @@ CFLAGS = -g -Wall -Wextra -Werror -I$(INCLUDE_DIR) -I$(LIBFT_DIR)
 #were is everyone
 LIBFT_DIR = lib/libft
 SRCS_DIR = src
-BUIL_DIR =
-PARS_DIR =
-EXEC_DIR =
+PARS_DIR = parsing
 INCLUDE_DIR = include
 
 #the .c (.c is here)
-SRCS = $(SRCS_DIR)/main.c \
-BUILT = $(BUIL_DIR)/ \
-PARS = $(PARS_DIR)/ \
-EXEC = $(EXEC_DIR)/ \
+SRCS = $(SRCS_DIR)/main.c
+PARS = $(PARS_DIR)/tokenizer.c \
+       $(PARS_DIR)/tokenizer_utils.c
 
 #.c to .o
-OBJS = $(SRCS:.c=.o) $(BUILT:.c=.o) $(PARS:.c=.o) $(EXEC:.c=.o)
+OBJS = $(SRCS:.c=.o) $(PARS:.c=.o)
 
 #the library we will use (lft is for libft and lreadline is for readline)
 LIBS = -L$(LIBFT_DIR) -lft -lreadline
@@ -39,7 +36,11 @@ make_libft:
 	make -C $(LIBFT_DIR)
 
 #compile every .c on .o
-%.o: $(SRCS_DIR)/%.c $(BUIL_DIR)/%.c $(PARS_DIR)/%.c $(EXEC_DIR)/%.c
+%.o: $(SRCS_DIR)/%.c
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+
+#compile parsing files
+%.o: $(PARS_DIR)/%.c
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 #is time to clean
