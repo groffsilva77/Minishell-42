@@ -8,9 +8,9 @@ CFLAGS = -g -Wall -Wextra -Werror -I$(INCLUDE_DIR) -I$(LIBFT_DIR)
 #were is everyone
 LIBFT_DIR = lib/libft
 SRCS_DIR = src
-BUIL_DIR =
-PARS_DIR =
-EXEC_DIR =
+# BUIL_DIR =
+# PARS_DIR =
+# EXEC_DIR =
 INCLUDE_DIR = include
 
 #the .c (.c is here)
