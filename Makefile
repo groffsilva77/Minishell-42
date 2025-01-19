@@ -14,7 +14,8 @@ INCLUDE_DIR = include
 #the .c (.c is here)
 SRCS = $(SRCS_DIR)/main.c
 PARS = $(PARS_DIR)/tokenizer.c \
-       $(PARS_DIR)/tokenizer_utils.c
+       $(PARS_DIR)/tokenizer_utils.c \
+	   $(PARS_DIR)/var_expansion.c
 
 #.c to .o
 OBJS = $(SRCS:.c=.o) $(PARS:.c=.o)

@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 15:17:58 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/01/17 15:21:33 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/01/19 15:44:20 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,9 @@ typedef struct s_token {
 	struct s_token	*next;
 }	t_token;
 
+char	*get_env_value(const char *var);
+char	*expand_var(const char *input, int *i);
+char	*expand_tokens(const char *token);
 void	add_token(t_token **tokens, const char *value);
 int		is_whitespace(char c);
 char	*copy_substr(const char *input, int start, int length);
