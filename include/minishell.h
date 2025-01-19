@@ -9,6 +9,9 @@
 # include "builtins.h"
 # include "parsin.h"
 # include "execution.h"
+# include "utils.h"
+# include "lib/libft/libft.h"
+
 
 //structs
 typedef struct s_memory
@@ -25,7 +28,3 @@ typedef struct s_shell
 }t_shell;
 
 
-//functions we will use to manage memory (prototype)
-void	*ft_malloc(t_shell *shell, size_t size);
-void	ft_free(t_shell *shell, void *ptr);
-void	ft_free_all(t_shell *shell);

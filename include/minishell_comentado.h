@@ -37,8 +37,4 @@ typedef struct s_shell
 	int			exit_status;
 }t_shell;
 
-//functions we will use to manage memory
-void	*ft_malloc(t_shell *shell, size_t size); //pegar o brinquedo (ptr) e guardar em um local especial (struct)
-void	ft_free(t_shell *shell, void *ptr); //devolver o brinquedo (ptr) tira da struct (um ponteiro especifico)
-void	ft_free_all(t_shell *shell); //develve todos brinquedos (ptrs)tira da struct (todos os ponteiros que foram alocados e estam guardados na struct)
 

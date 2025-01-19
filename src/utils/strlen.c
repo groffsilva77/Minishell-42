@@ -1,14 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execution.h                                        :+:      :+:    :+:   */
+/*   strlen.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/19 11:38:49 by ytavares          #+#    #+#             */
-/*   Updated: 2025/01/19 11:38:54 by ytavares         ###   ########.fr       */
+/*   Created: 2025/01/19 11:24:43 by ytavares          #+#    #+#             */
+/*   Updated: 2025/01/19 11:30:50 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef EXECUTION_H
-# define EXECUTION_H
+size_t	strlen(const char *str)
+{
+	int i;
+
+	i = 0;
+	while(str[i])
+		i++;
+	return(i);
+}
