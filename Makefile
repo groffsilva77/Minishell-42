@@ -3,7 +3,7 @@ NAME = minishell
 
 #compile and flags
 CC = cc
-CFLAGS = -g3 -Wall -Wextra -Werror -I$(INCLUDE_DIR) -I$(LIBFT_DIR)
+CFLAGS = -g -Wall -Wextra -Werror -I$(INCLUDE_DIR) -I$(LIBFT_DIR)
 
 #include (.h)
 INCLUDES = -I$(INCLUDE_DIR) -I$(LIBFT_DIR)
@@ -11,6 +11,7 @@ INCLUDES = -I$(INCLUDE_DIR) -I$(LIBFT_DIR)
 #were is everyone
 LIBFT_DIR = lib/libft
 SRCS_DIR = src
+
 MEMORY_DIR = $(SRCS_DIR)/memory
 BUILTINS_DIR = $(SRCS_DIR)/builtins
 PARSIN_DIR = $(SRCS_DIR)/parsin
@@ -44,9 +45,9 @@ $(NAME): make_libft $(OBJS)
 make_libft:
 	make -C $(LIBFT_DIR)
 
-#compile every .c on .o																																																																													
+#compile every .c on .o
 %.o: %.c
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@																																																																													
 
 #is time to clean
 clean:
