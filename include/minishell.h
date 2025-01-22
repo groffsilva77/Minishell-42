@@ -7,7 +7,7 @@
 # include <stdio.h>
 # include "memory.h"
 # include "builtins.h"
-# include "parsin.h"
+# include "parsing.h"
 # include "execution.h"
 # include "utils.h"
 # include "lib/libft/libft.h"

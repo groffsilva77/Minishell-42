@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 14:18:53 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/01/17 16:06:51 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/01/22 17:19:30 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "test.h"
+#include "parsing.h"
 
 void	handle_word(const char *input, int *i, int *start, t_token **tokens)
 {
@@ -25,7 +25,7 @@ void	handle_word(const char *input, int *i, int *start, t_token **tokens)
 	}
 }
 
-t_token	*tokenize(const char *input)
+t_command	*tokenize(const char *input)
 {
 	t_token	*tokens;
 	int		i;
@@ -47,12 +47,16 @@ t_token	*tokenize(const char *input)
 			if (!handle_quotes(input, &i, &tokens))
 			{
 				ft_putstr_fd("Error: Unmatched quotes\n", 2);
-				break ;
+				
+				return (NULL);
 			}
 			start = i;
 		}
 		else if (ft_strchr("|<>", input[i]))
+		{
 			hand_spc_chars(input, &i, &start, &tokens);
+			start = i;
+		}
 		else
 			handle_word(input, &i, &start, &tokens);
 	}

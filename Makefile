@@ -14,7 +14,7 @@ SRCS_DIR = src
 
 MEMORY_DIR = $(SRCS_DIR)/memory
 BUILTINS_DIR = $(SRCS_DIR)/builtins
-PARSIN_DIR = $(SRCS_DIR)/parsin
+PARSING_DIR = $(SRCS_DIR)/parsing
 EXECUTION_DIR = $(SRCS_DIR)/execution
 SIGNAL_DIR = $(SRCS_DIR)/signals 
 UTILS_DIR = $(SRCS_DIR)/utils
@@ -25,7 +25,7 @@ SRCS = $(SRCS_DIR)/main.c \
 		$(willdcard $(MEMORY_DIR)/*.c) \
 		$(willdcard $(UTILS_DIR)/*.c) \
 		$(willdcard $(BUILTINS_DIR)/.c) \
-		$(willdcard $(PARSIN_DIR)/.c) \
+		$(willdcard $(PARSING_DIR)/.c) \
 		$(willdcard $(EXECUTION_DIR)/.c) \
 		$(willdcard $(SIGNAL_DIR)/.c)
 
