@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/19 15:17:54 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/01/21 17:27:49 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/01/22 13:48:51 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ char	*expand_var(const char *input, int *i)
 		value = malloc(12);
 		if (!value)
 			return (NULL);
-		snprintf(value, 12, "%d", g_exit_status);
+		printf("%d\n", g_exit_status);
 		return (value);
 	}
 	while (input[start + len] && (ft_isalnum(input[start + len])

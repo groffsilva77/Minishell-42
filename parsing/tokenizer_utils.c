@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 13:42:32 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/01/17 16:00:32 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/01/22 13:25:02 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,20 @@ void	hand_spc_chars(const char *input, int *i, int *start, t_token **tokens)
 {
 	if (*i > *start)
 		add_token(tokens, copy_substr(input, *start, *i - *start));
-	add_token(tokens, copy_substr(input, *i, 1));
-	(*i)++;
+	if (input[*i] == '>' && input[*i + 1] == '>')
+	{
+		add_token(tokens, ">>");
+		(*i) += 2;
+	}
+	else if (input[*i] == '<' || input[*i] == '>')
+	{
+		add_token(tokens, copy_substr(input, *i, 1));
+		(*i)++;
+	}
+	else if (input[*i] == '|')
+	{
+		add_token(tokens, "|");
+		(*i)++;
+	}
 	*start = *i;
 }
