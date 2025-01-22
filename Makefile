@@ -3,7 +3,7 @@ NAME = minishell
 
 #compile and flags
 CC = cc
-CFLAGS = -g -Wall -Wextra -Werror -I$(INCLUDE_DIR) -I$(LIBFT_DIR)
+CFLAGS = -g3 -Wall -Wextra -Werror -I$(INCLUDE_DIR) -I$(LIBFT_DIR)
 
 #include (.h)
 INCLUDES = -I$(INCLUDE_DIR) -I$(LIBFT_DIR)
@@ -44,7 +44,7 @@ $(NAME): make_libft $(OBJS)
 make_libft:
 	make -C $(LIBFT_DIR)
 
-#compile every .c on .o
+#compile every .c on .o																																																																													
 %.o: %.c
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 

@@ -2,6 +2,7 @@
 	# define MINISHELL_H
 
 //first struct (gestão de memoria)
+
 /* s_memory: esta estrutra é uma lista encadeada usada para rastrear as alocações
 de memória feitas pelo minishell
 
@@ -13,6 +14,7 @@ next_ptr = proximo ponteiro para outro bloco de memória (que também foi alocad
 ------------------------------------------------------------------------------------------------------------------------------
 
 //segund struct (gerenciar informaçoes do estado)
+
 /*s_shell = usada para armazenar e gerenciar informações essenciais que controlam o estado global do shell
 *memory = re chama a função s_memory
 **envp_copy = cópia do ambiente do sistema  -> Copiar o ambiente permite que o shell faça alterações (como adicionar, remover ou modificar variáveis) sem afetar o ambiente original.
