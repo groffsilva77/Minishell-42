@@ -8,8 +8,13 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": false,
+<<<<<<< HEAD
       "cwd": "/nfs/homes/ggroff-d/FormacaoZip/Minishell-42/src",
       "program": "/nfs/homes/ggroff-d/FormacaoZip/Minishell-42/src/build/Debug/outDebug",
+=======
+      "cwd": "/nfs/homes/ggroff-d/FormacaoZip/Minishell-42/parsing",
+      "program": "/nfs/homes/ggroff-d/FormacaoZip/Minishell-42/parsing/build/Debug/outDebug",
+>>>>>>> gabriel
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

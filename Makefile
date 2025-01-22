@@ -11,6 +11,7 @@ INCLUDES = -I$(INCLUDE_DIR) -I$(LIBFT_DIR)
 #were is everyone
 LIBFT_DIR = lib/libft
 SRCS_DIR = src
+<<<<<<< HEAD
 MEMORY_DIR = $(SRCS_DIR)/memory
 BUILTINS_DIR = $(SRCS_DIR)/builtins
 PARSIN_DIR = $(SRCS_DIR)/parsin
@@ -30,6 +31,19 @@ SRCS = $(SRCS_DIR)/main.c \
 
 #.c to .o
 OBJS = $(SRCS:.c=.o)
+=======
+PARS_DIR = parsing
+INCLUDE_DIR = include
+
+#the .c (.c is here)
+SRCS = $(SRCS_DIR)/main.c
+PARS = $(PARS_DIR)/tokenizer.c \
+       $(PARS_DIR)/tokenizer_utils.c \
+	   $(PARS_DIR)/var_expansion.c
+
+#.c to .o
+OBJS = $(SRCS:.c=.o) $(PARS:.c=.o)
+>>>>>>> gabriel
 
 #the library we will use (lft is for libft and lreadline is for readline)
 LIBS = -L$(LIBFT_DIR) -lft -lreadline
@@ -44,8 +58,17 @@ $(NAME): make_libft $(OBJS)
 make_libft:
 	make -C $(LIBFT_DIR)
 
+<<<<<<< HEAD
 #compile every .c on .o																																																																													
 %.o: %.c
+=======
+#compile every .c on .o
+%.o: $(SRCS_DIR)/%.c
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+
+#compile parsing files
+%.o: $(PARS_DIR)/%.c
+>>>>>>> gabriel
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 #is time to clean
