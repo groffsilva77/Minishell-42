@@ -6,7 +6,7 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 14:18:53 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/01/22 17:19:30 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/01/23 17:17:07 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	handle_word(const char *input, int *i, int *start, t_token **tokens)
 	}
 }
 
-t_command	*tokenize(const char *input)
+t_token	*tokenize(const char *input)
 {
 	t_token	*tokens;
 	int		i;
