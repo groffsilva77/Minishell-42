@@ -26,5 +26,3 @@ typedef struct s_shell
 	char		**env_copy;
 	int			exit_status;
 }t_shell;
-
-

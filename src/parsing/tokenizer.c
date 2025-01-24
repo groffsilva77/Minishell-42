@@ -6,7 +6,7 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 14:18:53 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/01/23 17:17:07 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/01/24 12:36:06 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,16 +47,12 @@ t_token	*tokenize(const char *input)
 			if (!handle_quotes(input, &i, &tokens))
 			{
 				ft_putstr_fd("Error: Unmatched quotes\n", 2);
-				
-				return (NULL);
+				break ;
 			}
 			start = i;
 		}
 		else if (ft_strchr("|<>", input[i]))
-		{
 			hand_spc_chars(input, &i, &start, &tokens);
-			start = i;
-		}
 		else
 			handle_word(input, &i, &start, &tokens);
 	}

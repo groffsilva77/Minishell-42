@@ -1,4 +1,4 @@
-#include "test.h"
+#include "parsin.h"
 
 int			g_exit_status = 0; // Variável global para armazenar o status de saída
 
