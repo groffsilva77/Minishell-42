@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 15:17:58 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/01/21 17:27:44 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/01/22 16:06:05 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,9 @@ typedef struct s_token {
 // 	int			i;
 // 	int			exit_status;
 // }	t_var_expand;
+
+int		is_operator(const char *token);
+int		validate_syntax(t_token *tokens);
 
 char	*get_env_value(const char *var);
 char	*expand_var(const char *input, int *i);
