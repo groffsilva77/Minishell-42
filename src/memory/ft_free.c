@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_free.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:16:34 by ytavares          #+#    #+#             */
-/*   Updated: 2025/01/18 13:29:49 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/01/28 19:20:26 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,15 @@ void ft_free(t_shell *shell, void *ptr)
 	ant = NULL;
 	atl = shell->memory;
 	while (atl)
-		if (atl->ptr == ptr)
-	if (ant)
-		ant->next = atl->next;
-	else 
-		shell->memory = atl->next
+	{
+		if (atl->next_ptr == ptr)
+		{	
+			if (ant)
+				ant->next_ptr = atl->next_ptr;
+			else
+				shell->memory = atl->next_ptr;
+		}
+	}
 	free(ptr);
 	free(atl);
 	return;

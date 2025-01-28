@@ -22,6 +22,20 @@ typedef enum e_cmd_type { //tipos de comando
 	CMD_APPEND
 } t_cmd_type;
 
+typedef struct s_memory
+{
+	void				*ptr_for_memory_block;
+	struct s_memory		*next_ptr;
+}	t_memory;
+
+typedef struct s_shell
+{
+	t_memory	*memory;
+	char		**env_copy;
+	int			exit_status;
+}	t_shell;
+
+
 typedef struct s_command { //armazena informações do comando
 	char	**args; //matrix de argumentos
 	int		argument_count; //contador de argumentos
@@ -30,6 +44,10 @@ typedef struct s_command { //armazena informações do comando
 	t_cmd_type	type; //tipos do comando
 	struct	s_command *next;  //proximo comando da lista
 } t_command;
+
+//syntax validation
+int		is_operator(const char *token);
+int		validate_syntax(t_token *tokens);
 
 //environment variable and expansion
 char	*get_env_value(const char *var);
@@ -47,9 +65,8 @@ t_token	*tokenize(const char *input);
 
 //parser 
 t_command	*create_command(void);
-void		parse_redirections(t_command **t_command, t_command *new_cmd);
+void		parse_redirections(t_command *cmd, t_token **tokens);
 void		add_command(t_command **commands, t_command *new_cmd);
-t_command	*parser_tokens(t_token *token);
-
+t_command	*parse_tokens(t_token *tokens, t_shell *shell);
 
 #endif

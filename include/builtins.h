@@ -3,12 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/19 11:38:35 by ytavares          #+#    #+#             */
-/*   Updated: 2025/01/22 11:59:55 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/01/28 18:02:39 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BUILTINS_H
 # define BUILTINS_H
+
+#endif

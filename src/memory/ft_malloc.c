@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_malloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:15:00 by ytavares          #+#    #+#             */
-/*   Updated: 2025/01/18 13:27:52 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/01/28 16:18:55 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@ void *ft_malloc(t_shell *shell, size_t size)
 	t_memory *new;
 	void	 *ptr;
 
-	ptr = malloc(size)
+	ptr = malloc(size);
 	if (!ptr)
 		return (NULL);
-	new= malloc(sizeof(t_memory))
+	new= malloc(sizeof(t_memory));
 	if (!new)
 	{
 		free(ptr);

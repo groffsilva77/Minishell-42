@@ -6,11 +6,11 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 14:14:15 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/01/28 14:20:00 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/01/28 18:50:50 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "test.h"
+#include "minishell.h"
 
 void	free_tokens(t_token *tokens)
 {
@@ -50,10 +50,11 @@ char	*get_user_input(void)
 	return (input);
 }
 
-void	shell_loop(void)
+void	shell_loop(t_shell *shell)
 {
-	t_token	*tokens;
-	char	*input;
+	char		*input;
+	t_token		*tokens;
+	t_command	*commands;
 
 	while (1)
 	{
@@ -67,14 +68,25 @@ void	shell_loop(void)
 			free(input);
 			continue ;
 		}
+		commands = parse_tokens(tokens);
 		process_tokens(tokens);
+		execute_commands(commands, shell);
 		free_tokens(tokens);
+		free_commands(commands, shell);
 		free(input);
 	}
 }
 
-int	main(void)
+int	main(int argc, char **argv, char **envp)
 {
-	shell_loop();
+	t_shell	shell;
+
+	(void)argc;
+	(void)argv;
+	shell.memory = NULL;
+	shell.env_copy = envp;
+	shell.exit_status = 0;
+	shell_loop(&shell);
+	ft_free_all(&shell);
 	return (0);
 }

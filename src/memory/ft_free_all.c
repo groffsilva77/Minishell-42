@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_free_all.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:16:47 by ytavares          #+#    #+#             */
-/*   Updated: 2025/01/18 13:31:46 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/01/28 19:22:38 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ void ft_free_all(t_shell *shell)
 	atl = shell->memory;
 	while (atl)
 	{
-		free(atl->ptr);
+		next = atl->next_ptr;
+		free(atl->next_ptr);
 		free(atl);
 		atl = next;
 	}

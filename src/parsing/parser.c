@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 17:49:08 by ytavares          #+#    #+#             */
-/*   Updated: 2025/01/23 18:00:47 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/01/28 19:38:50 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parsing.h"
+#include "minishell.h"
 
 t_command	*create_commad(void)
 {
@@ -54,7 +54,7 @@ void	add_command(t_command **commands, t_command *new_cmd)
 	}
 }
 
-t_command	*parse_tokens(t_token *tokens)
+t_command	*parse_tokens(t_token *tokens, t_shell *shell)
 {
 	t_command *commands = NULL;
 	t_command *atl_cmd = NULL;
@@ -77,13 +77,13 @@ t_command	*parse_tokens(t_token *tokens)
 		{
 			if (!atl_cmd) 
 				atl_cmd = create_commad();
-			atl_cmd->args = ft_realloc_array(
-				atl_cmd->args, atl_cmd->argument_count + 1, token->value) //adiciona o novo comando (tokens->value) a listá de argumentos atl_cmd->args
+			atl_cmd->args = ft_realloc_array(atl_cmd->args,
+				atl_cmd->argument_count + 1, tokens->value, shell); //adiciona o novo comando (tokens->value) a listá de argumentos atl_cmd->args
 			atl_cmd->argument_count++;
 		}
-		tokens = tokens->next; n
+		tokens = tokens->next;
 	}
 	if (atl_cmd)
 		add_command(&commands, atl_cmd);
-		return (commands);
+	return (commands);
 }

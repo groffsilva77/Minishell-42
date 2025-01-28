@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   strjoin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/19 11:28:28 by ytavares          #+#    #+#             */
-/*   Updated: 2025/01/19 11:54:40 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/01/28 18:33:00 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char *strjoin(t_shell *shell, char const *s1, char const *s2)
+char *fts_strjoin(t_shell *shell, char const *s1, char const *s2)
 {
     char    *join;
     size_t  len1;

@@ -6,11 +6,11 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:26:00 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/01/22 16:34:43 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/01/28 15:32:54 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "test.h"
+#include "parsing.h"
 
 int	is_operator(const char *token)
 {
