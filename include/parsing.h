@@ -49,7 +49,7 @@ t_token	*tokenize(const char *input);
 t_command	*create_command(void);
 void		parse_redirections(t_command **t_command, t_command *new_cmd);
 void		add_command(t_command **commands, t_command *new_cmd);
-t_command	*parsr_tokens(t_token *token);
+t_command	*parser_tokens(t_token *token);
 
 
 #endif
