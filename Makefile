@@ -15,6 +15,7 @@ SRCS_DIR = src
 MEMORY_DIR = $(SRCS_DIR)/memory
 BUILTINS_DIR = $(SRCS_DIR)/builtins
 PARSING_DIR = $(SRCS_DIR)/parsing
+TOKEN_DIR = $(SRCS_DIR)/token
 EXECUTION_DIR = $(SRCS_DIR)/execution
 SIGNAL_DIR = $(SRCS_DIR)/signals 
 UTILS_DIR = $(SRCS_DIR)/utils
