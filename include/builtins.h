@@ -6,9 +6,22 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/19 11:38:35 by ytavares          #+#    #+#             */
-/*   Updated: 2025/01/22 11:59:55 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/01/28 16:07:32 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BUILTINS_H
 # define BUILTINS_H
+
+# include "minishell.h"
+
+//builtins (ptototype)
+int	the_echo(char **args, t_shell *shell);
+int	the_cd(char **args, t_shell *shell);
+int	the_pwd(t_shell *shell);
+int	the_env(t_shell *shell);
+int	the_export(char **args, t_shell *shell);
+int	the_unset(char **args, t_shell *shell);
+int	the_exit(char **args, t_shell *shell);
+
+#endif
