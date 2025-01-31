@@ -6,7 +6,7 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:34:26 by ytavares          #+#    #+#             */
-/*   Updated: 2025/01/31 18:15:52 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/01/31 18:29:04 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static int	resize_env_array(t_shell *shell)
 {
 	char	**new_env;
 
-	new_env = ft_realloc_array(shell->env_copy, sizeof(char *));
+	new_env = realloc_array(shell->env_copy, sizeof(char *));
 	if (!new_env)
 	{
 		shell->exit_status = 1;

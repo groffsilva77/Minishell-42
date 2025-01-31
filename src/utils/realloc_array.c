@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_realloc_array.c                                 :+:      :+:    :+:   */
+/*   realloc_array.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 14:08:14 by ytavares          #+#    #+#             */
-/*   Updated: 2025/01/23 16:35:16 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/01/31 18:58:32 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,25 +24,25 @@ A ideia aqui é criar um novo espaço na memória que seja maior que o antigo, p
 
 #include "minishell.h"
 
-char **ft_realloc_array(char **array, int new_size, char *new_value, t_shell *shell)
+char	**realloc_array(char **array, int n_size, char *n_value, t_shell *shell)
 {
-	char **new_array; //nova array
-	int i;
-	
+	char	**new_array;
+	int		i;
+
 	new_array = (char **)ft_malloc(shell, sizeof(char *) *(new_array + 1));
-	if (!new_array) //aloca espaço para o nova array
+	if (!new_array)
 		return (NULL);
 	i = 0;
 	if (array)
 	{
 		while (array[i])
 		{
-			new_array[i] = array[i];  //copia os elementos da array original para nova array
+			new_array[i] = array[i];
 			i++;
 		}
-		ft_free(shell, array) // libera o array original
+		ft_free(shell, array)
 	}
-	new_array[i] = ft_strdup(new_value);  //a nova array recebe o novo valor
-	new_array[i + 1] = NULL; //define o último elemento como NULL
-	return (new_array);
+		new_array[i] = fts_strdup(n_value);
+		new_array[i + 1] = NULL;
+		return (new_array);
 }

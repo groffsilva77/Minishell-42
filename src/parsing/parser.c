@@ -6,7 +6,7 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 17:49:08 by ytavares          #+#    #+#             */
-/*   Updated: 2025/01/23 18:00:47 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/01/31 18:23:59 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,5 +85,5 @@ t_command	*parse_tokens(t_token *tokens)
 	}
 	if (atl_cmd)
 		add_command(&commands, atl_cmd);
-		return (commands);
+	return (commands);
 }

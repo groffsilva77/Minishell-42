@@ -23,10 +23,10 @@ typedef enum e_cmd_type { //tipos de comando
 } t_cmd_type;
 
 typedef struct s_command { //armazena informações do comando
-	char	**args; //matrix de argumentos
-	int		argument_count; //contador de argumentos
-	char	*input_file; //arquivo de entrada
-	char	*output_file; //arquivo de saída 
+	char		**args; //matrix de argumentos
+	int			argument_count; //contador de argumentos
+	char		*input_file; //arquivo de entrada
+	char		*output_file; //arquivo de saída 
 	t_cmd_type	type; //tipos do comando
 	struct	s_command *next;  //proximo comando da lista
 } t_command;

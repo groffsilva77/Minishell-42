@@ -6,13 +6,13 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:15:00 by ytavares          #+#    #+#             */
-/*   Updated: 2025/01/18 13:27:52 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/01/31 18:40:01 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void *ft_malloc(t_shell *shell, size_t size)
+void *fts_malloc(t_shell *shell, size_t size)
 {
 	t_memory *new;
 	void	 *ptr;

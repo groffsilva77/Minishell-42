@@ -6,7 +6,7 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 18:23:11 by ytavares          #+#    #+#             */
-/*   Updated: 2025/01/31 17:49:52 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/01/31 18:36:34 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ static void	update_env_var(t_shell *shell, const char *name, const char *value)
 	char	*new_var;
 	char	*temp;
 
-	temp = ft_strjoin(name, "=");
-	new_var = ft_strjoin(temp, value);
+	temp = fts_strjoin(name, "=");
+	new_var = fts_strjoin(temp, value);
 	free(temp);
 	i = 0;
 	while (shell->env_copy[i])

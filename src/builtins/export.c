@@ -6,7 +6,7 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 18:02:33 by ytavares          #+#    #+#             */
-/*   Updated: 2025/01/31 18:07:22 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/01/31 18:38:05 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static int	update_existing_var(char *name, char *value_ex, t_shell *shell)
 			&& shell->env_copy[i][ft_strlen(name)] == '=')
 		{
 			free(shell->env_copy[i]);
-			shell->env_copy[i] = ft_strjoin(name, "=", value_ex);
+			shell->env_copy[i] = fts_strjoin(name, "=", value_ex);
 			free(name);
 			free(value_ex);
 			shell->exit_status = 0;
@@ -60,7 +60,7 @@ static int	add_new_var(char *name, char *value_ex, t_shell *shell)
 		shell->exit_status = 1;
 		return (1);
 	}
-	new_env[i] = ft_strjoin(name, "=", value_ex);
+	new_env[i] = fts_strjoin(name, "=", value_ex);
 	new_env[i + 1] = NULL;
 	shell->env_copy = new_env;
 	free(name);
@@ -84,8 +84,8 @@ int	the_export(char **args, t_shell *shell)
 		shell->exit_status = 1;
 		return (1);
 	}
-	name = ft_strndup(args[1], eq_position - args[1]);
-	var_value = ft_strdup(eq_position + 1);
+	name = fts_strdup(args[1], eq_position - args[1]);
+	var_value = fts_strdup(eq_position + 1);
 	value_ex = expand_tokens(var_value);
 	free(var_value);
 	if (update_existing_var(name, value_ex, shell) == 0)
