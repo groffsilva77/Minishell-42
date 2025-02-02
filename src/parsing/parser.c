@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 17:49:08 by ytavares          #+#    #+#             */
-/*   Updated: 2025/02/01 16:35:37 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/02 16:17:25 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,5 +69,6 @@ t_command	*parse_tokens(t_token *tokens, t_shell *shell)
 	}
 	if (atl_cmd)
 		add_command(&commands, atl_cmd);
+	return (commands);
 	return (commands);
 }

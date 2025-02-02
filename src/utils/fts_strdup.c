@@ -1,33 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_malloc.c                                        :+:      :+:    :+:   */
+/*   fts_strdup.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/18 13:15:00 by ytavares          #+#    #+#             */
-/*   Updated: 2025/02/01 15:48:12 by ggroff-d         ###   ########.fr       */
+/*   Created: 2025/01/19 11:31:21 by ytavares          #+#    #+#             */
+/*   Updated: 2025/02/02 16:16:26 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	*ft_malloc(t_shell *shell, size_t size)
+char	*strdup(t_shell *shell, const char *s1)
 {
-	t_memory	*new;
-	void		*ptr;
+	char	*dup;
+	size_t	len;
 
-	ptr = malloc(size);
-	if (!ptr)
+	len = strlen(s1);
+	dup = ft_malloc(shell, len + 1);
+	if (!dup)
 		return (NULL);
-	new = malloc(sizeof(t_memory));
-	if (!new)
-	{
-		free(ptr);
-		return (NULL);
-	}
-	new->ptr_for_memory_block = ptr;
-	new->next_ptr = shell->memory;
-	shell->memory = new;
-	return (ptr);
+	memcpy(dup, s1, len + 1);
+	return (dup);
 }
