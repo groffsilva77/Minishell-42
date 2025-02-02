@@ -1,5 +1,5 @@
-#ifndef MINISHELL_H
-	# define MINISHELL_H
+// #ifndef MINISHELL_H
+// 	# define MINISHELL_H
 
 //first struct (gestão de memoria)
 
@@ -21,22 +21,22 @@ next_ptr = proximo ponteiro para outro bloco de memória (que também foi alocad
 ext_status = status do último comando/Mantém o código de saída do útimo comando -> Necessário para implementar o comportamento padrão do shell com $?
 */
 
-# include <stdlib.h>
-# include <unistd.h>
-# include <stdio.h>
+// # include <stdlib.h>
+// # include <unistd.h>
+// # include <stdio.h>
 
 
-typedef struct s_memory
-{
-	void				*ptr_for_memory_block;
-	struct s_memory		*next_ptr;
-}t_memory;
+// typedef struct s_memory
+// {
+// 	void				*ptr_for_memory_block;
+// 	struct s_memory		*next_ptr;
+// }t_memory;
 
-typedef struct s_shell
-{
-	t_memory	*memory;
-	char		**env_copy;
-	int			exit_status;
-}t_shell;
+// typedef struct s_shell
+// {
+// 	t_memory	*memory;
+// 	char		**env_copy;
+// 	int			exit_status;
+// }t_shell;
 
 

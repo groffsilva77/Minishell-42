@@ -1,33 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_malloc.c                                        :+:      :+:    :+:   */
+/*   free_tokens.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/18 13:15:00 by ytavares          #+#    #+#             */
-/*   Updated: 2025/02/01 15:48:12 by ggroff-d         ###   ########.fr       */
+/*   Created: 2025/01/29 17:42:10 by ggroff-d          #+#    #+#             */
+/*   Updated: 2025/01/29 17:42:47 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	*ft_malloc(t_shell *shell, size_t size)
+void	free_tokens(t_token *tokens)
 {
-	t_memory	*new;
-	void		*ptr;
+	t_token	*temp;
 
-	ptr = malloc(size);
-	if (!ptr)
-		return (NULL);
-	new = malloc(sizeof(t_memory));
-	if (!new)
+	while (tokens)
 	{
-		free(ptr);
-		return (NULL);
+		temp = tokens;
+		tokens = tokens->next;
+		free(temp->value);
+		free(temp);
 	}
-	new->ptr_for_memory_block = ptr;
-	new->next_ptr = shell->memory;
-	shell->memory = new;
-	return (ptr);
 }

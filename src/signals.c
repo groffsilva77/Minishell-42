@@ -1,33 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_malloc.c                                        :+:      :+:    :+:   */
+/*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/18 13:15:00 by ytavares          #+#    #+#             */
-/*   Updated: 2025/02/01 15:48:12 by ggroff-d         ###   ########.fr       */
+/*   Created: 2025/01/29 17:55:28 by ggroff-d          #+#    #+#             */
+/*   Updated: 2025/01/29 18:00:49 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	*ft_malloc(t_shell *shell, size_t size)
+void	handle_sigint(int sig)
 {
-	t_memory	*new;
-	void		*ptr;
+	(void)sig;
+	write(1, "\n", 1);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
+}
 
-	ptr = malloc(size);
-	if (!ptr)
-		return (NULL);
-	new = malloc(sizeof(t_memory));
-	if (!new)
-	{
-		free(ptr);
-		return (NULL);
-	}
-	new->ptr_for_memory_block = ptr;
-	new->next_ptr = shell->memory;
-	shell->memory = new;
-	return (ptr);
+void	setup_signal_handlers(void)
+{
+	signal(SIGINT, handle_sigint);
+	signal(SIGQUIT, SIG_IGN);
 }

@@ -1,33 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_malloc.c                                        :+:      :+:    :+:   */
+/*   ft_strcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/18 13:15:00 by ytavares          #+#    #+#             */
-/*   Updated: 2025/02/01 15:48:12 by ggroff-d         ###   ########.fr       */
+/*   Created: 2025/01/30 18:16:32 by ggroff-d          #+#    #+#             */
+/*   Updated: 2025/01/30 18:17:15 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-void	*ft_malloc(t_shell *shell, size_t size)
+char	*ft_strcpy(char *dest, char *src)
 {
-	t_memory	*new;
-	void		*ptr;
+	int	i;
 
-	ptr = malloc(size);
-	if (!ptr)
-		return (NULL);
-	new = malloc(sizeof(t_memory));
-	if (!new)
+	i = 0;
+	while (src[i] != '\0')
 	{
-		free(ptr);
-		return (NULL);
+		dest[i] = src[i];
+		i++;
 	}
-	new->ptr_for_memory_block = ptr;
-	new->next_ptr = shell->memory;
-	shell->memory = new;
-	return (ptr);
+	dest[i] = '\0';
+	return (dest);
 }

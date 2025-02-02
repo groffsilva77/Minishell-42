@@ -17,19 +17,20 @@ BUILTINS_DIR = $(SRCS_DIR)/builtins
 PARSING_DIR = $(SRCS_DIR)/parsing
 TOKEN_DIR = $(SRCS_DIR)/token
 EXECUTION_DIR = $(SRCS_DIR)/execution
-#SIGNAL_DIR = $(SRCS_DIR)/signals 
+SIGNAL_DIR = $(SRCS_DIR)/signals 
 UTILS_DIR = $(SRCS_DIR)/utils
 INCLUDE_DIR = include
 
 #the .c (.c is here)
 SRCS = $(SRCS_DIR)/main.c \
-		$(wildcard $(MEMORY_DIR)/*.c) \
-		$(wildcard $(UTILS_DIR)/*.c) \
-		$(wildcard $(BUILTINS_DIR)/*.c) \
-		$(wildcard $(PARSING_DIR)/*.c) \
-		$(wildcard $(TOKEN_DIR)/*.c) \
-		$(wildcard $(EXECUTION_DIR)/*.c) \
-		#$(wildcard $(SIGNAL_DIR)/*.c)
+       $(SRCS_DIR)/main_utils.c \
+	   $(SRCS_DIR)/signals.c \
+	   $(wildcard $(MEMORY_DIR)/*.c) \
+	   $(wildcard $(UTILS_DIR)/*.c) \
+	   $(wildcard $(BUILTINS_DIR)/*.c) \
+	   $(wildcard $(PARSING_DIR)/*.c) \
+	   $(wildcard $(TOKEN_DIR)/*.c) \
+	   $(wildcard $(EXECUTION_DIR)/*.c)
 
 #.c to .o
 OBJS = $(SRCS:.c=.o)
@@ -40,11 +41,11 @@ LIBS = -L$(LIBFT_DIR) -lft -lreadline
 #rules
 all: $(NAME)
 
-$(NAME): make_libft $(OBJS)
+$(NAME): $(OBJS) $(LIBFT_DIR)/libft.a
 	$(CC) $(CFLAGS) $(OBJS) $(LIBS) -o $(NAME)
 
 #compile libft
-make_libft:
+$(LIBFT_DIR)/libft.a:
 	make -C $(LIBFT_DIR)
 
 #compile every .c on .o

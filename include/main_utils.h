@@ -1,33 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_malloc.c                                        :+:      :+:    :+:   */
+/*   main_utils.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/18 13:15:00 by ytavares          #+#    #+#             */
-/*   Updated: 2025/02/01 15:48:12 by ggroff-d         ###   ########.fr       */
+/*   Created: 2025/01/29 18:27:31 by ggroff-d          #+#    #+#             */
+/*   Updated: 2025/01/31 17:13:52 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#ifndef MAIN_UTILS_H
+# define MAIN_UTILS_H
 
-void	*ft_malloc(t_shell *shell, size_t size)
-{
-	t_memory	*new;
-	void		*ptr;
+# include "minishell.h"
 
-	ptr = malloc(size);
-	if (!ptr)
-		return (NULL);
-	new = malloc(sizeof(t_memory));
-	if (!new)
-	{
-		free(ptr);
-		return (NULL);
-	}
-	new->ptr_for_memory_block = ptr;
-	new->next_ptr = shell->memory;
-	shell->memory = new;
-	return (ptr);
-}
+void		shell_loop(t_shell *shell);
+void		execute_and_cleanup(t_command *commands, t_shell *shell);
+char		*get_user_input(void);
+int			is_empty_input(const char *input);
+t_command	*process_input(char *input, t_shell *shell);
+
+#endif

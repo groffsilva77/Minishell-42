@@ -6,44 +6,68 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:53:16 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/01/28 18:00:14 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/02 15:25:57 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	execute_simple_command(t_command *cmd, t_shell *shell)
+void	handle_env_var(t_command *cmd, t_shell *shell)
 {
-	t_exec_context	ctx;
-	int				status;
+	char	*var_name;
+	char	*var_value;
 
-	ctx.pid = fork();
-	if (ctx.pid < 0)
+	(void)shell;
+	if (cmd->args[0][0] == '$')
 	{
-		perror("fork failed");
-		return ;
-	}
-	if (ctx.pid == 0)
-	{
-		if (handle_redirections(cmd) < 0)
-			exit(1);
-		execve(cmd->args[0], cmd->args, shell->env_copy);
-		perror("Execve failed");
-		exit(127);
-	}
-	else
-	{
-		waitpid(ctx.pid, &status, 0);
-		shell->exit_status = WEXITSTATUS(status);
+		var_name = cmd->args[0] + 1;
+		var_value = getenv(var_name);
+		if (!var_value)
+			printf("\n");
+		exit(0);
 	}
 }
 
-void	execute_commands(t_command *commands, t_shell *shell)
+void	execute_command(t_command *cmd, t_shell *shell)
 {
-	if (!commands)
-		return ;
-	if (commands->next)
-		execute_pipeline(commands, shell);
-	else
-		execute_simple_command(commands, shell);
+	char	*full_path;
+
+	full_path = find_command_path(cmd->args[0], shell->env_copy);
+	if (!full_path)
+	{
+		ft_putstr_fd("minishell: command not found: ", 2);
+		ft_putendl_fd(cmd->args[0], 2);
+		exit(127);
+	}
+	if (access(full_path, X_OK) < 0)
+	{
+		perror("Command not executable");
+		free(full_path);
+		exit(127);
+	}
+	if (execve(full_path, cmd->args, shell->env_copy) < 0)
+	{
+		perror("Execve failed");
+		free(full_path);
+		exit(126);
+	}
+	free(full_path);
+}
+
+void	create_process(t_command *cmd, t_exec_context *ctx, t_shell *shell)
+{
+	if (cmd->args[0] && cmd->args[0][0] == '$')
+		handle_env_var(cmd, shell);
+	if (ctx->prev_fd != -1)
+	{
+		dup2(ctx->prev_fd, STDIN_FILENO);
+		close(ctx->prev_fd);
+	}
+	if (cmd->next)
+		dup2(ctx->pipe_fds[1], STDOUT_FILENO);
+	close(ctx->pipe_fds[0]);
+	close(ctx->pipe_fds[1]);
+	if (setup_redirections(cmd) < 0)
+		exit(1);
+	execute_command(cmd, shell);
 }

@@ -1,26 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   srtdup.c                                           :+:      :+:    :+:   */
+/*   fts_strjoin.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/19 11:31:21 by ytavares          #+#    #+#             */
-/*   Updated: 2025/01/28 18:32:55 by ggroff-d         ###   ########.fr       */
+/*   Created: 2025/01/19 11:28:28 by ytavares          #+#    #+#             */
+/*   Updated: 2025/01/31 17:34:08 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char *fts_strdup(t_shell *shell, const char *s1)
+char	*fts_strjoin(t_shell *shell, char const *s1, char const *s2)
 {
-    char    *dup;
-    size_t  len;
+	char	*join;
+	size_t	len1;
+	size_t	len2;
 
-    len = strlen(s1);
-    dup = ft_malloc(shell, len + 1);
-    if (!dup)
-        return (NULL);
-    memcpy(dup, s1, len + 1);
-    return (dup);
+	len1 = ft_strlen(s1);
+	len2 = ft_strlen(s2);
+	join = ft_malloc(shell, len1 + len2 + 1);
+	if (!join)
+		return (NULL);
+	ft_memcpy(join, s1, len1);
+	ft_memcpy(join + len1, s2, len2 + 1);
+	return (join);
 }

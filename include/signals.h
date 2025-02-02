@@ -1,29 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   strjoin.c                                          :+:      :+:    :+:   */
+/*   signals.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/19 11:28:28 by ytavares          #+#    #+#             */
-/*   Updated: 2025/01/28 18:33:00 by ggroff-d         ###   ########.fr       */
+/*   Created: 2025/01/29 17:59:59 by ggroff-d          #+#    #+#             */
+/*   Updated: 2025/02/02 15:49:00 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#ifndef SIGNALS_H
+# define SIGNALS_H
 
-char *fts_strjoin(t_shell *shell, char const *s1, char const *s2)
-{
-    char    *join;
-    size_t  len1;
-    size_t  len2;
+# include "minishell.h"
 
-    len1 = ft_strlen(s1);
-    len2 = ft_strlen(s2);
-    join = ft_malloc(shell, len1 + len2 + 1);
-    if (!join)
-        return (NULL);
-    ft_memcpy(join, s1, len1);
-    ft_memcpy(join + len1, s2, len2 + 1);
-    return (join);
-}
+void	handle_sigint(int sig);
+void	setup_signal_handlers(void);
+
+#endif

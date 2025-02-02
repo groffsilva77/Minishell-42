@@ -1,33 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_malloc.c                                        :+:      :+:    :+:   */
+/*   ft_free_array.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/18 13:15:00 by ytavares          #+#    #+#             */
-/*   Updated: 2025/02/01 15:48:12 by ggroff-d         ###   ########.fr       */
+/*   Created: 2025/01/30 17:18:25 by ggroff-d          #+#    #+#             */
+/*   Updated: 2025/01/31 18:20:17 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	*ft_malloc(t_shell *shell, size_t size)
+void	ft_free_array(char **array)
 {
-	t_memory	*new;
-	void		*ptr;
+	int	i;
 
-	ptr = malloc(size);
-	if (!ptr)
-		return (NULL);
-	new = malloc(sizeof(t_memory));
-	if (!new)
+	if (!array)
+		return ;
+	i = 0;
+	while (array[i])
 	{
-		free(ptr);
-		return (NULL);
+		free(array[i]);
+		i++;
 	}
-	new->ptr_for_memory_block = ptr;
-	new->next_ptr = shell->memory;
-	shell->memory = new;
-	return (ptr);
+	free(array);
 }

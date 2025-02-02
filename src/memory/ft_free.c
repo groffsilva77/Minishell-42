@@ -6,19 +6,19 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:16:34 by ytavares          #+#    #+#             */
-/*   Updated: 2025/01/28 19:20:26 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/01 15:48:06 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void ft_free(t_shell *shell, void *ptr)
+void	ft_free(t_shell *shell, void *ptr)
 {
-	t_memory	*atl; 
-	t_memory	*ant; 
+	t_memory	*atl;
+	t_memory	*ant;
 
 	if (!ptr)
-		return;
+		return ;
 	ant = NULL;
 	atl = shell->memory;
 	while (atl)
@@ -29,21 +29,12 @@ void ft_free(t_shell *shell, void *ptr)
 				ant->next_ptr = atl->next_ptr;
 			else
 				shell->memory = atl->next_ptr;
+			free(ptr);
+			free(atl);
+			return ;
 		}
+		ant = atl;
+		atl = atl->next_ptr;
 	}
 	free(ptr);
-	free(atl);
-	return;
 }
-
-/*olha o resumo
-
-Você recebe um brinquedo para devolver
-Começa a procurar na sua lista de papéis
-Quando acha o papel com esse brinquedo:
-
-Arruma a lista (liga os papéis vizinhos)
-Devolve o brinquedo
-Joga fora o que estava papel "que estava guardando o brinquedo"
-
-Se não achar, continua procurando até o fim da lista*/
