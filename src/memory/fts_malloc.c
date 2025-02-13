@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:15:00 by ytavares          #+#    #+#             */
-/*   Updated: 2025/02/02 16:18:37 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/12 17:44:44 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	*fts_malloc(t_shell *shell, size_t size)
 	new->ptr_for_memory_block = ptr;
 	new->next_ptr = shell->memory;
 	shell->memory = new;
+	free(new);
 	return (ptr);
 }
 

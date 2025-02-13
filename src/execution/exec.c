@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:53:16 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/02 15:25:57 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/12 16:48:40 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,11 @@ void	execute_command(t_command *cmd, t_shell *shell)
 {
 	char	*full_path;
 
+	if (is_builtin(cmd->args[0]))
+	{
+		shell->exit_status = execute_builtin(cmd, shell);
+		exit(shell->exit_status);
+	}
 	full_path = find_command_path(cmd->args[0], shell->env_copy);
 	if (!full_path)
 	{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:34:26 by ytavares          #+#    #+#             */
-/*   Updated: 2025/01/31 18:29:04 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/02/12 15:10:01 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int	find_and_remove_var(char **env_copy, char *var_name)
 	while (env_copy[i])
 	{
 		if (ft_strncmp(env_copy[i], var_name, len_var) == 0
-			&& (env_copy[i][len_var] == '=' || env_copy[i][len__var] == '\0'))
+			&& (env_copy[i][len_var] == '=' || env_copy[i][len_var] == '\0'))
 		{
 			free(env_copy[i]);
 			j = i;
@@ -47,8 +47,11 @@ static int	find_and_remove_var(char **env_copy, char *var_name)
 static int	resize_env_array(t_shell *shell)
 {
 	char	**new_env;
+	char	*new_value;
 
-	new_env = realloc_array(shell->env_copy, sizeof(char *));
+	new_value = NULL;
+	new_env = ft_realloc_array(shell->env_copy, sizeof(char *),
+			new_value, shell);
 	if (!new_env)
 	{
 		shell->exit_status = 1;

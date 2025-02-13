@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 16:15:22 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/02 16:15:37 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/12 17:41:20 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,26 +18,20 @@ char	**ft_realloc_array(char **array, int new_size, char *new_value,
 	char	**new_array;
 	int		i;
 
-	(void)new_size;
-	i = 0;
-	if (array)
-	{
-		while (array[i])
-			i++;
-	}
-	new_array = (char **)ft_malloc(shell, sizeof(char *) * (i + 2));
+	if (new_size <= 0)
+		return (NULL);
+	new_array = (char **)fts_malloc(shell, sizeof(char *) * (new_size + 1));
 	if (!new_array)
 		return (NULL);
 	i = 0;
-	if (array)
+	while (array && array[i] && i < new_size - 1)
 	{
-		while (array[i])
-		{
-			new_array[i] = array[i];
-			i++;
-		}
-		ft_free(shell, array);
+		new_array[i] = array[i];
+		i++;
 	}
 	new_array[i] = fts_strdup(shell, new_value);
-	return (new_array[i + 1] = NULL, new_array);
+	new_array[i + 1] = NULL;
+	if (array)
+		ft_free(shell, array);
+	return (new_array);
 }

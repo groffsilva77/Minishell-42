@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:19:31 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/02 16:19:41 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/12 18:07:18 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int			is_operator(const char *token);
 int			validate_syntax(t_token *tokens);
 
 char		*get_env_value(const char *var);
-char		*expand_var(const char *input, int *i);
+char		*expand_var(const char *input, size_t *i);
 char		*expand_tokens(const char *token, int allow_expansion);
 
 //tokenizer and utils for tokenizer

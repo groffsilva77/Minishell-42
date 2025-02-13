@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 17:23:11 by ytavares          #+#    #+#             */
-/*   Updated: 2025/01/31 17:51:09 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/02/12 14:49:27 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	the_env(t_shell *shell)
 	}
 	while (shell->env_copy[i])
 	{
-		printf("%s/n", shell->env_copy[i])
+		printf("%s/n", shell->env_copy[i]);
 		i++;
 	}
 	shell->exit_status = 0;

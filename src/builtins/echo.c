@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:35:38 by ytavares          #+#    #+#             */
-/*   Updated: 2025/01/31 17:50:32 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/02/02 16:45:47 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void	print_arguments(char **args, int i)
 
 	while (args[i])
 	{
-		expand_result = expand_tokens(args[i]);
+		expand_result = expand_tokens(args[i], 1);
 		if (expand_result)
 		{
 			ft_putstr_fd(expand_result, STDOUT_FILENO);

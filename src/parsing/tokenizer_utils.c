@@ -6,11 +6,11 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 13:42:32 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/01 18:25:41 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/05 16:17:39 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parsing.h"
+#include "minishell.h"
 
 void	finzalize_token(const char *input, int *i, int *start, t_token **tokens)
 {

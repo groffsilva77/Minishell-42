@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:14:26 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/01 18:31:23 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/13 17:26:02 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ typedef struct s_command {
 	char				*output_file;
 	t_cmd_type			type;
 	struct s_command	*next;
+	int					is_builtin;
 }	t_command;
 
 typedef struct s_token {
@@ -75,13 +76,21 @@ typedef struct s_exec_context
 	__pid_t	pid;
 }	t_exec_context;
 
+typedef struct s_expand_vars
+{
+	size_t	i;
+	size_t	j;
+	int		in_squotes;
+	int		in_dquotes;
+}	t_expand_vars;
+
 void		handle_sigint(int sig);
 void		setup_signal_handlers(void);
 
 void		ft_free_all(t_shell *shell);
 void		free_tokens(t_token *tokens);
 void		ft_free_array(char **array);
-void		*ft_malloc(t_shell *shell, size_t size);
+void		*fts_malloc(t_shell *shell, size_t size);
 void		ft_free(t_shell *shell, void *ptr);
 
 void		shell_loop(t_shell *shell);
@@ -90,7 +99,10 @@ int			is_operator(const char *token);
 int			validate_syntax(t_token *tokens);
 
 char		*get_env_value(const char *var);
-char		*expand_var(const char *input, int *i);
+int			handle_quotes_state(char c, int	*in_squotes, int *in_dquotes);
+char		*expand_var(const char *input, size_t *i);
+int			expand_variable(const char *token, size_t *i, char *expanded,
+				int j);
 char		*expand_tokens(const char *token, int allow_expansion);
 
 int			process_single_quote(const char *input, int *i, t_token **tokens,
@@ -153,5 +165,16 @@ char		**ft_realloc_array(char **array, int new_size, char *new_value,
 				t_shell *shell);
 char		*ft_strcat(char *dest, const char *src);
 char		*ft_strcpy(char *dest, char *src);
+
+int			the_cd(char **args, t_shell *shell);
+int			the_echo(char **args, t_shell *shell);
+int			the_exit(char **args, t_shell *shell);
+int			the_env(t_shell *shell);
+int			the_export(char **args, t_shell *shell);
+int			the_pwd(t_shell *shell);
+int			the_unset(char **args, t_shell *shell);
+
+int			is_builtin(char *cmd);
+int			execute_builtin(t_command *cmd, t_shell *shell);
 
 #endif

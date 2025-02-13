@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 18:23:11 by ytavares          #+#    #+#             */
-/*   Updated: 2025/02/02 16:23:59 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/12 18:17:45 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,23 +38,29 @@ static void	update_env_var(t_shell *shell, const char *name, const char *value)
 		}
 		i++;
 	}
-	shell->env_copy = realloc_array(shell->env_copy, sizeof(char *) * (i + 2));
+	shell->env_copy = ft_realloc_array(shell->env_copy,
+			sizeof(char *) * (i + 2), new_var, shell);
 	shell->env_copy[i] = new_var;
 	shell->env_copy[i + 1] = NULL;
 }
 
 static int	change_directory(char *new_dir, t_shell *shell, char *atl_dir)
 {
+	int	is_allocated;
+
+	is_allocated = (new_dir != get_env_value("HOME"));
 	if (chdir(new_dir) != 0)
 	{
 		perror("cd");
 		shell->exit_status = 1;
-		free(new_dir);
+		if (is_allocated)
+			free(new_dir);
 		return (1);
 	}
 	update_env_var(shell, "OLDPWD", atl_dir);
 	update_env_var(shell, "PWD", new_dir);
-	free(new_dir);
+	if (is_allocated)
+		free(new_dir);
 	shell->exit_status = 0;
 	return (0);
 }
@@ -70,13 +76,13 @@ static int	handle_no_args(t_shell *shell, char **new_path_dir)
 		shell->exit_status = 1;
 		return (1);
 	}
-	*new_dir = store_home;
+	*new_path_dir = ft_strdup(store_home);
 	return (0);
 }
 
 int	the_cd(char **args, t_shell *shell)
 {
-	char	*new_p_dir;
+	char	*new_path_dir;
 	char	store_atl_dir[1024];
 
 	if (getcwd(store_atl_dir, sizeof(store_atl_dir)) == NULL)
@@ -91,7 +97,7 @@ int	the_cd(char **args, t_shell *shell)
 	}
 	else
 	{
-		new_path_dir = expand_tokens(args[1]);
+		new_path_dir = expand_tokens(args[1], 1);
 		if (!new_path_dir)
 		{
 			shell->exit_status = 1;
