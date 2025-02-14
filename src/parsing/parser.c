@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 17:49:08 by ytavares          #+#    #+#             */
-/*   Updated: 2025/02/06 16:54:08 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/14 18:13:42 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,11 @@ int	handle_arg(t_command **atl_cmd, t_token *tokens, t_shell *shell)
 		return (-1);
 	}
 	(*atl_cmd)->args = temp;
+	(*atl_cmd)->args[(*atl_cmd)->argument_count] = ft_strdup(tokens->value);
+	if (!(*atl_cmd)->args[(*atl_cmd)->argument_count])
+		return (free ((*atl_cmd)->args), 0);
+	(*atl_cmd)->argument_count++;
+	(*atl_cmd)->args[(*atl_cmd)->argument_count] = NULL;
 	return (0);
 }
 
@@ -62,7 +67,10 @@ t_command	*parse_tokens(t_token *tokens, t_shell *shell)
 		if (ft_strncmp(tokens->value, "|", 1) == 0)
 			commands = handle_pipe(commands, &atl_cmd);
 		else if (ft_strchr("<>", tokens->value[0]))
+		{
 			handle_redirection(&atl_cmd, &tokens);
+			tokens = tokens->next;
+		}
 		else if (handle_arg(&atl_cmd, tokens, shell) == -1)
 			return (NULL);
 		tokens = tokens->next;

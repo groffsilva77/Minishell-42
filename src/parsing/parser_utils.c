@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 16:06:21 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/01 16:06:54 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/14 18:15:59 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ t_command	*create_command(void)
 	cmd->output_file = NULL;
 	cmd->type = CMD_SIMPLE;
 	cmd->next = NULL;
+	free(cmd);
 	return (cmd);
 }
 

@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 17:46:45 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/02 15:14:02 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/14 18:30:22 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	shell_loop(t_shell *shell)
 		}
 		expanded = expand_tokens(input, 1);
 		free(expanded);
-		execute_pipeline(commands, shell);
+		execute_single_command(commands, shell);
 		free_commands(commands, shell);
 		free(input);
 	}

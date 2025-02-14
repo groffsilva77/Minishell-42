@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:14:26 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/13 17:26:02 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/14 16:58:34 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,8 @@ int			handle_quotes_state(char c, int	*in_squotes, int *in_dquotes);
 char		*expand_var(const char *input, size_t *i);
 int			expand_variable(const char *token, size_t *i, char *expanded,
 				int j);
+char		*process_expansion(const char *token, char *expanded,
+				size_t max_len, int allow_expansion);
 char		*expand_tokens(const char *token, int allow_expansion);
 
 int			process_single_quote(const char *input, int *i, t_token **tokens,
@@ -143,10 +145,10 @@ t_command	*parse_tokens(t_token *tokens, t_shell *shell);
 void		handle_redirection(t_command **atl_cmd, t_token **tokens);
 int			handle_arg(t_command **atl_cmd, t_token *tokens, t_shell *shell);
 
-int			setup_pipes(t_exec_context *ctx);
 void		execute_command(t_command *cmd, t_shell *shell);
-void		execute_pipeline(t_command *commands, t_shell *shell);
 void		create_process(t_command *cmd, t_exec_context *ctx, t_shell *shell);
+void		execute_pipeline(t_command *commands, t_shell *shell);
+void		execute_single_command(t_command *cmd, t_shell *shell);
 
 int			handle_input_redirection(t_command *cmd);
 int			handle_output_redirection(t_command *cmd);
