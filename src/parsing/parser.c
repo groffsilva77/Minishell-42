@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 17:49:08 by ytavares          #+#    #+#             */
-/*   Updated: 2025/02/14 18:13:42 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/16 18:53:37 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,17 +59,35 @@ t_command	*parse_tokens(t_token *tokens, t_shell *shell)
 {
 	t_command	*commands;
 	t_command	*atl_cmd;
+	t_token		*redirect_tokens[1024];
 
 	commands = NULL;
 	atl_cmd = NULL;
 	while (tokens)
 	{
 		if (ft_strncmp(tokens->value, "|", 1) == 0)
+		{
 			commands = handle_pipe(commands, &atl_cmd);
+		}
+		else if (ft_strcmp(tokens->value, "<<") == 0)
+		{
+			if (!atl_cmd)
+				atl_cmd = create_command();
+			if (tokens->next)
+			{
+				atl_cmd->type = CMD_HEREDOC;
+				atl_cmd->is_heredoc = 1;
+				atl_cmd->heredoc_delim = ft_strdup(tokens->next->value);
+				setup_redirections(atl_cmd);
+			}
+			else
+				return (NULL);
+			tokens = tokens->next;
+		}
 		else if (ft_strchr("<>", tokens->value[0]))
 		{
-			handle_redirection(&atl_cmd, &tokens);
-			tokens = tokens->next;
+			if (!tokens->next)
+				return (commands);
 		}
 		else if (handle_arg(&atl_cmd, tokens, shell) == -1)
 			return (NULL);

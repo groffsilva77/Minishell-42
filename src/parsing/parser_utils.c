@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 16:06:21 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/14 18:15:59 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/16 18:54:06 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,24 +21,42 @@ t_command	*create_command(void)
 		return (NULL);
 	cmd->args = NULL;
 	cmd->argument_count = 0;
+	cmd->is_heredoc = 0;
 	cmd->input_file = NULL;
 	cmd->output_file = NULL;
+	cmd->heredoc_delim = NULL;
 	cmd->type = CMD_SIMPLE;
 	cmd->next = NULL;
-	free(cmd);
+	cmd->append_output = 0;
+	cmd->is_builtin = 0;
 	return (cmd);
 }
 
 void	parse_redirections(t_command *cmd, t_token **tokens)
 {
-	if (!(*tokens) || !(*tokens)->next)
+	if (!cmd || !(*tokens) || !(*tokens)->next)
 		return ;
-	if (ft_strncmp((*tokens)->value, "<", 1) == 0)
+	if (ft_strncmp((*tokens)->value, "<<", 2) == 0)
+	{	
+		cmd->heredoc_delim = ft_strdup((*tokens)->next->value);
+		cmd->is_heredoc = 1;
+		cmd->type = CMD_HEREDOC;
+	}
+	else if (ft_strncmp((*tokens)->value, "<", 1) == 0)
+	{
 		cmd->input_file = ft_strdup((*tokens)->next->value);
-	else if (ft_strncmp((*tokens)->value, ">", 1) == 0)
-		cmd->output_file = ft_strdup((*tokens)->next->value);
+		cmd->type = CMD_REDIR_IN;
+	}
 	else if (ft_strncmp((*tokens)->value, ">>", 2) == 0)
+	{	
 		cmd->output_file = ft_strdup((*tokens)->next->value);
+		cmd->type = CMD_APPEND;
+	}
+	else if (ft_strncmp((*tokens)->value, ">", 1) == 0)
+	{
+		cmd->output_file = ft_strdup((*tokens)->next->value);
+		cmd->type = CMD_REDIR_OUT;
+	}
 	*tokens = (*tokens)->next;
 }
 

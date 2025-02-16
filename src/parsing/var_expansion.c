@@ -6,11 +6,11 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/19 15:17:54 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/13 18:01:13 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/16 15:07:52 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parsing.h"
+#include "minishell.h"
 
 char	*expand_tokens(const char *token, int allow_expansion)
 {

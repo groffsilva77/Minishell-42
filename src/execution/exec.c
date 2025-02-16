@@ -6,27 +6,11 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:53:16 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/14 17:25:40 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/16 18:55:37 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// void	handle_env_var(t_command *cmd, t_shell *shell)
-// {
-// 	char	*var_name;
-// 	char	*var_value;
-
-// 	(void)shell;
-// 	if (cmd->args[0][0] == '$')
-// 	{
-// 		var_name = cmd->args[0] + 1;
-// 		var_value = getenv(var_name);
-// 		if (!var_value)
-// 			printf("\n");
-// 		exit(0);
-// 	}
-// }
 
 void	execute_command(t_command *cmd, t_shell *shell)
 {
@@ -43,7 +27,7 @@ void	execute_command(t_command *cmd, t_shell *shell)
 	if (!path)
 	{
 		ft_putstr_fd("minishell: command not found: \n", 2);
-		ft_putendl_fd(cmd->args[2], 2);
+		ft_putendl_fd(cmd->args[0], 2);
 		exit(127);
 	}
 	if (execve(path, cmd->args, shell->env_copy) < 0)
@@ -63,11 +47,11 @@ void	create_process(t_command *cmd, t_exec_context *ctx, t_shell *shell)
 		dup2(ctx->prev_fd, STDIN_FILENO);
 		close(ctx->prev_fd);
 	}
-	if (cmd->next)
+	if (setup_redirections(cmd) < 0)
+		exit(1);
+	if (cmd->next && !cmd->output_file)
 		dup2(ctx->pipe_fds[1], STDOUT_FILENO);
 	close(ctx->pipe_fds[0]);
 	close(ctx->pipe_fds[1]);
-	if (setup_redirections(cmd) < 0)
-		exit(1);
 	execute_command(cmd, shell);
 }

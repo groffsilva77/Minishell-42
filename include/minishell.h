@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:14:26 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/14 16:58:34 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/16 18:36:58 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <fcntl.h>
 # include <signal.h>
 # include <sys/wait.h>
+# include <errno.h>
 # include <../readline/readline.h>
 # include <../readline/history.h>
 # include "../lib/libft/libft.h"
@@ -38,17 +39,21 @@ typedef enum e_cmd_type {
 	CMD_PIPE,
 	CMD_REDIR_IN,
 	CMD_REDIR_OUT,
-	CMD_APPEND
+	CMD_APPEND,
+	CMD_HEREDOC
 }	t_cmd_type;
 
 typedef struct s_command {
 	char				**args;
-	int					argument_count;
 	char				*input_file;
 	char				*output_file;
+	char				*heredoc_delim;
+	int					append_output;
+	int					is_heredoc;
+	int					argument_count;
+	int					is_builtin;
 	t_cmd_type			type;
 	struct s_command	*next;
-	int					is_builtin;
 }	t_command;
 
 typedef struct s_token {

@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 18:02:33 by ytavares          #+#    #+#             */
-/*   Updated: 2025/02/12 14:54:53 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/16 14:59:01 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ static int	add_new_var(char *name, char *value_ex, t_shell *shell)
 	int		i;
 
 	i = 0;
-	value_ex = NULL;
 	while (shell->env_copy[i])
 		i++;
 	new_env = ft_realloc_array(shell->env_copy, sizeof(char *) * (i + 2),
@@ -94,67 +93,3 @@ int	the_export(char **args, t_shell *shell)
 		return (0);
 	return (add_new_var(name, value_ex, shell));
 }
-/*
-
-Início
-|
-v
-Verifica se args[1] existe?
-|
-+---> Não ---> Chama the_env(shell) e retorna
-|
-v
-Sim
-|
-v
-Procura o caractere '=' em args[1]
-|
-+---> Não encontrado ---> Define exit_status = 1 e retorna 1
-|
-v
-Encontrado
-|
-v
-Extrai o nome da variável (var_name) e o valor (var_value)
-|
-v
-Expande o valor da variável (var_value_expanded)
-|
-v
-Libera var_value (não é mais necessário)
-|
-v
-Chama update_existing_var(var_name, var_value_expanded, shell)
-|
-+---> Variável existe? ---> Sim ---> Atualiza a variável existente
-|        |                        |
-|        |                        v
-|        |                      Libera var_name e var_value_expanded
-|        |                        |
-|        |                        v
-|        |                      Define exit_status = 0 e retorna 0
-|        |
-|        v
-|       Não
-|
-v
-Chama add_new_var(var_name, var_value_expanded, shell)
-|
-+---> Alocação de memória falhou? ---> Sim ---> Define exit_status = 1 e retorna 1
-|        |
-|        v
-|       Não
-|        |
-|        v
-|      Adiciona a nova variável ao array
-|        |
-|        v
-|      Libera var_name e var_value_expanded
-|        |
-|        v
-|      Define exit_status = 0 e retorna 0
-|
-v
-Fim
-
-*/

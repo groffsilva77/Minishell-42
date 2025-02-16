@@ -6,14 +6,9 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 18:23:11 by ytavares          #+#    #+#             */
-/*   Updated: 2025/02/14 18:14:12 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/16 18:54:44 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-//cd: entra dentro de diretórios
-
-/*char args: contém os argumetos passados pelo usuário.
-t_shell: um ponteiro para a struct de dados*/
 
 #include "minishell.h"
 
@@ -33,7 +28,10 @@ static void	update_env_var(t_shell *shell, const char *name, const char *value)
 	i = 0;
 	while (shell->env_copy[i])
 	{
-		if (ft_strncmp(shell->env_copy[i], name, ft_strlen(name)) == 0
+		if (!name || !shell->env_copy[i])
+			continue ;
+		if (ft_strlen(shell->env_copy[i]) >= ft_strlen(name) + 1
+			&& ft_strncmp(shell->env_copy[i], name, ft_strlen(name)) == 0
 			&& shell->env_copy[i][ft_strlen(name)] == '=')
 		{
 			shell->env_copy[i] = new_var;

@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 16:39:05 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/14 17:54:50 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/15 17:45:54 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,14 @@
 static void	child_process(t_command *cmd, int *fd_in, int *pipe_fd,
 		t_shell *shell)
 {
-	if (*fd_in != -1)
+	if (setup_redirections(cmd) < 0)
+		exit(1);
+	if (*fd_in != -1 && !cmd->input_file)
 	{
 		dup2(*fd_in, STDIN_FILENO);
 		close(*fd_in);
 	}
-	if (pipe_fd[1] != -1)
+	if (pipe_fd[1] != -1 && cmd->output_file)
 	{
 		dup2(pipe_fd[1], STDOUT_FILENO);
 		close(pipe_fd[1]);

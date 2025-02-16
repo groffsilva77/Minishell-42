@@ -1,9 +1,13 @@
+DEBUG execute_command - Starting
+DEBUG execute_command - Output file: teste.txt
+DEBUG execute_command - STDOUT_FILENO status: 0
+DEBUG execute_command - Before execve
 #name of the project
 NAME = minishell
 
 #compile and flags
-CC = gcc
-CFLAGS = -g3
+CC = cc
+CFLAGS = -g -Wall -Wextra -Werror -I$(INCLUDE_DIR) -I$(LIBFT_DIR)
 
 #include (.h)
 INCLUDES = -I$(INCLUDE_DIR) -I$(LIBFT_DIR)

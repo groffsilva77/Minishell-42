@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 17:02:48 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/01 18:23:42 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/16 17:24:39 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,11 @@ void	handle_redirects(const char *input, int *i, t_token **tokens)
 {
 	char	*sbstr;
 
+	if (input[*i] == '<' && input[*i + 1] == '<')
+	{
+		add_token(tokens, "<<");
+		(*i) += 2;
+	}
 	if (input[*i] == '>' && input[*i + 1] == '>')
 	{
 		add_token(tokens, ">>");
