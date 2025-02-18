@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:59:35 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/18 17:13:03 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/18 17:41:46 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	handle_output_redirection(t_command *cmd)
 			flags = O_WRONLY | O_CREAT | O_APPEND;
 		else
 			flags = O_WRONLY | O_CREAT | O_TRUNC;
-		fd = open(cmd->output_file, flags, 0644);
+		fd = open(cmd->output_file, flags, 0777);
 		if (fd < 0)
 		{
 			perror("Output redirection failed");

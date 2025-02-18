@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 16:06:21 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/16 18:54:06 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/18 17:41:31 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,23 +36,23 @@ void	parse_redirections(t_command *cmd, t_token **tokens)
 {
 	if (!cmd || !(*tokens) || !(*tokens)->next)
 		return ;
-	if (ft_strncmp((*tokens)->value, "<<", 2) == 0)
+	if (ft_strncmp((*tokens)->value, "<<", 3) == 0)
 	{	
 		cmd->heredoc_delim = ft_strdup((*tokens)->next->value);
 		cmd->is_heredoc = 1;
 		cmd->type = CMD_HEREDOC;
 	}
-	else if (ft_strncmp((*tokens)->value, "<", 1) == 0)
+	else if (ft_strncmp((*tokens)->value, "<", 2) == 0)
 	{
 		cmd->input_file = ft_strdup((*tokens)->next->value);
 		cmd->type = CMD_REDIR_IN;
 	}
-	else if (ft_strncmp((*tokens)->value, ">>", 2) == 0)
+	else if (ft_strncmp((*tokens)->value, ">>", 3) == 0)
 	{	
 		cmd->output_file = ft_strdup((*tokens)->next->value);
 		cmd->type = CMD_APPEND;
 	}
-	else if (ft_strncmp((*tokens)->value, ">", 1) == 0)
+	else if (ft_strncmp((*tokens)->value, ">", 2) == 0)
 	{
 		cmd->output_file = ft_strdup((*tokens)->next->value);
 		cmd->type = CMD_REDIR_OUT;
