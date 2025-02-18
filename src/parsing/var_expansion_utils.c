@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 17:59:29 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/14 15:53:04 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/18 16:00:29 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,6 @@ char	*get_env_value(const char *var)
 	value = getenv(var);
 	if (!value)
 		return (ft_strdup(""));
-	if (ft_strcmp(var, "PATH") == 0)
-	{
-		printf("%s\n", value);
-		return (ft_strdup(""));
-	}
-	else
-	{
-		printf("%s\n", value);
-		return (ft_strdup(""));
-	}
 	return (ft_strdup(value));
 }
 
@@ -71,6 +61,8 @@ char	*expand_var(const char *input, size_t *i)
 	if (len == 0)
 		return ((*i)++, ft_strdup("$"));
 	var_name = malloc(len + 1);
+	if (!var_name)
+		return (NULL);
 	ft_strlcpy(var_name, &input[start], len + 1);
 	value = get_env_value(var_name);
 	free(var_name);
@@ -87,11 +79,9 @@ int	expand_variable(const char *token, size_t *i, char *expanded, int j)
 	if (!value)
 		return (j);
 	k = 0;
-	if (value)
-	{
-		while (value[k])
-			expanded[j++] = value[k++];
-	}
+	while (value[k])
+		expanded[j++] = value[k++];
+	free(value);
 	return (j);
 }
 
@@ -100,17 +90,18 @@ char	*process_expansion(const char *token, char *expanded,
 {
 	size_t	i;
 	size_t	j;
-	int		in_quotes[2];
+	int		in_squotes;
+	int		in_dquotes;
 
 	i = 0;
 	j = 0;
-	in_quotes[0] = 0;
-	in_quotes[1] = 0;
+	in_squotes = 0;
+	in_dquotes = 0;
 	while (token[i] && j < max_len - 1)
 	{
-		if (handle_quotes_state(token[i], &in_quotes[0], &in_quotes[1]))
+		if (handle_quotes_state(token[i], &in_squotes, &in_dquotes))
 			i++;
-		else if (token[i] == '$' && allow_expansion && !in_quotes[0])
+		else if (token[i] == '$' && allow_expansion && !in_squotes)
 			j = expand_variable(token, &i, expanded, j);
 		else
 			expanded[j++] = token[i++];

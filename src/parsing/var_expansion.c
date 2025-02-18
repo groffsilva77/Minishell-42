@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/19 15:17:54 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/16 15:07:52 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/18 15:59:30 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*expand_tokens(const char *token, int allow_expansion)
 
 	if (!token)
 		return (NULL);
-	max_len = ft_strlen(token) * 4 + 1;
+	max_len = ft_strlen(token) * 8 + 1;
 	expanded = malloc(max_len);
 	if (!expanded)
 		return (NULL);

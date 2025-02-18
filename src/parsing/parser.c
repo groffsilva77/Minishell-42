@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 17:49:08 by ytavares          #+#    #+#             */
-/*   Updated: 2025/02/16 18:53:37 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/18 16:30:40 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,20 @@ t_command	*parse_tokens(t_token *tokens, t_shell *shell)
 				atl_cmd->type = CMD_HEREDOC;
 				atl_cmd->is_heredoc = 1;
 				atl_cmd->heredoc_delim = ft_strdup(tokens->next->value);
+				setup_redirections(atl_cmd);
+			}
+			else
+				return (NULL);
+			tokens = tokens->next;
+		}
+		else if (ft_strcmp(tokens->value, ">>") == 0)
+		{
+			if (!atl_cmd)
+				atl_cmd = create_command();
+			if (tokens->next)
+			{
+				atl_cmd->type = CMD_APPEND;
+				atl_cmd->output_file = ft_strdup(tokens->next->value);
 				setup_redirections(atl_cmd);
 			}
 			else

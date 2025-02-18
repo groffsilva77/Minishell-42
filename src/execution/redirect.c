@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:59:35 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/16 18:46:55 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/18 17:13:03 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@ static int	handle_heredoc(t_command *cmd)
 			free(line);
 			break ;
 		}
-		if (*line)
-			add_history(cmd->heredoc_delim);
 		write(pipe_fds[1], line, ft_strlen(line));
 		write(pipe_fds[1], "\n", 1);
 		free(line);
