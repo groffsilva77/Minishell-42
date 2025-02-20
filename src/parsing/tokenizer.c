@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 14:18:53 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/01 18:25:55 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/20 13:58:59 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	process_whitespace(const char *input, int *i, int *start,
 	*start = ++(*i);
 }
 
-t_token	*tokenize(const char *input)
+t_token	*tokenize(t_shell *shell, const char *input)
 {
 	t_token	*tokens;
 	int		i;
@@ -44,7 +44,7 @@ t_token	*tokenize(const char *input)
 			process_whitespace(input, &i, &start, &tokens);
 		else if (input[i] == '\'' || input[i] == '"')
 		{
-			if (!process_quotes(input, &i, &tokens))
+			if (!process_quotes(shell, input, &i, &tokens))
 				break ;
 			start = i;
 		}

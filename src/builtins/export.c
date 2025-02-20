@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 18:02:33 by ytavares          #+#    #+#             */
-/*   Updated: 2025/02/18 15:29:26 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/20 13:32:41 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,23 +79,39 @@ int	the_export(char **args, t_shell *shell)
 	const char	*eq_position;
 	char		*name;
 	char		*value_ex;
+	size_t		name_len;
 
 	if (!args[1])
 		return (the_env(shell));
 	eq_position = ft_strchr(args[1], '=');
 	if (!eq_position)
 		return (0);
-	name = ft_strndup(args[1], eq_position - args[1]);
+	name_len = eq_position -args[1];
+	printf("Tamanho do nome: %zu\n", name_len);
+	printf("Argumento recebido: '%s'\n", args[1]);
+	name = malloc(name_len + 1);
 	if (!name)
 		return (1);
-	value_ex = expand_tokens(eq_position + 1, 1);
+	memcpy(name, args[1], name_len);
+	name[name_len] = '\0';
+	printf ("nome extraido: %s\n", name);
+	value_ex = expand_tokens(shell, eq_position + 1, 1);
 	if (!value_ex)
+	{
+		printf("Erro: Expansão de tokens falhou!\n");
 		return (free(name), 1);
+	}
 	if (update_existing_var(name, value_ex, shell) != 0)
 	{
 		if (add_new_var(name, value_ex, shell) != 0)
 			return (free(name), free(value_ex), 1);
 	}
 	free(name);
+	int i = 0;
+	while(shell->env_copy[i])
+	{
+		printf("env[%d]: %s\n", i, shell->env_copy[i]);
+		i++;
+	}
 	return (0);
 }

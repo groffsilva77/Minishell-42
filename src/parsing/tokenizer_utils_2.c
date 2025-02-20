@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_utils_2.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 17:02:48 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/16 17:24:39 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/20 13:55:16 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	handle_quotes(const char *input, int *i, t_token **tokens)
+int	handle_quotes(t_shell *shell, const char *input, int *i, t_token **tokens)
 {
 	char	quote;
 	char	*sbstr;
@@ -31,7 +31,7 @@ int	handle_quotes(const char *input, int *i, t_token **tokens)
 		if (quote == '\'')
 			return (process_single_quote(input, i, tokens, sbstr));
 		else
-			return (process_double_quote(input, i, tokens, sbstr));
+			return (process_double_quote(shell, input, i, tokens, sbstr));
 	}
 	return (0);
 }

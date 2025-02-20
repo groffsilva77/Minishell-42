@@ -3,26 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:35:38 by ytavares          #+#    #+#             */
-/*   Updated: 2025/02/18 18:07:15 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/20 13:46:02 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	print_arguments(char **args, int i)
+static void	print_arguments(t_shell *shell, char **args, int i)
 {
 	char	*expand_result;
 
 	while (args[i])
 	{
-		expand_result = expand_tokens(args[i], 1);
+		expand_result = expand_tokens(shell, args[i], 1);
+		printf("expand_tokens('%s') -> '%s'\n", args[i], expand_result);
 		if (expand_result)
 		{
+			printf("expansão de argumento: %s\n", expand_result);
 			ft_putstr_fd(expand_result, STDOUT_FILENO);
 			free(expand_result);
+		}
+		else
+		{
+			ft_putstr_fd(args[i], STDOUT_FILENO);
 		}
 		if (args[i + 1])
 			ft_putstr_fd(" ", STDOUT_FILENO);
@@ -42,7 +48,7 @@ int	the_echo(char **args, t_shell *shell)
 		newline = 0;
 		i++;
 	}
-	print_arguments(args, i);
+	print_arguments(shell ,args, i);
 	if (newline)
 		ft_putstr_fd("\n", STDOUT_FILENO);
 	shell->exit_status = 0;

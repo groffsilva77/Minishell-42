@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 17:46:45 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/18 14:27:20 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/20 14:01:08 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ t_command	*process_input(char *input, t_shell *shell)
 	t_token		*tokens;
 	t_command	*commands;
 
-	tokens = tokenize(input);
+	tokens = tokenize(shell, input);
 	if (!tokens)
 		return (NULL);
 	if (!validate_syntax(tokens))
@@ -71,7 +71,7 @@ void	shell_loop(t_shell *shell)
 			free(input);
 			continue ;
 		}
-		expanded = expand_tokens(input, 1);
+		expanded = expand_tokens(shell, input, 1);
 		free(expanded);
 		execute_single_command(commands, shell);
 		free_commands(commands, shell);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:14:26 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/18 16:00:18 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/20 16:32:18 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,24 +103,24 @@ void		shell_loop(t_shell *shell);
 int			is_operator(const char *token);
 int			validate_syntax(t_token *tokens);
 
-char		*get_env_value(const char *var);
+char		*get_env_value(t_shell *shell, const char *var);
 int			handle_quotes_state(char c, int	*in_squotes, int *in_dquotes);
-char		*expand_var(const char *input, size_t *i);
-int			expand_variable(const char *token, size_t *i, char *expanded,
-				int j);
-char		*process_expansion(const char *token, char *expanded,
-				size_t max_len, int allow_expansion);
-char		*expand_tokens(const char *token, int allow_expansion);
+char		*expand_var(t_shell *shell, const char *input, size_t *i);
+int			expand_variable(t_shell *shell, const char *token, size_t *i, char *expanded,
+				int j); //
+char		*process_expansion(t_shell *shell, const char *token, char *expanded,
+				size_t max_len, int allow_expansion); //
+char		*expand_tokens(t_shell *shell, const char *token, int allow_expansion);
 
 int			process_single_quote(const char *input, int *i, t_token **tokens,
 				char *sbstr);
-int			process_double_quote(const char *input, int *i, t_token **tokens,
-				char *sbstr);
+int			process_double_quote(t_shell *shell, const char *input, int *i, t_token **tokens,
+				char *sbstr); //
 int			is_whitespace(char c);
 void		add_token(t_token **tokens, const char *value);
 char		*copy_substr(const char *input, int start, int length);
 
-int			handle_quotes(const char *input, int *i, t_token **tokens);
+int			handle_quotes(t_shell *shell, const char *input, int *i, t_token **tokens);
 void		hand_pipe(const char *input, int *i, t_token **tokens);
 void		handle_redirects(const char *input, int *i, t_token **tokens);
 void		hand_spc_chars(const char *input, int *i, int *start,
@@ -128,7 +128,7 @@ void		hand_spc_chars(const char *input, int *i, int *start,
 
 void		finzalize_token(const char *input, int *i, int *start,
 				t_token **tokens);
-int			process_quotes(const char *input, int *i, t_token **tokens);
+int			process_quotes(t_shell *shell,const char *input, int *i, t_token **tokens);
 void		process_special_chars(const char *input, int *i, int *start,
 				t_token **tokens);
 void		handle_word(const char *input, int *i, int *start,
@@ -136,7 +136,7 @@ void		handle_word(const char *input, int *i, int *start,
 void		process_word(const char *input, int *i, int *start,
 				t_token **tokens);
 
-t_token		*tokenize(const char *input);
+t_token		*tokenize(t_shell *shell, const char *input);
 void		process_whitespace(const char *input, int *i, int *start,
 				t_token **tokens);
 

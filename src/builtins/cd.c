@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 18:23:11 by ytavares          #+#    #+#             */
-/*   Updated: 2025/02/16 18:54:44 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/20 13:47:04 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ static int	handle_no_args(t_shell *shell, char **new_path_dir)
 
 	if (!shell || !new_path_dir)
 		return (1);
-	store_home = get_env_value("HOME");
+	store_home = get_env_value(shell, "HOME");
 	if (!store_home || !*store_home)
 	{
 		ft_putendl_fd("cd: HOME is not defined", 2);

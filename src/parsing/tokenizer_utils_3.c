@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_utils_3.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 18:22:26 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/02 14:51:16 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/20 13:17:37 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,14 +68,14 @@ int	process_single_quote(const char *input, int *i, t_token **tokens,
 	return (1);
 }
 
-int	process_double_quote(const char *input, int *i, t_token **tokens,
+int	process_double_quote(t_shell *shell, const char *input, int *i, t_token **tokens,
 						char *sbstr)
 {
 	char	*expanded;
 
 	(void)*input;
 	(void)*i;
-	expanded = expand_tokens(sbstr, 1);
+	expanded = expand_tokens(shell, sbstr, 1);
 	if (!expanded)
 		return (free(sbstr), 0);
 	add_token(tokens, expanded);

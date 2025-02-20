@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:53:16 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/18 14:57:49 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/20 14:02:06 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	execute_command(t_command *cmd, t_shell *shell)
 		exit(EXIT_FAILURE);
 	if (cmd->args[0][0] == '$')
 	{
-		expanded_cmd = expand_tokens(cmd->args[0], 1);
+		expanded_cmd = expand_tokens(shell ,cmd->args[0], 1);
 		if (!expanded_cmd || !*expanded_cmd)
 		{
 			ft_putstr_fd("minishell: command not found: ", 2);

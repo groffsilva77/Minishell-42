@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 13:42:32 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/05 16:17:39 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/20 13:56:53 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,11 @@ void	finzalize_token(const char *input, int *i, int *start, t_token **tokens)
 	}
 }
 
-int	process_quotes(const char *input, int *i, t_token **tokens)
+int	process_quotes(t_shell *shell, const char *input, int *i, t_token **tokens)
 {
 	if (!&handle_quotes)
 		ft_putstr_fd("Error: Unmatched quotes\n", 2);
-	return (handle_quotes(input, i, tokens));
+	return (handle_quotes(shell, input, i, tokens));
 }
 
 void	process_special_chars(const char *input, int *i, int *start,
