@@ -6,29 +6,41 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 16:39:05 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/15 17:45:54 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/20 14:42:58 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "execution.h"
+#include "minishell.h"
+
+int	handle_heredoc(t_command *cmd);
 
 static void	child_process(t_command *cmd, int *fd_in, int *pipe_fd,
 		t_shell *shell)
 {
-	if (setup_redirections(cmd) < 0)
-		exit(1);
-	if (*fd_in != -1 && !cmd->input_file)
+	if (cmd->is_heredoc == CMD_HEREDOC)
+	{
+		if (dup2(cmd->heredoc_pipe[0], STDIN_FILENO) < 0)
+		{
+			perror("heredoc dup2 heredoc");
+			exit(1);
+		}
+		close(cmd->heredoc_pipe[0]);
+		close(cmd->heredoc_pipe[1]);
+	}
+	if (*fd_in != -1)
 	{
 		dup2(*fd_in, STDIN_FILENO);
 		close(*fd_in);
 	}
-	if (pipe_fd[1] != -1 && cmd->output_file)
+	if (pipe_fd[1] != -1)
 	{
 		dup2(pipe_fd[1], STDOUT_FILENO);
 		close(pipe_fd[1]);
 	}
 	if (pipe_fd[0] != -1)
 		close(pipe_fd[0]);
+	if (setup_redirections(cmd) < 0)
+		exit(1);
 	execute_command(cmd, shell);
 	exit(shell->exit_status);
 }
@@ -84,12 +96,26 @@ void	execute_pipeline(t_command *cmd, t_shell *shell)
 
 void	execute_single_command(t_command *cmd, t_shell *shell)
 {
+	int	heredoc_fd;
+
 	if (!cmd || !cmd->args || !cmd->args[0])
 		return ;
-	if (is_builtin(cmd->args[0]))
+	if (cmd->is_heredoc == CMD_HEREDOC)
+	{
+		heredoc_fd = handle_heredoc(cmd);
+		if (cmd->heredoc_fd < 0)
+			return ;
+		cmd->heredoc_fd = heredoc_fd;
+	}
+	if (is_builtin(cmd->args[0]) && !cmd->next && !cmd->output_file
+		&& !cmd->input_file)
 	{
 		execute_builtin(cmd, shell);
-		return ;
+		if (cmd->heredoc_fd != -1)
+		{
+			close(cmd->heredoc_pipe[0]);
+			close(cmd->heredoc_pipe[1]);
+		}
 	}
 	else
 		execute_pipeline(cmd, shell);

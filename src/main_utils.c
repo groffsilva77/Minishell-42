@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 17:46:45 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/18 14:27:20 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/19 19:04:13 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	is_empty_input(const char *input)
 void	shell_loop(t_shell *shell)
 {
 	char			*input;
-	char			*expanded;
+	// char			*expanded;
 	t_command		*commands;
 
 	while (1)
@@ -71,8 +71,8 @@ void	shell_loop(t_shell *shell)
 			free(input);
 			continue ;
 		}
-		expanded = expand_tokens(input, 1);
-		free(expanded);
+		// expanded = expand_tokens(input, 1);
+		// free(expanded);
 		execute_single_command(commands, shell);
 		free_commands(commands, shell);
 		free(input);

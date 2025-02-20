@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:14:26 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/18 16:00:18 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/20 14:05:36 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,10 @@ typedef struct s_command {
 	char				*input_file;
 	char				*output_file;
 	char				*heredoc_delim;
+	int					heredoc_pipe[2];
 	int					append_output;
 	int					is_heredoc;
+	int					heredoc_fd;
 	int					argument_count;
 	int					is_builtin;
 	t_cmd_type			type;
@@ -59,6 +61,7 @@ typedef struct s_command {
 typedef struct s_token {
 	char			*value;
 	struct s_token	*next;
+	t_command		*cmd;
 }	t_token;
 
 typedef struct s_memory
@@ -172,6 +175,7 @@ char		**ft_realloc_array(char **array, int new_size, char *new_value,
 				t_shell *shell);
 char		*ft_strcat(char *dest, const char *src);
 char		*ft_strcpy(char *dest, char *src);
+char		*fts_strtrim(const char *str);
 
 int			the_cd(char **args, t_shell *shell);
 int			the_echo(char **args, t_shell *shell);

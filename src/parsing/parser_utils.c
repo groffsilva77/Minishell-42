@@ -6,11 +6,13 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 16:06:21 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/18 17:41:31 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/20 14:23:28 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	handle_heredoc(t_command *cmd);
 
 t_command	*create_command(void)
 {
@@ -22,6 +24,7 @@ t_command	*create_command(void)
 	cmd->args = NULL;
 	cmd->argument_count = 0;
 	cmd->is_heredoc = 0;
+	cmd->heredoc_fd = -1;
 	cmd->input_file = NULL;
 	cmd->output_file = NULL;
 	cmd->heredoc_delim = NULL;
@@ -29,6 +32,8 @@ t_command	*create_command(void)
 	cmd->next = NULL;
 	cmd->append_output = 0;
 	cmd->is_builtin = 0;
+	cmd->heredoc_pipe[0] = -1;
+	cmd->heredoc_pipe[1] = -1;
 	return (cmd);
 }
 
@@ -36,23 +41,23 @@ void	parse_redirections(t_command *cmd, t_token **tokens)
 {
 	if (!cmd || !(*tokens) || !(*tokens)->next)
 		return ;
-	if (ft_strncmp((*tokens)->value, "<<", 3) == 0)
+	if (ft_strncmp((*tokens)->value, "<<", 2) == 0)
 	{	
 		cmd->heredoc_delim = ft_strdup((*tokens)->next->value);
-		cmd->is_heredoc = 1;
+		cmd->is_heredoc = CMD_HEREDOC;
 		cmd->type = CMD_HEREDOC;
 	}
-	else if (ft_strncmp((*tokens)->value, "<", 2) == 0)
+	else if (ft_strncmp((*tokens)->value, "<", 1) == 0)
 	{
 		cmd->input_file = ft_strdup((*tokens)->next->value);
 		cmd->type = CMD_REDIR_IN;
 	}
-	else if (ft_strncmp((*tokens)->value, ">>", 3) == 0)
+	else if (ft_strncmp((*tokens)->value, ">>", 2) == 0)
 	{	
 		cmd->output_file = ft_strdup((*tokens)->next->value);
 		cmd->type = CMD_APPEND;
 	}
-	else if (ft_strncmp((*tokens)->value, ">", 2) == 0)
+	else if (ft_strncmp((*tokens)->value, ">", 1) == 0)
 	{
 		cmd->output_file = ft_strdup((*tokens)->next->value);
 		cmd->type = CMD_REDIR_OUT;
