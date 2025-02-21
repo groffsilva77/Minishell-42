@@ -6,7 +6,7 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:35:38 by ytavares          #+#    #+#             */
-/*   Updated: 2025/02/20 13:46:02 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/02/20 18:26:05 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,8 @@ static void	print_arguments(t_shell *shell, char **args, int i)
 	while (args[i])
 	{
 		expand_result = expand_tokens(shell, args[i], 1);
-		printf("expand_tokens('%s') -> '%s'\n", args[i], expand_result);
 		if (expand_result)
 		{
-			printf("expansão de argumento: %s\n", expand_result);
 			ft_putstr_fd(expand_result, STDOUT_FILENO);
 			free(expand_result);
 		}

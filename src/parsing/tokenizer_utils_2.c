@@ -6,7 +6,7 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 17:02:48 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/20 13:55:16 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/02/21 18:02:41 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ int	handle_quotes(t_shell *shell, const char *input, int *i, t_token **tokens)
 			return (0);
 		(*i)++;
 		if (quote == '\'')
-			return (process_single_quote(input, i, tokens, sbstr));
+			return (process_single_quote(shell, input, i, tokens));
 		else
-			return (process_double_quote(shell, input, i, tokens, sbstr));
+			return (process_double_quote(shell, input, i, tokens));
 	}
 	return (0);
 }

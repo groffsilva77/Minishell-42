@@ -6,7 +6,7 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:14:26 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/20 16:32:18 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/02/21 19:26:09 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,8 @@ typedef struct s_shell
 	t_memory	*memory;
 	char		**env_copy;
 	int			exit_status;
+	char		*expand;
+	char		*sbstr;
 }	t_shell;
 
 typedef struct s_exec_context
@@ -97,7 +99,9 @@ void		free_tokens(t_token *tokens);
 void		ft_free_array(char **array);
 void		*fts_malloc(t_shell *shell, size_t size);
 void		ft_free(t_shell *shell, void *ptr);
-
+t_shell		*init_shell(char **env);
+void		free_shell(t_shell *shell);
+char		**duplicate_env(char **env);
 void		shell_loop(t_shell *shell);
 
 int			is_operator(const char *token);
@@ -106,16 +110,13 @@ int			validate_syntax(t_token *tokens);
 char		*get_env_value(t_shell *shell, const char *var);
 int			handle_quotes_state(char c, int	*in_squotes, int *in_dquotes);
 char		*expand_var(t_shell *shell, const char *input, size_t *i);
-int			expand_variable(t_shell *shell, const char *token, size_t *i, char *expanded,
-				int j); //
-char		*process_expansion(t_shell *shell, const char *token, char *expanded,
+int			expand_variable(t_shell *shell, const char *token, size_t *i, int j); //
+char		*process_expansion(t_shell *shell, const char *token,
 				size_t max_len, int allow_expansion); //
 char		*expand_tokens(t_shell *shell, const char *token, int allow_expansion);
 
-int			process_single_quote(const char *input, int *i, t_token **tokens,
-				char *sbstr);
-int			process_double_quote(t_shell *shell, const char *input, int *i, t_token **tokens,
-				char *sbstr); //
+int			process_single_quote(t_shell *shell, const char *input, int *i, t_token **tokens); //ver se essa também deve ser alterada
+int			process_double_quote(t_shell *shell, const char *input, int *i, t_token **tokens); //
 int			is_whitespace(char c);
 void		add_token(t_token **tokens, const char *value);
 char		*copy_substr(const char *input, int start, int length);
