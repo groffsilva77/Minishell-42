@@ -6,13 +6,11 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 17:59:29 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/18 16:00:29 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/21 15:46:45 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int			g_exit_status = 0;
 
 char	*get_env_value(const char *var)
 {
@@ -63,14 +61,15 @@ char	*expand_var(const char *input, size_t *i)
 	var_name = malloc(len + 1);
 	if (!var_name)
 		return (NULL);
+	ft_bzero(var_name, len + 1);
 	ft_strlcpy(var_name, &input[start], len + 1);
 	value = get_env_value(var_name);
 	free(var_name);
-	*i = start + len;
-	return (value);
+	return (var_name = NULL, *i = start + len, value);
 }
 
-int	expand_variable(const char *token, size_t *i, char *expanded, int j)
+int	expand_variable(const char *token, size_t *i, char *expanded, int j,
+			size_t max_len)
 {
 	char	*value;
 	int		k;
@@ -79,9 +78,10 @@ int	expand_variable(const char *token, size_t *i, char *expanded, int j)
 	if (!value)
 		return (j);
 	k = 0;
-	while (value[k])
+	while (value[k] && j < max_len - 1)
 		expanded[j++] = value[k++];
 	free(value);
+	value = NULL;
 	return (j);
 }
 
@@ -97,12 +97,14 @@ char	*process_expansion(const char *token, char *expanded,
 	j = 0;
 	in_squotes = 0;
 	in_dquotes = 0;
+	if (!token)
+		return (NULL);
 	while (token[i] && j < max_len - 1)
 	{
 		if (handle_quotes_state(token[i], &in_squotes, &in_dquotes))
 			i++;
 		else if (token[i] == '$' && allow_expansion && !in_squotes)
-			j = expand_variable(token, &i, expanded, j);
+			j = expand_variable(token, &i, expanded, j, max_len);
 		else
 			expanded[j++] = token[i++];
 	}

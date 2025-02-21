@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:14:26 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/20 14:05:36 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/21 15:50:52 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ typedef struct s_command {
 
 typedef struct s_token {
 	char			*value;
+	int				is_single_quoted;
 	struct s_token	*next;
 	t_command		*cmd;
 }	t_token;
@@ -67,6 +68,7 @@ typedef struct s_token {
 typedef struct s_memory
 {
 	void				*ptr_for_memory_block;
+	void				*ptr;
 	struct s_memory		*next_ptr;
 }	t_memory;
 
@@ -109,8 +111,9 @@ int			validate_syntax(t_token *tokens);
 char		*get_env_value(const char *var);
 int			handle_quotes_state(char c, int	*in_squotes, int *in_dquotes);
 char		*expand_var(const char *input, size_t *i);
-int			expand_variable(const char *token, size_t *i, char *expanded,
-				int j);
+int			expand_variable(const char *token, size_t *i, char *expanded, int j,
+				size_t max_len);
+
 char		*process_expansion(const char *token, char *expanded,
 				size_t max_len, int allow_expansion);
 char		*expand_tokens(const char *token, int allow_expansion);
@@ -120,7 +123,8 @@ int			process_single_quote(const char *input, int *i, t_token **tokens,
 int			process_double_quote(const char *input, int *i, t_token **tokens,
 				char *sbstr);
 int			is_whitespace(char c);
-void		add_token(t_token **tokens, const char *value);
+void		add_token(t_token **tokens, const char *value,
+				int is_single_quoted);
 char		*copy_substr(const char *input, int start, int length);
 
 int			handle_quotes(const char *input, int *i, t_token **tokens);

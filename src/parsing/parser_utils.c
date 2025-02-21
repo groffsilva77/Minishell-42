@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 16:06:21 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/20 14:23:28 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/21 15:19:41 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,12 @@ void	parse_redirections(t_command *cmd, t_token **tokens)
 	if (ft_strncmp((*tokens)->value, "<<", 2) == 0)
 	{	
 		cmd->heredoc_delim = ft_strdup((*tokens)->next->value);
-		cmd->is_heredoc = CMD_HEREDOC;
+		cmd->is_heredoc = 1;
 		cmd->type = CMD_HEREDOC;
+		cmd->heredoc_fd = handle_heredoc(cmd);
+		if (cmd->heredoc_fd < 0)
+			cmd->is_heredoc = 0;
+		free(cmd->heredoc_delim);
 	}
 	else if (ft_strncmp((*tokens)->value, "<", 1) == 0)
 	{

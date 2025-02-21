@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:59:35 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/20 14:24:23 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/21 17:18:35 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,9 @@ int	handle_redirections(t_command *cmd)
 {
 	int		fd;
 
-	if (cmd->is_heredoc == CMD_HEREDOC && cmd->heredoc_fd != -1)
+	ft_putstr_fd("Setting up redirections for: ", 2);
+	ft_putendl_fd(cmd->args[0], 2);
+	if (cmd->is_heredoc && cmd->heredoc_fd != -1)
 	{
 		if (dup2(cmd->heredoc_fd, STDIN_FILENO) < 0)
 		{
@@ -103,15 +105,13 @@ int	handle_redirections(t_command *cmd)
 		}
 		close(cmd->heredoc_fd);
 	}
-	if (cmd->input_file)
+	if (cmd->input_file && handle_input_redirection(cmd) < 0)
 	{
-		if (handle_input_redirection(cmd) < 0)
-			return (-1);
+		return (-1);
 	}
-	if (cmd->output_file)
+	if (cmd->output_file && handle_output_redirection(cmd) < 0)
 	{
-		if (handle_output_redirection(cmd) < 0)
-			return (-1);
+		return (-1);
 	}
 	return (0);
 }

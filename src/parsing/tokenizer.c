@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 14:18:53 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/01 18:25:55 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/21 15:06:11 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	process_whitespace(const char *input, int *i, int *start,
 		token = copy_substr(input, *start, *i - *start);
 		if (token)
 		{
-			add_token(tokens, token);
+			add_token(tokens, token, 0);
 			free(token);
 		}
 	}

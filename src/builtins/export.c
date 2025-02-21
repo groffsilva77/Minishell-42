@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 18:02:33 by ytavares          #+#    #+#             */
-/*   Updated: 2025/02/18 15:29:26 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/21 15:42:58 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,9 @@ static int	add_new_var(char *name, char *value_ex, t_shell *shell)
 	new_env = malloc(sizeof(char *) * (i + 2));
 	if (!new_env)
 		return (1);
-	i = 0;
-	while (shell->env_copy[i])
-	{
+	i = -1;
+	while (shell->env_copy[++i])
 		new_env[i] = shell->env_copy[i];
-		i++;
-	}
 	temp = ft_strjoin(name, "=");
 	if (!temp)
 		return (free(new_env), 1);
@@ -70,8 +67,7 @@ static int	add_new_var(char *name, char *value_ex, t_shell *shell)
 	new_env[i] = new_value;
 	new_env[i + 1] = NULL;
 	shell->env_copy = new_env;
-	shell->exit_status = 0;
-	return (0);
+	return (shell->exit_status = 0, 0);
 }
 
 int	the_export(char **args, t_shell *shell)

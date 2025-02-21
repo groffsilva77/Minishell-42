@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 17:18:25 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/01/31 18:20:17 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/20 17:12:01 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	ft_free_array(char **array)
 	while (array[i])
 	{
 		free(array[i]);
+		array[i] = NULL;
 		i++;
 	}
 	free(array);

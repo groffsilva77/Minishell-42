@@ -6,35 +6,31 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 18:22:26 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/02 14:51:16 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/21 15:15:26 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	add_token(t_token **tokens, const char *value)
+void	add_token(t_token **tokens, const char *value, int is_single_quoted)
 {
 	t_token	*new_token;
-	t_token	*current;
+	t_token	*tmp;
 
 	new_token = malloc(sizeof(t_token));
 	if (!new_token)
 		return ;
 	new_token->value = ft_strdup(value);
-	if (!new_token->value)
-	{
-		free(new_token);
-		return ;
-	}
+	new_token->is_single_quoted = is_single_quoted;
 	new_token->next = NULL;
-	if (*tokens == NULL)
+	if (!*tokens)
 		*tokens = new_token;
 	else
 	{
-		current = *tokens;
-		while (current->next)
-			current = current->next;
-		current->next = new_token;
+		tmp = *tokens;
+		while (tmp->next)
+			tmp = tmp->next;
+		tmp->next = new_token;
 	}
 }
 
@@ -63,7 +59,7 @@ int	process_single_quote(const char *input, int *i, t_token **tokens,
 {
 	(void)*input;
 	(void)*i;
-	add_token(tokens, sbstr);
+	add_token(tokens, sbstr, 1);
 	free(sbstr);
 	return (1);
 }
@@ -73,12 +69,10 @@ int	process_double_quote(const char *input, int *i, t_token **tokens,
 {
 	char	*expanded;
 
-	(void)*input;
-	(void)*i;
 	expanded = expand_tokens(sbstr, 1);
 	if (!expanded)
 		return (free(sbstr), 0);
-	add_token(tokens, expanded);
+	add_token(tokens, expanded, 0);
 	free(expanded);
 	free(sbstr);
 	return (1);

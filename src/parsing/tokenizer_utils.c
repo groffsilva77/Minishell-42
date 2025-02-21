@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 13:42:32 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/05 16:17:39 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/21 15:05:57 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	finzalize_token(const char *input, int *i, int *start, t_token **tokens)
 		token = copy_substr(input, *start, *i - *start);
 		if (token)
 		{
-			add_token(tokens, token);
+			add_token(tokens, token, 0);
 			free(token);
 		}
 	}
@@ -56,7 +56,7 @@ void	handle_word(const char *input, int *i, int *start, t_token **tokens)
 			ft_putstr_fd("Error: Memory allocation failed\n", 2);
 			return ;
 		}
-		add_token(tokens, word);
+		add_token(tokens, word, 0);
 		free(word);
 		*start = *i;
 	}

@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 17:02:48 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/18 18:46:11 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/21 16:06:56 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,12 @@ void	handle_redirects(const char *input, int *i, t_token **tokens)
 
 	if (input[*i] == '<' && input[*i + 1] == '<')
 	{
-		add_token(tokens, "<<");
+		add_token(tokens, "<<", 0);
 		(*i) += 2;
 	}
 	if (input[*i] == '>' && input[*i + 1] == '>')
 	{
-		add_token(tokens, ">>");
+		add_token(tokens, ">>", 0);
 		(*i) += 2;
 	}
 	else if (input[*i] == '<' || input[*i] == '>')
@@ -58,7 +58,7 @@ void	handle_redirects(const char *input, int *i, t_token **tokens)
 			ft_putstr_fd("Error: Memory allocation failed\n", 2);
 			return ;
 		}
-		add_token(tokens, sbstr);
+		add_token(tokens, sbstr, 0);
 		free(sbstr);
 		(*i)++;
 	}
@@ -67,7 +67,7 @@ void	handle_redirects(const char *input, int *i, t_token **tokens)
 void	hand_pipe(const char *input, int *i, t_token **tokens)
 {
 	(void)input;
-	add_token(tokens, "|");
+	add_token(tokens, "|", 0);
 	(*i)++;
 }
 
@@ -83,7 +83,7 @@ void	hand_spc_chars(const char *input, int *i, int *start, t_token **tokens)
 			ft_putstr_fd("Error: Memory allocation failed\n", 2);
 			return ;
 		}
-		add_token(tokens, sbstr);
+		add_token(tokens, sbstr, 0);
 		free(sbstr);
 	}
 	if (input[*i] == '>' || input[*i] == '<')

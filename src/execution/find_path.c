@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 17:04:10 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/02 14:28:51 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/21 16:33:44 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ char	*search_in_path(const char *command, char *path)
 char	*find_command_path(const char *command, char **envp)
 {
 	int		i;
+	char	*result;
 
 	if (!command)
 		return (NULL);
@@ -56,7 +57,13 @@ char	*find_command_path(const char *command, char **envp)
 	while (envp[++i])
 	{
 		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
-			return (search_in_path(command, envp[i] + 5));
+		{
+			result = search_in_path(command, envp[i] + 5);
+			ft_putstr_fd("Path found: ", 2);
+			ft_putendl_fd(result ? result : "NULL", 2);
+			return(result);
+		}
 	}
+	ft_putstr_fd("No PATH in envp\n", 2);
 	return (NULL);
 }

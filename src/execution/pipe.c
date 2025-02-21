@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 16:39:05 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/20 14:42:58 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/21 17:32:05 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,6 @@ int	handle_heredoc(t_command *cmd);
 static void	child_process(t_command *cmd, int *fd_in, int *pipe_fd,
 		t_shell *shell)
 {
-	if (cmd->is_heredoc == CMD_HEREDOC)
-	{
-		if (dup2(cmd->heredoc_pipe[0], STDIN_FILENO) < 0)
-		{
-			perror("heredoc dup2 heredoc");
-			exit(1);
-		}
-		close(cmd->heredoc_pipe[0]);
-		close(cmd->heredoc_pipe[1]);
-	}
 	if (*fd_in != -1)
 	{
 		dup2(*fd_in, STDIN_FILENO);
@@ -39,8 +29,6 @@ static void	child_process(t_command *cmd, int *fd_in, int *pipe_fd,
 	}
 	if (pipe_fd[0] != -1)
 		close(pipe_fd[0]);
-	if (setup_redirections(cmd) < 0)
-		exit(1);
 	execute_command(cmd, shell);
 	exit(shell->exit_status);
 }
@@ -96,26 +84,28 @@ void	execute_pipeline(t_command *cmd, t_shell *shell)
 
 void	execute_single_command(t_command *cmd, t_shell *shell)
 {
-	int	heredoc_fd;
+	int	stdout_backup;
+	int	stderr_backup;
 
 	if (!cmd || !cmd->args || !cmd->args[0])
 		return ;
-	if (cmd->is_heredoc == CMD_HEREDOC)
+	if (is_builtin(cmd->args[0]) && !cmd->next)
 	{
-		heredoc_fd = handle_heredoc(cmd);
-		if (cmd->heredoc_fd < 0)
-			return ;
-		cmd->heredoc_fd = heredoc_fd;
-	}
-	if (is_builtin(cmd->args[0]) && !cmd->next && !cmd->output_file
-		&& !cmd->input_file)
-	{
-		execute_builtin(cmd, shell);
-		if (cmd->heredoc_fd != -1)
+		stdout_backup = dup(STDOUT_FILENO);
+		stderr_backup = dup(STDERR_FILENO);
+		if (setup_redirections(cmd) < 0)
 		{
-			close(cmd->heredoc_pipe[0]);
-			close(cmd->heredoc_pipe[1]);
+			dup2(stdout_backup, STDOUT_FILENO);
+			dup2(stderr_backup, STDERR_FILENO);
+			close(stdout_backup);
+			close(stderr_backup);
+			return ;
 		}
+		execute_builtin(cmd, shell);
+		dup2(stdout_backup, STDOUT_FILENO);
+		dup2(stderr_backup, STDERR_FILENO);
+		close(stdout_backup);
+		close(stderr_backup);
 	}
 	else
 		execute_pipeline(cmd, shell);

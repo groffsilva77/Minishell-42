@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:16:34 by ytavares          #+#    #+#             */
-/*   Updated: 2025/02/14 18:27:33 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/21 16:10:29 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,16 @@ void	ft_free(t_shell *shell, void *ptr)
 	atl = shell->memory;
 	while (atl)
 	{	
-		if (ant)
-			ant->next_ptr = atl->next_ptr;
-		return ;
+		if (atl->ptr_for_memory_block == ptr)
+		{
+			if (ant)
+				ant->next_ptr = atl->next_ptr;
+			else
+				shell->memory = atl->next_ptr;
+			free(atl);
+			return ;
+		}
 		ant = atl;
 		atl = atl->next_ptr;
 	}
-	free(ptr);
 }

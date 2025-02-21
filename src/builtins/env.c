@@ -6,11 +6,9 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 17:23:11 by ytavares          #+#    #+#             */
-/*   Updated: 2025/02/12 14:49:27 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/21 15:43:21 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-//env: exibe todas as variáveis armazenadas na cópia do ambiente(env_copy)
 
 #include "minishell.h"
 
@@ -32,14 +30,3 @@ int	the_env(t_shell *shell)
 	shell->exit_status = 0;
 	return (0);
 }
-
-/*
-resumão
-
-1- cria um iterador para printar as variaveis de ambiente;
-2- verifica se há variáveis de ambiente (se não tiver: atualiza os status de saída e retorna 1, se tiver: segue o fluxo)
-3- percorre toda a matriz de env_copy até chegar no nulo
-4- printa a variavél
-5- vai para aproxima
-6- atualiza a saída e retorna 0
-*/
