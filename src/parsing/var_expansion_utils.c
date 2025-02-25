@@ -6,7 +6,7 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 17:59:29 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/21 20:05:57 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/02/25 12:15:09 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int	expand_variable(t_shell *shell, const char *token, size_t *i, int j)
 	if (!value)
 		return (j);
 	k = 0;
-	while (value[k])
+	while (value[k] && j < 4095)
 		shell->expand[j++] = value[k++];
 	free(value);
 	return (j);
@@ -100,14 +100,14 @@ char	*process_expansion(t_shell *shell, const char *token, size_t max_len, int a
 	int		in_squotes;
 	int		in_dquotes;
 
-	if (!token)//
+	/* if (!token)//
 		return(NULL);
 	if (!shell->expand)//
 	{
 		shell->expand = malloc(4096);//
 		if (!shell->expand)//
 			return (NULL);//
-	}
+	} */
 	i = 0;
 	j = 0;
 	in_squotes = 0;

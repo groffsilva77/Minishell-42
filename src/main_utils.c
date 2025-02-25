@@ -6,7 +6,7 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 17:46:45 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/21 19:25:18 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/02/25 12:30:48 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	shell_loop(t_shell *shell)
 			continue ;
 		}
 		expand_tokens(shell, input, 1);
-		free(shell->expand);
+		//free(shell->expand);
 		execute_single_command(commands, shell);
 		free_commands(commands, shell);
 		free(input);
@@ -145,8 +145,7 @@ char **duplicate_env(char **env)
         {
             while (i > 0)
                 free(copy[--i]);
-            free(copy);
-            return (NULL);
+            return (free(copy), NULL);
         }
         i++;
     }
