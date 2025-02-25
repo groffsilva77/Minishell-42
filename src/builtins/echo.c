@@ -6,7 +6,7 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:35:38 by ytavares          #+#    #+#             */
-/*   Updated: 2025/02/25 12:20:55 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/02/25 14:03:13 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,6 @@ static void	print_arguments(t_shell *shell, char **args, int i)
 			ft_putstr_fd(expand_result, STDOUT_FILENO);
 			free(expand_result);
 		}
-		/* else
-		{
-			ft_putstr_fd(args[i], STDOUT_FILENO);
-		} */
 		if (args[i + 1])
 			ft_putstr_fd(" ", STDOUT_FILENO);
 		i++;
@@ -55,12 +51,10 @@ int	the_echo(char **args, t_shell *shell)
 	{
 		if (newline)
 			ft_putstr_fd("\n", STDOUT_FILENO);
-		shell->exit_status = 0;
-		return (0);
+		return (shell->exit_status = 0, 0);
 	}
-	print_arguments(shell ,args, i);
+	print_arguments(shell, args, i);
 	if (newline)
 		ft_putstr_fd("\n", STDOUT_FILENO);
-	shell->exit_status = 0;
-	return (0);
+	return (shell->exit_status = 0, 0);
 }

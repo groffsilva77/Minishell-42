@@ -6,13 +6,9 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:34:26 by ytavares          #+#    #+#             */
-/*   Updated: 2025/02/20 18:33:17 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/02/25 14:08:47 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-//unset: Remover variáveis do ambiente
-
-//execução: unset VARIAVEL (variavel que vc quer remover)
 
 #include "minishell.h"
 
@@ -75,30 +71,3 @@ int	the_unset(char **args, t_shell *shell)
 	shell->exit_status = 0;
 	return (0);
 }
-
-/*
-
-Verifica se args[1] existe.
-Não: Retorna 0.
-Sim: Continua.
-
-Tenta encontrar e remover a variável com find_and_remove_var.
-
-Encontrada:
-Remove a variável.
-Reorganiza o array.
-Chama resize_env_array para realocar o array.
-Retorna 0 (sucesso).
-
-Não encontrada:
-Retorna 0.
-
-Se a realocação falhar:
-Define exit_status = 1.
-Retorna 1.
-
-Se a realocação for bem-sucedida:
-Define exit_status = 0.
-Retorna 0.
-
-*/

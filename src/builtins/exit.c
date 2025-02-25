@@ -6,21 +6,9 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:22:31 by ytavares          #+#    #+#             */
-/*   Updated: 2025/01/31 16:48:05 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/02/25 14:04:56 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-//exit: encerra o programa (ou o shell) e retorna um código de saída para o sistema operacional.
-
-/*
-args: array de argumentos(string)
-
-Se não há argumentos: Sai com exit(0).
-Se há um argumento numérico: Sai com esse código.
-Se o argumento não é numérico: Exibe erro e sai com exit(2).
-Se há mais de um argumento: Exibe erro, mas não sai.
-
-*/
 
 #include "minishell.h"
 
@@ -67,34 +55,3 @@ int	the_exit(char **args, t_shell *shell)
 	}
 	exit(shell->exit_status);
 }
-
-/*
-
-Imprime "exit".
-Verifica se args[1] existe: //se temos algum argumento 
-
-Não: Encerra com shell->exit_status.
-Sim: Continua.
-
-Valida args[1]: //se ele e um numero
-
-Inválido:
-Exibe mensagem de erro.
-Encerra com status 2.
-
-Válido: Continua.
-
-Verifica se args[2] existe: //se possui mais de um argumento
-
-Sim:
-Exibe mensagem de erro.
-Define shell->exit_status = 1.
-Retorna 1 (não encerra).
-
-Não: Continua.
-
-Converte args[1] para número (exit_code).
-Define shell->exit_status = exit_code % 256.
-Encerra o programa com shell->exit_status
-
-*/

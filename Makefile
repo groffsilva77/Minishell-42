@@ -24,6 +24,7 @@ INCLUDE_DIR = include
 #the .c (.c is here)
 SRCS = $(SRCS_DIR)/main.c \
        $(SRCS_DIR)/main_utils.c \
+	   $(SRCS_DIR)/main_utils_2.c \
 	   $(SRCS_DIR)/signals.c \
 	   $(wildcard $(MEMORY_DIR)/*.c) \
 	   $(wildcard $(UTILS_DIR)/*.c) \

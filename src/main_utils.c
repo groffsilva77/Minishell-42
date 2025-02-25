@@ -6,7 +6,7 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 17:46:45 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/25 12:30:48 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/02/25 15:15:47 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,104 +51,42 @@ int	is_empty_input(const char *input)
 	return (1);
 }
 
+static void	handle_input(t_shell *shell, char *input)
+{
+	t_command	*commands;
+
+	if (is_empty_input(input))
+	{
+		free(input);
+		return ;
+	}
+	commands = process_input(input, shell);
+	if (!commands)
+	{
+		free(input);
+		return ;
+	}
+	expand_tokens(shell, input, 1);
+	execute_single_command(commands, shell);
+	free_commands(commands, shell);
+	free(input);
+}
+
 void	shell_loop(t_shell *shell)
 {
-	char			*input;
-	t_command		*commands;
+	char	*input;
+	int		store_exit;
 
 	while (1)
 	{
 		input = get_user_input();
-		if (!input || is_empty_input(input))
+		if (!input)
 		{
-			free(input);
-			continue ;
+			write(1, "exit", 5);
+			store_exit = shell->exit_status;
+			ft_free_all(shell);
+			exit(store_exit);
 		}
-		commands = process_input(input, shell);
-		if (!commands)
-		{
-			free(input);
-			continue ;
-		}
-		expand_tokens(shell, input, 1);
-		//free(shell->expand);
-		execute_single_command(commands, shell);
-		free_commands(commands, shell);
-		free(input);
+		handle_input(shell, input);
 	}
-}
-
-t_shell *init_shell(char **env)
-{
-    t_shell *shell = malloc(sizeof(t_shell));
-    if (!shell)
-        return (NULL);
-    shell->expand = malloc(4096);  // Tamanho fixo para expansões
-    shell->sbstr = malloc(4096);   // Tamanho fixo para substrings
-    if (!shell->expand || !shell->sbstr)
-    {
-        free(shell->expand);
-        free(shell->sbstr);
-        free(shell);
-        return (NULL);
-    }
-    shell->memory = NULL;
-    shell->env_copy = duplicate_env(env);
-	if (!shell->env_copy)
-    {
-        free(shell->expand);
-        free(shell->sbstr);
-        free(shell);
-        return (NULL);
-    }
-    shell->exit_status = 0;
-    return (shell);
-}
-
-void free_shell(t_shell *shell)
-{
-	int i = 0;
-    if (shell)
-    {
-        free(shell->expand);
-        free(shell->sbstr);
-		if (shell->env_copy)
-		{
-			while (shell->env_copy[i])
-				free(shell->env_copy[i++]);
-			free(shell->env_copy);
-		}
-        free(shell->memory);
-        free(shell);
-    }
-}
-
-
-char **duplicate_env(char **env)
-{
-    int     i;
-    char    **copy;
-
-    if (!env)
-        return (NULL);
-    i = 0;
-    while (env[i])
-        i++;
-    copy = malloc(sizeof(char *) * (i + 1));
-    if (!copy)
-        return (NULL);
-    i = 0;
-    while (env[i])
-    {
-        copy[i] = ft_strdup(env[i]);
-        if (!copy[i])
-        {
-            while (i > 0)
-                free(copy[--i]);
-            return (free(copy), NULL);
-        }
-        i++;
-    }
-    copy[i] = NULL;
-    return (copy);
 }

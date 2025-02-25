@@ -6,7 +6,7 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 18:22:26 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/21 19:15:12 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/02/25 14:28:21 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,8 @@ char	*copy_substr(const char *input, int start, int length)
 	return (substr);
 }
 
-int	process_single_quote(t_shell *shell, const char *input, int *i, t_token **tokens)
+int	process_single_quote(t_shell *shell, const char *input, int *i,
+				t_token **tokens)
 {
 	(void)*input;
 	(void)*i;
@@ -68,10 +69,11 @@ int	process_single_quote(t_shell *shell, const char *input, int *i, t_token **to
 	return (1);
 }
 
-int	process_double_quote(t_shell *shell, const char *input, int *i, t_token **tokens)
+int	process_double_quote(t_shell *shell, const char *input, int *i,
+				t_token **tokens)
 {
 	char	*expanded;
-	
+
 	(void)*input;
 	(void)*i;
 	expanded = expand_tokens(shell, shell->sbstr, 1);
@@ -81,6 +83,6 @@ int	process_double_quote(t_shell *shell, const char *input, int *i, t_token **to
 	free(expanded);
 	free(shell->sbstr);
 	//shell->expand = NULL;
-    shell->sbstr = NULL;
+	shell->sbstr = NULL;
 	return (1);
 }

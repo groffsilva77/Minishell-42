@@ -6,13 +6,13 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 17:59:29 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/25 12:15:09 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/02/25 14:30:55 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int			g_exit_status = 0;
+int	g_exit_status = 0;
 
 char	*get_env_value(t_shell *shell, const char *var)
 {
@@ -23,15 +23,15 @@ char	*get_env_value(t_shell *shell, const char *var)
 	if (!shell || !shell->env_copy || !var)
 		return (ft_strdup(""));
 	var_len = ft_strlen(var);
-	i =0;
-	while(shell->env_copy[i])
+	i = 0;
+	while (shell->env_copy[i])
 	{
 		key = shell->env_copy[i];
 		if (!ft_strncmp(key, var, var_len) && key[var_len] == '=')
 			return (ft_strdup(key + var_len + 1));
 		i++;
 	}
-	return(ft_strdup(""));
+	return (ft_strdup(""));
 }
 
 int	handle_quotes_state(char c, int	*in_squotes, int *in_dquotes)
@@ -82,7 +82,7 @@ int	expand_variable(t_shell *shell, const char *token, size_t *i, int j)
 {
 	char	*value;
 	int		k;
-	
+
 	value = expand_var(shell, token, i);
 	if (!value)
 		return (j);
@@ -93,26 +93,18 @@ int	expand_variable(t_shell *shell, const char *token, size_t *i, int j)
 	return (j);
 }
 
-char	*process_expansion(t_shell *shell, const char *token, size_t max_len, int allow_expansion)
+char	*process_expansion(t_shell *shell, const char *token, size_t max_len,
+				int allow_expansion)
 {
 	size_t	i;
 	size_t	j;
 	int		in_squotes;
 	int		in_dquotes;
 
-	/* if (!token)//
-		return(NULL);
-	if (!shell->expand)//
-	{
-		shell->expand = malloc(4096);//
-		if (!shell->expand)//
-			return (NULL);//
-	} */
 	i = 0;
 	j = 0;
 	in_squotes = 0;
 	in_dquotes = 0;
-
 	while (token[i] && j < max_len - 1)
 	{
 		if (handle_quotes_state(token[i], &in_squotes, &in_dquotes))

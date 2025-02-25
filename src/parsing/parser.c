@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/22 17:49:08 by ytavares          #+#    #+#             */
-/*   Updated: 2025/02/18 16:30:40 by ggroff-d         ###   ########.fr       */
+/*   Created: 2025/02/25 14:26:49 by ytavares          #+#    #+#             */
+/*   Updated: 2025/02/25 14:26:52 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ int	handle_arg(t_command **atl_cmd, t_token *tokens, t_shell *shell)
 	(*atl_cmd)->args[(*atl_cmd)->argument_count] = NULL;
 	return (0);
 }
-
 t_command	*parse_tokens(t_token *tokens, t_shell *shell)
 {
 	t_command	*commands;

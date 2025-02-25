@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 17:55:28 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/01/29 18:00:49 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/25 15:08:14 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,11 @@ void	handle_sigint(int sig)
 
 void	setup_signal_handlers(void)
 {
-	signal(SIGINT, handle_sigint);
+	struct sigaction	sig;
+
+	sig.sa_handler = handle_sigint;
+	sig.sa_flags = SA_RESTART;
+	sigemptyset(&sig.sa_mask);
+	sigaction(SIGINT, &sig, NULL);
 	signal(SIGQUIT, SIG_IGN);
 }

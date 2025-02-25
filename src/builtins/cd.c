@@ -6,47 +6,36 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 18:23:11 by ytavares          #+#    #+#             */
-/*   Updated: 2025/02/20 13:47:04 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/02/25 13:50:28 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	update_env_var(t_shell *shell, const char *name, const char *value)
+static void	update_env_var(t_shell *shell, const char *name, const char *val)
 {
 	int		i;
 	char	*new_var;
-	char	*temp;
 
-	temp = ft_strjoin(name, "=");
-	if (!temp)
-		return ;
-	new_var = ft_strjoin(temp, value);
-	free(temp);
+	i = 0;
+	new_var = ft_strjoin(ft_strjoin(name, "="), val);
 	if (!new_var)
 		return ;
-	i = 0;
 	while (shell->env_copy[i])
 	{
-		if (!name || !shell->env_copy[i])
-			continue ;
-		if (ft_strlen(shell->env_copy[i]) >= ft_strlen(name) + 1
-			&& ft_strncmp(shell->env_copy[i], name, ft_strlen(name)) == 0
+		if (ft_strncmp(shell->env_copy[i], name, ft_strlen(name)) == 0
 			&& shell->env_copy[i][ft_strlen(name)] == '=')
 		{
-			shell->env_copy[i] = new_var;
 			free(shell->env_copy[i]);
+			shell->env_copy[i] = new_var;
 			return ;
 		}
 		i++;
 	}
 	if (!ft_realloc_array(shell->env_copy, i + 2, new_var, shell))
-	{
 		free(new_var);
-		return ;
-	}
-	shell->env_copy[i] = new_var;
-	shell->env_copy[i + 1] = NULL;
+	else
+		shell->env_copy[i] = new_var, shell->env_copy[i + 1] = NULL;
 }
 
 static int	change_directory(char *new_dir, t_shell *shell, char *atl_dir)
