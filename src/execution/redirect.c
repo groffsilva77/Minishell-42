@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:59:35 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/20 14:24:23 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/25 13:54:38 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,8 @@ int	handle_heredoc(t_command *cmd)
 	while (1)
 	{
 		line = readline("> ");
-		if (!line)
-			break ;
 		trimmed_line = fts_strtrim(line);
-		if (ft_strcmp(trimmed_line, cmd->heredoc_delim) == 0)
+		if (!line || ft_strcmp(trimmed_line, cmd->heredoc_delim) == 0)
 		{
 			free(line);
 			free(trimmed_line);

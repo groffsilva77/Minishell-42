@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:14:26 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/20 14:05:36 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/25 14:01:51 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,6 +158,7 @@ void		create_process(t_command *cmd, t_exec_context *ctx, t_shell *shell);
 void		execute_pipeline(t_command *commands, t_shell *shell);
 void		execute_single_command(t_command *cmd, t_shell *shell);
 
+int			handle_heredoc(t_command *cmd);
 int			handle_input_redirection(t_command *cmd);
 int			handle_output_redirection(t_command *cmd);
 int			setup_redirections(t_command *cmd);

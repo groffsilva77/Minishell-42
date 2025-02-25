@@ -6,18 +6,16 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 16:39:05 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/20 14:42:58 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/25 15:00:43 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	handle_heredoc(t_command *cmd);
-
 static void	child_process(t_command *cmd, int *fd_in, int *pipe_fd,
 		t_shell *shell)
 {
-	if (cmd->is_heredoc == CMD_HEREDOC)
+	if (cmd->is_heredoc)
 	{
 		if (dup2(cmd->heredoc_pipe[0], STDIN_FILENO) < 0)
 		{
@@ -27,6 +25,8 @@ static void	child_process(t_command *cmd, int *fd_in, int *pipe_fd,
 		close(cmd->heredoc_pipe[0]);
 		close(cmd->heredoc_pipe[1]);
 	}
+	if (setup_redirections(cmd) < 0)
+		exit(1);
 	if (*fd_in != -1)
 	{
 		dup2(*fd_in, STDIN_FILENO);
@@ -39,8 +39,6 @@ static void	child_process(t_command *cmd, int *fd_in, int *pipe_fd,
 	}
 	if (pipe_fd[0] != -1)
 		close(pipe_fd[0]);
-	if (setup_redirections(cmd) < 0)
-		exit(1);
 	execute_command(cmd, shell);
 	exit(shell->exit_status);
 }
@@ -98,10 +96,11 @@ void	execute_single_command(t_command *cmd, t_shell *shell)
 {
 	int	heredoc_fd;
 
-	if (!cmd || !cmd->args || !cmd->args[0])
+	if (!cmd)
 		return ;
-	if (cmd->is_heredoc == CMD_HEREDOC)
+	if (cmd->type == CMD_HEREDOC)
 	{
+		printf("Chamando handle_heredoc para %s\n", cmd->heredoc_delim);
 		heredoc_fd = handle_heredoc(cmd);
 		if (cmd->heredoc_fd < 0)
 			return ;

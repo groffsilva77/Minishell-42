@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 14:18:53 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/01 18:25:55 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/25 14:53:26 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void	process_whitespace(const char *input, int *i, int *start,
 t_token	*tokenize(const char *input)
 {
 	t_token	*tokens;
+	t_token *temp;
 	int		i;
 	int		start;
 
@@ -54,5 +55,11 @@ t_token	*tokenize(const char *input)
 			process_word(input, &i, &start, &tokens);
 	}
 	finzalize_token(input, &i, &start, &tokens);
+	temp = tokens;
+	while (temp)
+	{
+		printf("Token gerado: %s\n", temp->value);
+		temp = temp->next;
+	}
 	return (tokens);
 }

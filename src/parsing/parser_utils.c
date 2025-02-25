@@ -6,13 +6,11 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 16:06:21 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/20 14:23:28 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/25 14:45:25 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	handle_heredoc(t_command *cmd);
 
 t_command	*create_command(void)
 {
@@ -42,9 +40,10 @@ void	parse_redirections(t_command *cmd, t_token **tokens)
 	if (!cmd || !(*tokens) || !(*tokens)->next)
 		return ;
 	if (ft_strncmp((*tokens)->value, "<<", 2) == 0)
-	{	
+	{
+		printf("Heredoc detectado com delimitador: %s\n", (*tokens)->next->value);
 		cmd->heredoc_delim = ft_strdup((*tokens)->next->value);
-		cmd->is_heredoc = CMD_HEREDOC;
+		cmd->is_heredoc = 1;
 		cmd->type = CMD_HEREDOC;
 	}
 	else if (ft_strncmp((*tokens)->value, "<", 1) == 0)
