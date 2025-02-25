@@ -6,34 +6,38 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:59:35 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/18 17:41:46 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/20 14:24:23 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	handle_heredoc(t_command *cmd)
+int	handle_heredoc(t_command *cmd)
 {
-	int		pipe_fds[2];
 	char	*line;
+	char	*trimmed_line;
 
-	if (pipe(pipe_fds) == -1)
-		return (perror("Error: pipe failed while creating heredoc"), -1);
+	if (pipe(cmd->heredoc_pipe) == -1)
+		return (perror("heredoc pipe failed"), -1);
 	while (1)
 	{
 		line = readline("> ");
-		if (!line || ft_strncmp(line, cmd->heredoc_delim,
-				ft_strlen(cmd->heredoc_delim)) == 0)
+		if (!line)
+			break ;
+		trimmed_line = fts_strtrim(line);
+		if (ft_strcmp(trimmed_line, cmd->heredoc_delim) == 0)
 		{
 			free(line);
+			free(trimmed_line);
 			break ;
 		}
-		write(pipe_fds[1], line, ft_strlen(line));
-		write(pipe_fds[1], "\n", 1);
+		write(cmd->heredoc_pipe[1], line, ft_strlen(line));
+		write(cmd->heredoc_pipe[1], "\n", 1);
 		free(line);
+		free(trimmed_line);
 	}
-	close(pipe_fds[1]);
-	return (pipe_fds[0]);
+	close(cmd->heredoc_pipe[1]);
+	return (cmd->heredoc_pipe[0]);
 }
 
 int	handle_input_redirection(t_command *cmd)
@@ -48,7 +52,12 @@ int	handle_input_redirection(t_command *cmd)
 			perror("Input redirection failed");
 			return (-1);
 		}
-		dup2(fd, STDIN_FILENO);
+		if (dup2(fd, STDIN_FILENO) < 0)
+		{
+			perror("Dup in failed");
+			close(fd);
+			return (-1);
+		}
 		close(fd);
 	}
 	return (0);
@@ -57,21 +66,24 @@ int	handle_input_redirection(t_command *cmd)
 int	handle_output_redirection(t_command *cmd)
 {
 	int	fd;
-	int	flags;
 
 	if (cmd->output_file && *cmd->output_file)
 	{
 		if (cmd->type == CMD_APPEND)
-			flags = O_WRONLY | O_CREAT | O_APPEND;
-		else
-			flags = O_WRONLY | O_CREAT | O_TRUNC;
-		fd = open(cmd->output_file, flags, 0777);
+			fd = open(cmd->output_file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		else if (cmd->type == CMD_REDIR_OUT)
+			fd = open(cmd->output_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (fd < 0)
 		{
-			perror("Output redirection failed");
+			perror("open failed");
 			return (-1);
 		}
-		dup2(fd, STDOUT_FILENO);
+		if (dup2(fd, STDOUT_FILENO) < 0)
+		{
+			perror("dup2 failed");
+			close(fd);
+			return (-1);
+		}
 		close(fd);
 	}
 	return (0);
@@ -80,29 +92,27 @@ int	handle_output_redirection(t_command *cmd)
 int	handle_redirections(t_command *cmd)
 {
 	int		fd;
-	pid_t	pid;
 
-	if (cmd->is_heredoc)
+	if (cmd->is_heredoc == CMD_HEREDOC && cmd->heredoc_fd != -1)
 	{
-		pid = fork();
-		if (pid == -1)
-			return (perror("Error: fork invalid in heredoc"), -1);
-		if (pid == 0)
+		if (dup2(cmd->heredoc_fd, STDIN_FILENO) < 0)
 		{
-			fd = handle_heredoc(cmd);
-			if (fd >= 0)
-			{
-				dup2(fd, STDIN_FILENO);
-				close(fd);
-			}
-			exit(0);
+			perror("dup2 heredoc");
+			close(cmd->heredoc_fd);
+			return (-1);
 		}
-		return (waitpid(pid, NULL, 0), 0);
+		close(cmd->heredoc_fd);
 	}
-	if (handle_input_redirection(cmd) < 0)
-		return (-1);
-	if (handle_output_redirection(cmd) < 0)
-		return (-1);
+	if (cmd->input_file)
+	{
+		if (handle_input_redirection(cmd) < 0)
+			return (-1);
+	}
+	if (cmd->output_file)
+	{
+		if (handle_output_redirection(cmd) < 0)
+			return (-1);
+	}
 	return (0);
 }
 

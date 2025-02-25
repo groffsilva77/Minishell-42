@@ -5,8 +5,13 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
+<<<<<<< HEAD
 /*   Created: 2025/02/25 14:26:49 by ytavares          #+#    #+#             */
 /*   Updated: 2025/02/25 14:26:52 by ytavares         ###   ########.fr       */
+=======
+/*   Created: 2025/01/22 17:49:08 by ytavares          #+#    #+#             */
+/*   Updated: 2025/02/19 19:07:05 by ggroff-d         ###   ########.fr       */
+>>>>>>> 61e53790d7d686fd655c7b05c5e64901fb0963bc
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +31,6 @@ t_command	*handle_pipe(t_command *commands, t_command **atl_cmd)
 	return (commands);
 }
 
-void	handle_redirection(t_command **atl_cmd, t_token **tokens)
-{
-	*atl_cmd = creat_or_get_command(*atl_cmd);
-	parse_redirections(*atl_cmd, tokens);
-}
-
 int	handle_arg(t_command **atl_cmd, t_token *tokens, t_shell *shell)
 {
 	char	**temp;
@@ -41,7 +40,7 @@ int	handle_arg(t_command **atl_cmd, t_token *tokens, t_shell *shell)
 			tokens->value, shell);
 	if (!temp)
 	{
-		ft_putstr_fd("Error: Memory allocation failed in realloc array", 2);
+		ft_putstr_fd("Error: Memory allocation failed in realloc array\n", 2);
 		free((*atl_cmd)->args);
 		(*atl_cmd)->args = NULL;
 		return (-1);
@@ -58,49 +57,20 @@ t_command	*parse_tokens(t_token *tokens, t_shell *shell)
 {
 	t_command	*commands;
 	t_command	*atl_cmd;
-	t_token		*redirect_tokens[1024];
 
 	commands = NULL;
 	atl_cmd = NULL;
 	while (tokens)
 	{
 		if (ft_strncmp(tokens->value, "|", 1) == 0)
-		{
 			commands = handle_pipe(commands, &atl_cmd);
-		}
-		else if (ft_strcmp(tokens->value, "<<") == 0)
-		{
-			if (!atl_cmd)
-				atl_cmd = create_command();
-			if (tokens->next)
-			{
-				atl_cmd->type = CMD_HEREDOC;
-				atl_cmd->is_heredoc = 1;
-				atl_cmd->heredoc_delim = ft_strdup(tokens->next->value);
-				setup_redirections(atl_cmd);
-			}
-			else
-				return (NULL);
-			tokens = tokens->next;
-		}
-		else if (ft_strcmp(tokens->value, ">>") == 0)
-		{
-			if (!atl_cmd)
-				atl_cmd = create_command();
-			if (tokens->next)
-			{
-				atl_cmd->type = CMD_APPEND;
-				atl_cmd->output_file = ft_strdup(tokens->next->value);
-				setup_redirections(atl_cmd);
-			}
-			else
-				return (NULL);
-			tokens = tokens->next;
-		}
 		else if (ft_strchr("<>", tokens->value[0]))
 		{
 			if (!tokens->next)
 				return (commands);
+			if (!atl_cmd)
+				atl_cmd = create_command();
+			parse_redirections(atl_cmd, &tokens);
 		}
 		else if (handle_arg(&atl_cmd, tokens, shell) == -1)
 			return (NULL);
