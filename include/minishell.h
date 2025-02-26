@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:14:26 by ggroff-d          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/02/25 14:58:42 by ytavares         ###   ########.fr       */
-=======
-/*   Updated: 2025/02/20 14:05:36 by ggroff-d         ###   ########.fr       */
->>>>>>> 61e53790d7d686fd655c7b05c5e64901fb0963bc
+/*   Updated: 2025/02/26 15:55:11 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +19,7 @@
 # include <fcntl.h>
 # include <signal.h>
 # include <sys/wait.h>
+# include <sys/stat.h>
 # include <errno.h>
 # include <../readline/readline.h>
 # include <../readline/history.h>
@@ -64,6 +61,8 @@ typedef struct s_command {
 
 typedef struct s_token {
 	char			*value;
+	int				in_single_quotes;
+	int				in_double_quotes;
 	struct s_token	*next;
 	t_command		*cmd;
 }	t_token;
@@ -77,10 +76,10 @@ typedef struct s_memory
 typedef struct s_shell
 {
 	t_memory	*memory;
+	char		*sbstr;
+	char		*expand;
 	char		**env_copy;
 	int			exit_status;
-	char		*expand;
-	char		*sbstr;
 }	t_shell;
 
 typedef struct s_exec_context
@@ -106,9 +105,7 @@ void		free_tokens(t_token *tokens);
 void		ft_free_array(char **array);
 void		*fts_malloc(t_shell *shell, size_t size);
 void		ft_free(t_shell *shell, void *ptr);
-t_shell		*init_shell(char **env);
-void		free_shell(t_shell *shell);
-char		**duplicate_env(char **env);
+
 void		shell_loop(t_shell *shell);
 
 int			is_operator(const char *token);
@@ -117,23 +114,21 @@ int			validate_syntax(t_token *tokens);
 char		*get_env_value(t_shell *shell, const char *var);
 int			handle_quotes_state(char c, int	*in_squotes, int *in_dquotes);
 char		*expand_var(t_shell *shell, const char *input, size_t *i);
-int			expand_variable(t_shell *shell, const char *token, size_t *i,
-				int j);
-char		*process_expansion(t_shell *shell, const char *token,
-				size_t max_len, int allow_expansion);
-char		*expand_tokens(t_shell *shell, const char *token,
+int			expand_variable(t_shell *shell, const char *token, size_t *i, int j);
+char		*process_expansion(t_shell *shell, const char *token, size_t max_len,
 				int allow_expansion);
+char		*expand_tokens(t_shell *shell, const char *token, int allow_expansion);
 
-int			process_single_quote(t_shell *shell, const char *input,
-				int *i, t_token **tokens);
-int			process_double_quote(t_shell *shell, const char *input,
-				int *i, t_token **tokens);
+int			process_single_quote(t_shell *shell, const char *input, int *i,
+				t_token **tokens);
+int			process_double_quote(t_shell *shell, const char *input, int *i,
+				t_token **tokens);
 int			is_whitespace(char c);
-void		add_token(t_token **tokens, const char *value);
+void		add_token(t_token **tokens, const char *value, int in_squotes,
+					int in_dquotes);
 char		*copy_substr(const char *input, int start, int length);
 
-int			handle_quotes(t_shell *shell, const char *input, int *i,
-				t_token **tokens);
+int			handle_quotes(t_shell *shell, const char *input, int *i, t_token **tokens);
 void		hand_pipe(const char *input, int *i, t_token **tokens);
 void		handle_redirects(const char *input, int *i, t_token **tokens);
 void		hand_spc_chars(const char *input, int *i, int *start,
@@ -141,8 +136,7 @@ void		hand_spc_chars(const char *input, int *i, int *start,
 
 void		finzalize_token(const char *input, int *i, int *start,
 				t_token **tokens);
-int			process_quotes(t_shell *shell, const char *input, int *i,
-				t_token **tokens);
+int			process_quotes(t_shell *shell, const char *input, int *i, t_token **tokens);
 void		process_special_chars(const char *input, int *i, int *start,
 				t_token **tokens);
 void		handle_word(const char *input, int *i, int *start,
@@ -169,6 +163,7 @@ void		create_process(t_command *cmd, t_exec_context *ctx, t_shell *shell);
 void		execute_pipeline(t_command *commands, t_shell *shell);
 void		execute_single_command(t_command *cmd, t_shell *shell);
 
+int			handle_heredoc(t_command *cmd);
 int			handle_input_redirection(t_command *cmd);
 int			handle_output_redirection(t_command *cmd);
 int			setup_redirections(t_command *cmd);
@@ -198,5 +193,8 @@ int			the_unset(char **args, t_shell *shell);
 
 int			is_builtin(char *cmd);
 int			execute_builtin(t_command *cmd, t_shell *shell);
+
+char		**duplicate_env(char **env);
+t_shell		*init_shell(char **env);
 
 #endif
