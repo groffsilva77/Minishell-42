@@ -6,7 +6,7 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 18:23:11 by ytavares          #+#    #+#             */
-/*   Updated: 2025/02/25 13:50:28 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/02/25 17:37:40 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,14 @@ static void	update_env_var(t_shell *shell, const char *name, const char *val)
 {
 	int		i;
 	char	*new_var;
+	char	*temp;
 
 	i = 0;
-	new_var = ft_strjoin(ft_strjoin(name, "="), val);
-	if (!new_var)
+	temp = ft_strjoin(name, "=");
+	if (!temp)
 		return ;
+	new_var = ft_strjoin(temp, val);
+	free(temp);
 	while (shell->env_copy[i])
 	{
 		if (ft_strncmp(shell->env_copy[i], name, ft_strlen(name)) == 0
@@ -59,6 +62,7 @@ static int	change_directory(char *new_dir, t_shell *shell, char *atl_dir)
 	update_env_var(shell, "OLDPWD", atl_dir);
 	update_env_var(shell, "PWD", new_dir);
 	free(current_dir);
+	free(new_dir);
 	shell->exit_status = 0;
 	return (0);
 }
