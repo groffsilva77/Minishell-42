@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_utils_3.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 18:22:26 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/25 14:28:21 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/02/26 16:02:55 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	add_token(t_token **tokens, const char *value)
+void	add_token(t_token **tokens, const char *value, int in_squotes,
+					int in_dquotes)
 {
 	t_token	*new_token;
 	t_token	*current;
@@ -21,11 +22,13 @@ void	add_token(t_token **tokens, const char *value)
 	if (!new_token)
 		return ;
 	new_token->value = ft_strdup(value);
-	if (!new_token->value)
+	if (!value)
 	{
 		free(new_token);
 		return ;
 	}
+	new_token->in_single_quotes = in_squotes;
+	new_token->in_double_quotes = in_dquotes;
 	new_token->next = NULL;
 	if (*tokens == NULL)
 		*tokens = new_token;
@@ -63,9 +66,8 @@ int	process_single_quote(t_shell *shell, const char *input, int *i,
 {
 	(void)*input;
 	(void)*i;
-	add_token(tokens, shell->sbstr);
+	add_token(tokens, shell->sbstr, 1, 0);
 	free(shell->sbstr);
-	//shell->sbstr = NULL;
 	return (1);
 }
 
@@ -79,10 +81,9 @@ int	process_double_quote(t_shell *shell, const char *input, int *i,
 	expanded = expand_tokens(shell, shell->sbstr, 1);
 	if (!expanded)
 		return (free(shell->sbstr), 0);
-	add_token(tokens, expanded);
+	add_token(tokens, expanded, 0, 1);
 	free(expanded);
 	free(shell->sbstr);
-	//shell->expand = NULL;
 	shell->sbstr = NULL;
 	return (1);
 }

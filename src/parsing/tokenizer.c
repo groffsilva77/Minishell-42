@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 14:18:53 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/20 13:58:59 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/02/26 15:57:44 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	process_whitespace(const char *input, int *i, int *start,
 		token = copy_substr(input, *start, *i - *start);
 		if (token)
 		{
-			add_token(tokens, token);
+			add_token(tokens, token, 0, 0);
 			free(token);
 		}
 	}

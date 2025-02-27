@@ -6,7 +6,7 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 17:46:45 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/25 17:17:44 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/02/27 18:16:03 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ int	is_empty_input(const char *input)
 static void	handle_input(t_shell *shell, char *input)
 {
 	t_command	*commands;
+	char		*store_expand;
 
 	if (is_empty_input(input))
 	{
@@ -66,7 +67,9 @@ static void	handle_input(t_shell *shell, char *input)
 		free(input);
 		return ;
 	}
-	expand_tokens(shell, input, 1);
+	store_expand = expand_tokens(shell, input, 1);
+	if (store_expand)
+		free(store_expand);
 	execute_single_command(commands, shell);
 	free_commands(commands, shell);
 	free(input);
@@ -82,7 +85,8 @@ void	shell_loop(t_shell *shell)
 		input = get_user_input();
 		if (!input)
 		{
-			write(1, "exit", 5);
+			write(1, "exit\n", 6);
+			//break ;
 			store_exit = shell->exit_status;
 			ft_free_all(shell);
 			exit(store_exit);

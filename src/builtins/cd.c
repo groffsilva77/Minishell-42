@@ -6,7 +6,7 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 18:23:11 by ytavares          #+#    #+#             */
-/*   Updated: 2025/02/25 17:37:40 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/02/27 14:27:55 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,14 +78,17 @@ static int	handle_no_args(t_shell *shell, char **new_path_dir)
 	{
 		ft_putendl_fd("cd: HOME is not defined", 2);
 		shell->exit_status = 1;
+		free(store_home);
 		return (1);
 	}
 	*new_path_dir = ft_strdup(store_home);
 	if (!*new_path_dir)
 	{
 		shell->exit_status = 1;
+		free(store_home);
 		return (1);
 	}
+	free(store_home);
 	return (0);
 }
 
