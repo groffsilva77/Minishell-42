@@ -6,13 +6,13 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 13:42:32 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/26 15:56:22 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/04 14:23:26 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	finzalize_token(const char *input, int *i, int *start, t_token **tokens)
+void	finalize_token(const char *input, int *i, int *start, t_token **tokens)
 {
 	char	*token;
 
@@ -29,8 +29,6 @@ void	finzalize_token(const char *input, int *i, int *start, t_token **tokens)
 
 int	process_quotes(t_shell *shell, const char *input, int *i, t_token **tokens)
 {
-	if (!&handle_quotes)
-		ft_putstr_fd("Error: Unmatched quotes\n", 2);
 	return (handle_quotes(shell, input, i, tokens));
 }
 

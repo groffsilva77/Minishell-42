@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:15:00 by ytavares          #+#    #+#             */
-/*   Updated: 2025/02/14 18:11:05 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/28 11:21:54 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,3 @@ void	*fts_malloc(t_shell *shell, size_t size)
 	free(new);
 	return (ptr);
 }
-
-/*resumão de ft_malloc
-
-aqui nos estamos mexendo com lista linkada
-como funciona: o ft_malloc, basicamente, será utiizado para ordernar os todos os ponteiros
-para que todos eles fiquem salvos na struct memory e depois seram apagados um por um
-
-a teoria funciona assim: ptr está apontando para um bloco de memoria, precisamos salvar ele
-em uma struct (a memory no caso) mas para isso precisamos "salvar" em new.
-
-tipo : É como quando você ganha um brinquedo novo (ptr)
-	Anota num papel onde guardou ele (new)
-	Coloca esse papel numa pasta especial (struct memory)
-	Assim você sempre sabe onde estão todos seus brinquedos!*/

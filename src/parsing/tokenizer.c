@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 14:18:53 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/26 15:57:44 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/04 12:57:47 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,6 @@ t_token	*tokenize(t_shell *shell, const char *input)
 		else
 			process_word(input, &i, &start, &tokens);
 	}
-	finzalize_token(input, &i, &start, &tokens);
+	finalize_token(input, &i, &start, &tokens);
 	return (tokens);
 }

@@ -6,42 +6,11 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 16:39:05 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/25 17:51:02 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/04 17:28:37 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static void	child_process(t_command *cmd, int *fd_in, int *pipe_fd,
-		t_shell *shell)
-{
-	if (cmd->is_heredoc)
-	{
-		if (dup2(cmd->heredoc_pipe[0], STDIN_FILENO) < 0)
-		{
-			perror("heredoc dup2 heredoc");
-			exit(1);
-		}
-		close(cmd->heredoc_pipe[0]);
-		close(cmd->heredoc_pipe[1]);
-	}
-	if (setup_redirections(cmd) < 0)
-		exit(1);
-	if (*fd_in != -1)
-	{
-		dup2(*fd_in, STDIN_FILENO);
-		close(*fd_in);
-	}
-	if (pipe_fd[1] != -1)
-	{
-		dup2(pipe_fd[1], STDOUT_FILENO);
-		close(pipe_fd[1]);
-	}
-	if (pipe_fd[0] != -1)
-		close(pipe_fd[0]);
-	execute_command(cmd, shell);
-	exit(shell->exit_status);
-}
 
 static void	parent_process(int *fd_in, int *pipe_fd)
 {
@@ -101,9 +70,10 @@ void	execute_single_command(t_command *cmd, t_shell *shell)
 	if (cmd->type == CMD_HEREDOC)
 	{
 		heredoc_fd = handle_heredoc(cmd);
-		if (cmd->heredoc_fd < 0)
+		if (heredoc_fd < 0)
 			return ;
 		cmd->heredoc_fd = heredoc_fd;
+		cmd->is_heredoc = 1;
 	}
 	if (is_builtin(cmd->args[0]) && !cmd->next && !cmd->output_file
 		&& !cmd->input_file)

@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 17:04:10 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/26 15:59:39 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/02/28 10:52:46 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 char	*resolve_absolute_path(const char *command)
 {
-	struct stat st;
+	struct stat	st;
+
 	if (access(command, F_OK) == 0 && stat(command, &st) == 0)
 	{
 		if (S_ISREG(st.st_mode) && access(command, X_OK) == 0)

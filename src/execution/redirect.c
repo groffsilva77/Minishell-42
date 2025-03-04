@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:59:35 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/20 14:24:23 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/04 14:30:24 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	handle_heredoc(t_command *cmd)
 	char	*trimmed_line;
 
 	if (pipe(cmd->heredoc_pipe) == -1)
-		return (perror("heredoc pipe failed"), -1);
+		return (perror("heredoc pipe failed"), close(cmd->heredoc_pipe[1]), -1);
 	while (1)
 	{
 		line = readline("> ");

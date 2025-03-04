@@ -6,13 +6,13 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 14:26:49 by ytavares          #+#    #+#             */
-/*   Updated: 2025/02/26 15:15:55 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/04 13:02:27 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_command	*creat_or_get_command(t_command *atl_cmd)
+t_command	*create_or_get_command(t_command *atl_cmd)
 {
 	if (!atl_cmd)
 		atl_cmd = create_command();
@@ -37,7 +37,7 @@ int	handle_arg(t_command **atl_cmd, t_token *tokens, t_shell *shell)
 		expanded_value = expand_tokens(shell, tokens->value, 1);
 	if (!expanded_value)
 		return (-1);
-	*atl_cmd = creat_or_get_command(*atl_cmd);
+	*atl_cmd = create_or_get_command(*atl_cmd);
 	temp = ft_realloc_array((*atl_cmd)->args, (*atl_cmd)->argument_count + 1,
 			expanded_value, shell);
 	if (!temp)
@@ -54,6 +54,7 @@ int	handle_arg(t_command **atl_cmd, t_token *tokens, t_shell *shell)
 	(*atl_cmd)->args[(*atl_cmd)->argument_count] = NULL;
 	return (0);
 }
+
 t_command	*parse_tokens(t_token *tokens, t_shell *shell)
 {
 	t_command	*commands;

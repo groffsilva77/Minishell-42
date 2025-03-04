@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 18:23:11 by ytavares          #+#    #+#             */
-/*   Updated: 2025/02/25 13:50:28 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/02/28 10:57:45 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ static void	update_env_var(t_shell *shell, const char *name, const char *val)
 	if (!ft_realloc_array(shell->env_copy, i + 2, new_var, shell))
 		free(new_var);
 	else
-		shell->env_copy[i] = new_var, shell->env_copy[i + 1] = NULL;
+		shell->env_copy[i] = new_var;
+	shell->env_copy[i + 1] = NULL;
 }
 
 static int	change_directory(char *new_dir, t_shell *shell, char *atl_dir)

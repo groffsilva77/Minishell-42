@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 17:02:48 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/26 15:57:28 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/04 14:22:14 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	handle_quotes(t_shell *shell, const char *input, int *i, t_token **tokens)
 		else
 			return (process_double_quote(shell, input, i, tokens));
 	}
-	ft_putstr_fd("Error: Unmatched quotes", 2);
+	ft_putstr_fd("Error: Unmatched quotes\n", 2);
 	return (0);
 }
 

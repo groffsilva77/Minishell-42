@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 17:46:45 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/26 13:43:36 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/04 16:54:02 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,10 @@ static void	handle_input(t_shell *shell, char *input)
 		free(input);
 		return ;
 	}
-	expand_tokens(shell, input, 1);
 	execute_single_command(commands, shell);
 	free_commands(commands, shell);
 	free(input);
+	shell->expand[0] = '\0';
 }
 
 void	shell_loop(t_shell *shell)
@@ -82,7 +82,7 @@ void	shell_loop(t_shell *shell)
 		input = get_user_input();
 		if (!input)
 		{
-			write(1, "exit\n", 6);
+			write(1, "exit\n", 5);
 			store_exit = shell->exit_status;
 			ft_free_all(shell);
 			exit(store_exit);

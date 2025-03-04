@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:34:26 by ytavares          #+#    #+#             */
-/*   Updated: 2025/02/25 14:08:47 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/02/28 10:57:59 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ static int	find_and_remove_var(char **env_copy, char *var_name)
 		if (ft_strncmp(env_copy[i], var_name, len_var) == 0
 			&& (env_copy[i][len_var] == '=' || env_copy[i][len_var] == '\0'))
 		{
-			//free(env_copy[i]);
 			j = i;
 			while (env_copy[j + 1])
 			{

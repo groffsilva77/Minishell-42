@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   var_expansion_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 17:59:29 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/25 14:30:55 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/03/04 13:19:29 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	g_exit_status = 0;
 
 char	*get_env_value(t_shell *shell, const char *var)
 {
@@ -61,7 +59,7 @@ char	*expand_var(t_shell *shell, const char *input, size_t *i)
 	if (input[start] == '?')
 	{
 		*i += 2;
-		return (ft_itoa(g_exit_status));
+		return (ft_itoa(shell->exit_status));
 	}
 	while (input[start + len] && (ft_isalnum(input[start + len])
 			|| input[start + len] == '_'))
@@ -87,7 +85,7 @@ int	expand_variable(t_shell *shell, const char *token, size_t *i, int j)
 	if (!value)
 		return (j);
 	k = 0;
-	while (value[k] && j < 4095)
+	while (value[k] && j < 4096)
 		shell->expand[j++] = value[k++];
 	free(value);
 	return (j);
