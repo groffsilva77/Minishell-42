@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 16:39:05 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/05 17:56:36 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/05 18:25:54 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,36 +36,43 @@ static void	wait_children(t_shell *shell)
 		shell->exit_status = WEXITSTATUS(status);
 }
 
-void	execute_pipeline(t_command *cmd, t_shell *shell)
+static void	execute_the_command(t_command *cmd, int *fd_in, t_shell *shell)
 {
 	int		pipe_fd[2];
-	int		fd_in;
 	pid_t	pid;
+
+	pipe_fd[0] = -1;
+	pipe_fd[1] = -1;
+	if (cmd->is_heredoc)
+	{
+		cmd->heredoc_fd = handle_heredoc(cmd);
+		if (cmd->heredoc_fd < 0)
+			exit(1);
+	}
+	if (cmd->next && pipe(pipe_fd) < 0)
+		return (perror("pipe"));
+	pid = fork();
+	if (pid < 0)
+		return (perror("fork"));
+	if (pid == 0)
+		child_process(cmd, fd_in, pipe_fd, shell);
+	else
+		parent_process(fd_in, pipe_fd);
+}
+
+void	execute_pipeline(t_command *cmd, t_shell *shell)
+{
+	int		fd_in;
 
 	fd_in = -1;
 	while (cmd)
 	{
-		pipe_fd[0] = -1;
-		pipe_fd[1] = -1;
-		if (cmd->is_heredoc)
-		{
-			cmd->heredoc_fd = handle_heredoc(cmd);
-			if (cmd->heredoc_fd < 0)
-				exit(1);
-		}
-		if (cmd->next && pipe(pipe_fd) < 0)
-			return (perror("pipe"));
-		pid = fork();
-		if (pid < 0)
-			return (perror("fork"));
-		if (pid == 0)
-			child_process(cmd, &fd_in, pipe_fd, shell);
-		else
-			parent_process(&fd_in, pipe_fd);
+		execute_the_command(cmd, &fd_in, shell);
 		cmd = cmd->next;
 	}
 	wait_children(shell);
 }
+
 
 void	execute_single_command(t_command *cmd, t_shell *shell)
 {
