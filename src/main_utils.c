@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 17:46:45 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/04 16:54:02 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/05 16:34:46 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ void	shell_loop(t_shell *shell)
 			store_exit = shell->exit_status;
 			ft_free_all(shell);
 			exit(store_exit);
+			break ;
 		}
 		handle_input(shell, input);
 	}

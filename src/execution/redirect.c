@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:59:35 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/04 14:30:24 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/05 17:57:41 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	handle_heredoc(t_command *cmd)
 	char	*trimmed_line;
 
 	if (pipe(cmd->heredoc_pipe) == -1)
-		return (perror("heredoc pipe failed"), close(cmd->heredoc_pipe[1]), -1);
+		return (perror("heredoc pipe failed"), -1);
 	while (1)
 	{
 		line = readline("> ");
@@ -27,6 +27,7 @@ int	handle_heredoc(t_command *cmd)
 		trimmed_line = fts_strtrim(line);
 		if (ft_strcmp(trimmed_line, cmd->heredoc_delim) == 0)
 		{
+			ft_putstr_fd("DEBUG: Found delimiter, breaking\n", 2);
 			free(line);
 			free(trimmed_line);
 			break ;
@@ -69,9 +70,9 @@ int	handle_output_redirection(t_command *cmd)
 
 	if (cmd->output_file && *cmd->output_file)
 	{
-		if (cmd->type == CMD_APPEND)
+		if (cmd->append_output)
 			fd = open(cmd->output_file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-		else if (cmd->type == CMD_REDIR_OUT)
+		else
 			fd = open(cmd->output_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (fd < 0)
 		{
@@ -91,18 +92,6 @@ int	handle_output_redirection(t_command *cmd)
 
 int	handle_redirections(t_command *cmd)
 {
-	int		fd;
-
-	if (cmd->is_heredoc == CMD_HEREDOC && cmd->heredoc_fd != -1)
-	{
-		if (dup2(cmd->heredoc_fd, STDIN_FILENO) < 0)
-		{
-			perror("dup2 heredoc");
-			close(cmd->heredoc_fd);
-			return (-1);
-		}
-		close(cmd->heredoc_fd);
-	}
 	if (cmd->input_file)
 	{
 		if (handle_input_redirection(cmd) < 0)

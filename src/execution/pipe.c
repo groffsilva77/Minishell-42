@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 16:39:05 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/04 17:28:37 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/05 17:56:36 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,12 @@ void	execute_pipeline(t_command *cmd, t_shell *shell)
 	{
 		pipe_fd[0] = -1;
 		pipe_fd[1] = -1;
+		if (cmd->is_heredoc)
+		{
+			cmd->heredoc_fd = handle_heredoc(cmd);
+			if (cmd->heredoc_fd < 0)
+				exit(1);
+		}
 		if (cmd->next && pipe(pipe_fd) < 0)
 			return (perror("pipe"));
 		pid = fork();
@@ -67,24 +73,9 @@ void	execute_single_command(t_command *cmd, t_shell *shell)
 
 	if (!cmd)
 		return ;
-	if (cmd->type == CMD_HEREDOC)
-	{
-		heredoc_fd = handle_heredoc(cmd);
-		if (heredoc_fd < 0)
-			return ;
-		cmd->heredoc_fd = heredoc_fd;
-		cmd->is_heredoc = 1;
-	}
-	if (is_builtin(cmd->args[0]) && !cmd->next && !cmd->output_file
-		&& !cmd->input_file)
-	{
+	if (cmd->args && cmd->args[0] && is_builtin(cmd->args[0]) && !cmd->next
+		&& !cmd->output_file && !cmd->input_file)
 		execute_builtin(cmd, shell);
-		if (cmd->heredoc_fd != -1)
-		{
-			close(cmd->heredoc_pipe[0]);
-			close(cmd->heredoc_pipe[1]);
-		}
-	}
 	else
 		execute_pipeline(cmd, shell);
 }
