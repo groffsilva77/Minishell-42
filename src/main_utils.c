@@ -6,7 +6,7 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 17:46:45 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/05 18:53:18 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/03/06 19:29:28 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,8 @@ void	shell_loop(t_shell *shell)
 		{
 			write(1, "exit\n", 5);
 			store_exit = shell->exit_status;
-			ft_free_all(shell);
+			free_shell(shell);
 			exit(store_exit);
-			break ;
 		}
 		handle_input(shell, input);
 	}

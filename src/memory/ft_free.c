@@ -6,58 +6,39 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:16:34 by ytavares          #+#    #+#             */
-/*   Updated: 2025/03/05 18:57:29 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/03/06 19:57:02 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/* 
-void    ft_free(t_shell *shell, void *ptr)
-{
-    t_memory    *atl;
-    t_memory    *ant;
 
-    if (!ptr)
-        return ;
-    ant = NULL;
-    atl = shell->memory;
-    printf("ft_free: Liberando %p\n", ptr);
-    while (atl)
+void ft_free(t_shell *shell, void *ptr)
+{
+    t_memory *current;
+    t_memory *prev;
+
+    if (!ptr || !shell || !shell->memory)
+        return;
+
+    prev = NULL;
+    current = shell->memory;
+    while (current)
     {
-        if (atl->ptr_for_memory_block == ptr)
+        if (current->ptr_for_memory_block == ptr)
         {
-            if (ant)
-                ant->next_ptr = atl->next_ptr;
+            if (prev)
+                prev->next_ptr = current->next_ptr;
             else
-                shell->memory = atl->next_ptr;
-            free(atl->ptr_for_memory_block);
-            free(atl);
-            return ;
+                shell->memory = current->next_ptr;
+            free(current->ptr_for_memory_block);
+            free(current);
+            return;
         }
-        ant = atl;
-        atl = atl->next_ptr;
+        prev = current;
+        current = current->next_ptr;
     }
+
     free(ptr);
-} */
-
-
-void	ft_free(t_shell *shell, void *ptr)
-{
-	t_memory	*atl;
-	t_memory	*ant;
-
-	if (!ptr)
-		return ;
-	ant = NULL;
-	atl = shell->memory;
-	while (atl)
-	{	
-		if (ant)
-			ant->next_ptr = atl->next_ptr;
-		return ;
-		ant = atl;
-		atl = atl->next_ptr;
-	}
-	free(ptr);
 }
+

@@ -6,7 +6,7 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:14:26 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/05 18:23:35 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/03/05 19:08:03 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ void		child_process(t_command *cmd, int *fd_in, int *pipe_fd,
 				t_shell *shell);
 
 void		ft_free_all(t_shell *shell);
+void		free_shell(t_shell *shell);
 void		free_tokens(t_token *tokens);
 void		ft_free_array(char **array);
 void		*fts_malloc(t_shell *shell, size_t size);
