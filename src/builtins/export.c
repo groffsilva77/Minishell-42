@@ -6,7 +6,7 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 18:02:33 by ytavares          #+#    #+#             */
-/*   Updated: 2025/02/25 14:07:27 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/03/07 12:10:25 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ static int	add_new_var(char *name, char *value_ex, t_shell *shell)
 	i = 0;
 	while (shell->env_copy[i])
 		i++;
-	new_env = copy_env(shell->env_copy, i);
+	new_env = copy_env(shell->env_copy, i + 1);
 	if (!new_env)
 		return (1);
 	temp = ft_strjoin(name, "=");

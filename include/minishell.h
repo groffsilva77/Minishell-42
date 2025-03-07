@@ -6,7 +6,7 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:14:26 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/05 19:08:03 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/03/07 12:24:05 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,6 +194,6 @@ int			is_builtin(char *cmd);
 int			execute_builtin(t_command *cmd, t_shell *shell);
 
 char		**duplicate_env(char **env);
-t_shell		*init_shell(char **env);
+t_shell		*init_shell(char **env)
 
 #endif
