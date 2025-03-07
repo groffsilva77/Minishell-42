@@ -6,7 +6,7 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 16:15:22 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/06 12:30:33 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/03/07 15:33:04 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,9 @@ char	**ft_realloc_array(char **array, int new_size, char *new_value,
 	if (!new_array)
 		return (NULL);
 	i = 0;
-	while (array && array[i] && i < new_size - 1)
+	while (array && array[i] && i < new_size)
 	{
-		new_array[i] = fts_strdup(shell, array[i]);
-		ft_free(shell, array[i]);
+		new_array[i] = array[i];
 		i++;
 	}
 	if (new_value)

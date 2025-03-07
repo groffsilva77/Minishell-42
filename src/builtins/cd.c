@@ -6,7 +6,7 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 18:23:11 by ytavares          #+#    #+#             */
-/*   Updated: 2025/03/07 12:02:06 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/03/07 19:24:30 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,24 +19,24 @@ static void	update_env_var(t_shell *shell, const char *name, const char *val)
 	char	*temp;
 
 	i = 0;
-	temp = ft_strjoin(name, "=");
+	temp = fts_strjoin(name, "=", shell);
 	if (!temp)
 		return ;
-	new_var = ft_strjoin(temp, val);
+	new_var = fts_strjoin(temp, val, shell);
 	free(temp);
 	while (shell->env_copy[i])
 	{
 		if (ft_strncmp(shell->env_copy[i], name, ft_strlen(name)) == 0
 			&& shell->env_copy[i][ft_strlen(name)] == '=')
 		{
-			free(shell->env_copy[i]);
+			ft_free(shell, shell->env_copy[i]);
 			shell->env_copy[i] = new_var;
 			return ;
 		}
 		i++;
 	}
 	if (!ft_realloc_array(shell->env_copy, i + 2, new_var, shell))
-		free(new_var);
+		ft_free(shell, new_var);
 	else
 		shell->env_copy[i] = new_var, shell->env_copy[i + 1] = NULL;
 } 

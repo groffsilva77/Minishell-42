@@ -6,16 +6,16 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 14:26:49 by ytavares          #+#    #+#             */
-/*   Updated: 2025/03/06 19:18:53 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/03/07 17:58:54 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_command	*create_or_get_command(t_command *atl_cmd)
+t_command	*create_or_get_command(t_command *atl_cmd, t_shell *shell)
 {
 	if (!atl_cmd)
-		atl_cmd = create_command();
+		atl_cmd = create_command(shell);
 	return (atl_cmd);
 }
 
@@ -37,7 +37,7 @@ int	handle_arg(t_command **atl_cmd, t_token *tokens, t_shell *shell)
 		expanded_value = expand_tokens(shell, tokens->value, 1);
 	if (!expanded_value)
 		return (-1);
-	*atl_cmd = create_or_get_command(*atl_cmd);
+	*atl_cmd = create_or_get_command(*atl_cmd, shell);
 	temp = ft_realloc_array((*atl_cmd)->args, (*atl_cmd)->argument_count + 1,
 			expanded_value, shell);
 	if (!temp)
@@ -68,7 +68,7 @@ t_command	*parse_tokens(t_token *tokens, t_shell *shell)
 			if (!tokens->next)
 				return (commands);
 			if (!atl_cmd)
-				atl_cmd = create_command();
+				atl_cmd = create_command(shell);
 			parse_redirections(atl_cmd, &tokens);
 		}
 		else if (handle_arg(&atl_cmd, tokens, shell) == -1)

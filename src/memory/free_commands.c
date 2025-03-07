@@ -6,7 +6,7 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 16:42:58 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/06 19:56:52 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/03/07 17:38:08 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void free_commands(t_command *commands, t_shell *shell)
         next = current->next;
         ft_free(shell, current->input_file);
         ft_free(shell, current->output_file);
+        ft_free(shell, current->heredoc_delim);
         if (current->args)
         {
             i = 0;

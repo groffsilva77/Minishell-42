@@ -6,17 +6,17 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 16:06:21 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/06 19:19:12 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/03/07 18:01:50 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_command	*create_command(void)
+t_command	*create_command(t_shell *shell)
 {
 	t_command	*cmd;
 
-	cmd = malloc(sizeof(t_command));
+	cmd = fts_malloc(shell, sizeof(t_command));
 	if (!cmd)
 		return (NULL);
 	cmd->args = NULL;

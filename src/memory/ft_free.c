@@ -6,7 +6,7 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:16:34 by ytavares          #+#    #+#             */
-/*   Updated: 2025/03/06 19:57:02 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/03/07 18:23:42 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void ft_free(t_shell *shell, void *ptr)
         prev = current;
         current = current->next_ptr;
     }
-
     free(ptr);
 }
 
