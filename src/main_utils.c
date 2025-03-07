@@ -6,11 +6,12 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 17:46:45 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/06 19:29:28 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/03/07 13:30:07 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <stdio.h>
 
 t_command	*process_input(char *input, t_shell *shell)
 {
@@ -77,6 +78,7 @@ void	shell_loop(t_shell *shell)
 	char	*input;
 	int		store_exit;
 
+	printf("shell_loop: starting\n");
 	while (1)
 	{
 		input = get_user_input();
@@ -84,9 +86,12 @@ void	shell_loop(t_shell *shell)
 		{
 			write(1, "exit\n", 5);
 			store_exit = shell->exit_status;
+			printf("shell_loop: calling free_shell before exit\n");
 			free_shell(shell);
+			printf("shell_loop: exiting with status=%d\n", store_exit);
 			exit(store_exit);
 		}
+		printf("shell_loop: input=%s\n", input);
 		handle_input(shell, input);
 	}
 }

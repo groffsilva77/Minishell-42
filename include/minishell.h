@@ -6,7 +6,7 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:14:26 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/07 12:24:05 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/03/07 13:52:23 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void		setup_signal_handlers(void);
 void		child_process(t_command *cmd, int *fd_in, int *pipe_fd,
 				t_shell *shell);
 
-void		ft_free_all(t_shell *shell);
+//void		ft_free_all(t_shell *shell);
 void		free_shell(t_shell *shell);
 void		free_tokens(t_token *tokens);
 void		ft_free_array(char **array);
@@ -193,7 +193,7 @@ int			the_unset(char **args, t_shell *shell);
 int			is_builtin(char *cmd);
 int			execute_builtin(t_command *cmd, t_shell *shell);
 
-char		**duplicate_env(char **env);
-t_shell		*init_shell(char **env)
+char		**duplicate_env(char **env, t_shell *shell);
+t_shell		*init_shell(char **env);
 
 #endif

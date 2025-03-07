@@ -6,7 +6,7 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 18:02:33 by ytavares          #+#    #+#             */
-/*   Updated: 2025/03/07 12:10:25 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/03/07 13:35:12 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,11 @@ static int	add_new_var(char *name, char *value_ex, t_shell *shell)
 
 	i = 0;
 	while (shell->env_copy[i])
+	{
+		printf("add_new_var: env_copy[%d]=%s\n", i, shell->env_copy[i]);
 		i++;
+	}
+	printf("add_new_var: original size=%d\n", i);
 	new_env = copy_env(shell->env_copy, i + 1);
 	if (!new_env)
 		return (1);
@@ -88,6 +92,7 @@ static int	add_new_var(char *name, char *value_ex, t_shell *shell)
 		return (free(new_env), 1);
 	new_env[i] = new_value;
 	new_env[i + 1] = NULL;
+	printf("add_new_var: original size=%d\n", i);
 	free(shell->env_copy);
 	shell->env_copy = new_env;
 	shell->exit_status = 0;
