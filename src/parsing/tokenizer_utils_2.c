@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_utils_2.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 17:02:48 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/04 14:22:14 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/08 18:06:39 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	handle_quotes(t_shell *shell, const char *input, int *i, t_token **tokens)
 {
 	char	quote;
-	char	*sbstr;
+	//char	*sbstr;
 	int		start;
 
 	quote = input[*i];

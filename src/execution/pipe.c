@@ -6,7 +6,7 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 16:39:05 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/05 18:25:54 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/03/08 18:07:35 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	execute_pipeline(t_command *cmd, t_shell *shell)
 
 void	execute_single_command(t_command *cmd, t_shell *shell)
 {
-	int	heredoc_fd;
+	//int	heredoc_fd;
 
 	if (!cmd)
 		return ;

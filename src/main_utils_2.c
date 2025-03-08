@@ -6,7 +6,7 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 12:58:40 by ytavares          #+#    #+#             */
-/*   Updated: 2025/03/08 13:45:51 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/03/08 19:07:14 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void free_shell(t_shell *shell)
 
     if (!shell)
         return;
-	printf("free_shell: liberating shell=%p\n", shell);
+	//printf("free_shell: liberating shell=%p\n", shell);
     if (shell->expand)
 	{
 		printf("free_shell: liberating expand=%p\n", shell->expand);
@@ -47,7 +47,7 @@ void free_shell(t_shell *shell)
 		shell->env_copy = NULL;
     }
 	printf("free_shell: liberating shell=%p\n", shell);
-    ft_free(shell, shell);
+    free(shell);
 }
 
 

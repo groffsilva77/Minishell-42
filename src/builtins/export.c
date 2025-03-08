@@ -6,7 +6,7 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 18:02:33 by ytavares          #+#    #+#             */
-/*   Updated: 2025/03/08 13:02:43 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/03/08 18:05:15 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static int	update_existing_var(char *name, char *value_ex, t_shell *shell)
 	return (1);
 }
 
-static char	**copy_env(char **env_copy, int size)
+/* static char	**copy_env(char **env_copy, int size)
 {
 	char	**new_env;
 	int		i;
@@ -64,7 +64,7 @@ static char	**copy_env(char **env_copy, int size)
 	}
 	new_env[i] = NULL;
 	return (new_env);
-}
+} */
 
 
 
