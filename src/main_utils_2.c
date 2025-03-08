@@ -6,7 +6,7 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 12:58:40 by ytavares          #+#    #+#             */
-/*   Updated: 2025/03/07 20:13:57 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/03/08 13:45:51 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,17 @@ void free_shell(t_shell *shell)
 
     if (!shell)
         return;
-	//printf("free_shell: liberating shell=%p\n", shell);
+	printf("free_shell: liberating shell=%p\n", shell);
     if (shell->expand)
 	{
-        free(shell->expand);
+		printf("free_shell: liberating expand=%p\n", shell->expand);
+        ft_free(shell, shell->expand);
 		shell->expand = NULL;
 	}
     if (shell->sbstr)
 	{
-        free(shell->sbstr);
+		printf("free_shell: liberating sbstr=%p\n", shell->sbstr);
+        ft_free(shell, shell->sbstr);
 		shell->sbstr = NULL;
 	}
     if (shell->env_copy)
@@ -35,15 +37,17 @@ void free_shell(t_shell *shell)
         i = 0;
         while (shell->env_copy[i])
 		{
-			//printf("free_shell: liberating env_copy[%d]=%p (%s)\n", i, shell->env_copy[i], shell->env_copy[i]);
-			free(shell->env_copy[i]);
+			printf("free_shell: liberating env_copy[%d]=%p (%s)\n", i, shell->env_copy[i], shell->env_copy[i]);
+			ft_free(shell, shell->env_copy[i]);
 			shell->env_copy[i] = NULL;
 			i++;
 		}
-        free(shell->env_copy);
+		printf("free_shell: liberating env_copy=%p\n", shell->env_copy);
+        ft_free(shell, shell->env_copy);
 		shell->env_copy = NULL;
     }
-    free(shell);
+	printf("free_shell: liberating shell=%p\n", shell);
+    ft_free(shell, shell);
 }
 
 
@@ -57,7 +61,7 @@ char	**duplicate_env(char **env, t_shell *shell)
 	i = 0;
 	while (env[i])
 		i++;
-	copy = malloc(sizeof(char *) * (i + 1));
+	copy = fts_malloc(shell, sizeof(char *) * (i + 1));
 	if (!copy)
 		return (NULL);
 	i = 0;

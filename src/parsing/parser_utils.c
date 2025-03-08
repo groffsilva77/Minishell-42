@@ -6,7 +6,7 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 16:06:21 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/07 18:01:50 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/03/08 17:27:09 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,41 @@ t_command	*create_command(t_shell *shell)
 	return (cmd);
 }
 
-void	parse_redirections(t_command *cmd, t_token **tokens)
+void parse_redirections(t_command *cmd, t_token **tokens, t_shell *shell)
+{
+    if (!tokens || !(*tokens) || !(*tokens)->next)
+        return;
+    if (ft_strncmp((*tokens)->value, "<<", 2) == 0)
+    {
+        // Liberar o delimitador anterior, se existir
+        if (cmd->heredoc_delim)
+            ft_free(shell, cmd->heredoc_delim);
+        cmd->heredoc_delim = ft_strdup((*tokens)->next->value);
+        cmd->is_heredoc = 1;
+    }
+    else if (ft_strncmp((*tokens)->value, "<", 1) == 0)
+    {
+        if (cmd->input_file)
+            ft_free(shell, cmd->input_file);
+        cmd->input_file = ft_strdup((*tokens)->next->value);
+        cmd->type = CMD_REDIR_IN;
+    }
+    else if (ft_strncmp((*tokens)->value, ">>", 2) == 0)
+    {   
+        if (cmd->output_file)
+            ft_free(shell, cmd->output_file);
+        cmd->output_file = ft_strdup((*tokens)->next->value);
+        cmd->append_output = 1;
+    }
+    else if (ft_strncmp((*tokens)->value, ">", 1) == 0)
+    {
+        if (cmd->output_file)
+            ft_free(shell, cmd->output_file);
+        cmd->output_file = ft_strdup((*tokens)->next->value);
+    }
+    *tokens = (*tokens)->next;
+}
+/* void	parse_redirections(t_command *cmd, t_token **tokens)
 {
 	if (!tokens || !(*tokens) || !(*tokens)->next)
 		return ;
@@ -57,7 +91,7 @@ void	parse_redirections(t_command *cmd, t_token **tokens)
 	else if (ft_strncmp((*tokens)->value, ">", 1) == 0)
 		cmd->output_file = ft_strdup((*tokens)->next->value);
 	*tokens = (*tokens)->next;
-}
+} */
 
 void	add_command(t_command **commands, t_command *new_cmd)
 {

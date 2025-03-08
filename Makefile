@@ -2,8 +2,8 @@
 NAME = minishell
 
 #compile and flags
-CC = gcc
-CFLAGS = -g3
+CC = cc
+CFLAGS = -g3 -Wall -Werror -Wextra
 
 #include (.h)
 INCLUDES = -I$(INCLUDE_DIR) -I$(LIBFT_DIR)

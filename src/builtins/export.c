@@ -6,7 +6,7 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 18:02:33 by ytavares          #+#    #+#             */
-/*   Updated: 2025/03/07 18:59:18 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/03/08 13:02:43 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,28 +82,28 @@ static int add_new_var(char *name, char *value_ex, t_shell *shell)
         i++;
     }
     printf("add_new_var: original size=%d\n", i);
-    new_env = malloc(sizeof(char *) * (i + 2)); // +2 para nova var e NULL
+    new_env = fts_malloc(shell, sizeof(char *) * (i + 2)); // +2 para nova var e NULL
     if (!new_env)
         return (1);
     // Transfere os ponteiros do array antigo
-    for (int j = 0; j < i; j++)
-        new_env[j] = shell->env_copy[j];
-    temp = ft_strjoin(name, "=");
+    for (int j = 0; j < i; j++)//
+        new_env[j] = shell->env_copy[j];//
+    temp = fts_strjoin(shell, name, "=");
     if (!temp)
     {
         free(new_env);
         return (1);
     }
-    new_value = ft_strjoin(temp, value_ex);
-    free(temp);
+    new_value = fts_strjoin(shell, temp, value_ex);
+    ft_free(shell, temp);
     if (!new_value)
     {
-        free(new_env);
+        ft_free(shell, new_env);
         return (1);
     }
     new_env[i] = new_value;
     new_env[i + 1] = NULL;
-    free(shell->env_copy); // Libera apenas o array antigo
+    ft_free(shell, shell->env_copy); // Libera apenas o array antigo
     shell->env_copy = new_env;
     shell->exit_status = 0;
     return (0);

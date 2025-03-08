@@ -6,14 +6,15 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:34:26 by ytavares          #+#    #+#             */
-/*   Updated: 2025/03/07 18:56:42 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/03/08 14:33:18 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <stdio.h>
 
 
-static int	find_and_remove_var(char **env_copy, char *var_name)
+static int	find_and_remove_var(char **env_copy, char *var_name, t_shell *shell)
 {
 	int					i;
 	int					j;
@@ -26,6 +27,7 @@ static int	find_and_remove_var(char **env_copy, char *var_name)
 		if (ft_strncmp(env_copy[i], var_name, len_var) == 0
 			&& (env_copy[i][len_var] == '=' || env_copy[i][len_var] == '\0'))
 		{
+			ft_free(shell, env_copy[i]);
 			j = i;
 			while (env_copy[j + 1])
 			{
@@ -48,13 +50,22 @@ static int	resize_env_array(t_shell *shell)
 	size = 0;
 	while (shell->env_copy[size])
 		size++;
-	size--;
+	printf("resize_env_array: original size=%d\n", size);
+	if (size <= 0)
+	{
+		ft_free(shell, shell->env_copy);
+		shell->env_copy = NULL;
+		shell->exit_status = 0;
+		return (0);
+	}
 	new_env = ft_realloc_array(shell->env_copy, size, NULL, shell);
 	if (!new_env)
 	{
+		printf("resize_env_array: ft_realloc_array failed\n");
 		shell->exit_status = 1;
 		return (1);
 	}
+	printf("resize_env_array: new_env=%p, old_env=%p\n", new_env, shell->env_copy);
 	shell->env_copy = new_env;
 	shell->exit_status = 0;
 	return (0);
@@ -67,7 +78,7 @@ int	the_unset(char **args, t_shell *shell)
 		shell->exit_status = 0;
 		return (0);
 	}
-	if (find_and_remove_var(shell->env_copy, args[1]))
+	if (find_and_remove_var(shell->env_copy, args[1], shell))
 		return (resize_env_array(shell));
 	shell->exit_status = 0;
 	return (0);

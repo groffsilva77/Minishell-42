@@ -6,7 +6,7 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:14:26 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/07 18:01:19 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/03/08 17:29:04 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ void		process_whitespace(const char *input, int *i, int *start,
 				t_token **tokens);
 
 t_command	*create_command(t_shell *shell);
-void		parse_redirections(t_command *cmd, t_token **tokens);
+void		parse_redirections(t_command *cmd, t_token **tokens, t_shell *shell);
 void		add_command(t_command **commands, t_command *new_cmd);
 
 t_command	*create_or_get_command(t_command *atl_cmd, t_shell *shell);
