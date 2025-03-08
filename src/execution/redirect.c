@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:59:35 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/05 17:57:41 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/07 14:52:53 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ int	handle_heredoc(t_command *cmd)
 		trimmed_line = fts_strtrim(line);
 		if (ft_strcmp(trimmed_line, cmd->heredoc_delim) == 0)
 		{
-			ft_putstr_fd("DEBUG: Found delimiter, breaking\n", 2);
 			free(line);
 			free(trimmed_line);
 			break ;
@@ -37,8 +36,7 @@ int	handle_heredoc(t_command *cmd)
 		free(line);
 		free(trimmed_line);
 	}
-	close(cmd->heredoc_pipe[1]);
-	return (cmd->heredoc_pipe[0]);
+	return (close(cmd->heredoc_pipe[1]), cmd->heredoc_pipe[0]);
 }
 
 int	handle_input_redirection(t_command *cmd)

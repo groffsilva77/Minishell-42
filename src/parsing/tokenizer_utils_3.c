@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 18:22:26 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/26 16:02:55 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/08 15:38:29 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,22 +67,19 @@ int	process_single_quote(t_shell *shell, const char *input, int *i,
 	(void)*input;
 	(void)*i;
 	add_token(tokens, shell->sbstr, 1, 0);
+	printf("process_single_quote: token=%s, in_squotes=1, in_dquotes=0\n", shell->sbstr);
 	free(shell->sbstr);
+	shell->sbstr = NULL;
 	return (1);
 }
 
 int	process_double_quote(t_shell *shell, const char *input, int *i,
 				t_token **tokens)
 {
-	char	*expanded;
-
 	(void)*input;
 	(void)*i;
-	expanded = expand_tokens(shell, shell->sbstr, 1);
-	if (!expanded)
-		return (free(shell->sbstr), 0);
-	add_token(tokens, expanded, 0, 1);
-	free(expanded);
+	add_token(tokens, shell->sbstr, 0, 1);
+	printf("process_double_quote: token=%s, in_squotes=0, in_dquotes=1\n", shell->sbstr);
 	free(shell->sbstr);
 	shell->sbstr = NULL;
 	return (1);

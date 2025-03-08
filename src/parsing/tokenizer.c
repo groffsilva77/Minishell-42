@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 14:18:53 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/04 12:57:47 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/08 15:39:13 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,20 +38,22 @@ t_token	*tokenize(t_shell *shell, const char *input)
 	tokens = NULL;
 	i = 0;
 	start = 0;
+	printf("tokenize: full input=%s\n", input);
 	while (input[i])
 	{
+		printf("tokenize: i=%d, char=%c\n", i, input[i]);
 		if (is_whitespace(input[i]))
 			process_whitespace(input, &i, &start, &tokens);
-		else if (input[i] == '\'' || input[i] == '"')
+		else if ((input[i] == '\'' || input[i] == '"') && i == start)
 		{
 			if (!process_quotes(shell, input, &i, &tokens))
-				break ;
+				return (free_tokens(tokens), NULL);
 			start = i;
 		}
-		else if (ft_strchr("|<>", input[i]))
+		else if (ft_strchr ("|<>", input[i]))
 			process_special_chars(input, &i, &start, &tokens);
 		else
-			process_word(input, &i, &start, &tokens);
+			handle_word(input, &i, &start, &tokens);
 	}
 	finalize_token(input, &i, &start, &tokens);
 	return (tokens);

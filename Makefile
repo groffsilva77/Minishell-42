@@ -2,8 +2,8 @@
 NAME = minishell
 
 #compile and flags
-CC = gcc
-CFLAGS = -g3
+CC = cc
+CFLAGS = -Wall -Wextra -Werror -g3
 
 #include (.h)
 INCLUDES = -I$(INCLUDE_DIR) -I$(LIBFT_DIR)
@@ -15,9 +15,7 @@ SRCS_DIR = src
 MEMORY_DIR = $(SRCS_DIR)/memory
 BUILTINS_DIR = $(SRCS_DIR)/builtins
 PARSING_DIR = $(SRCS_DIR)/parsing
-TOKEN_DIR = $(SRCS_DIR)/token
 EXECUTION_DIR = $(SRCS_DIR)/execution
-SIGNAL_DIR = $(SRCS_DIR)/signals 
 UTILS_DIR = $(SRCS_DIR)/utils
 INCLUDE_DIR = include
 
@@ -26,12 +24,39 @@ SRCS = $(SRCS_DIR)/main.c \
        $(SRCS_DIR)/main_utils.c \
 	   $(SRCS_DIR)/main_utils_2.c \
 	   $(SRCS_DIR)/signals.c \
-	   $(wildcard $(MEMORY_DIR)/*.c) \
-	   $(wildcard $(UTILS_DIR)/*.c) \
-	   $(wildcard $(BUILTINS_DIR)/*.c) \
-	   $(wildcard $(PARSING_DIR)/*.c) \
-	   $(wildcard $(TOKEN_DIR)/*.c) \
-	   $(wildcard $(EXECUTION_DIR)/*.c)
+	   $(MEMORY_DIR)/free_commands.c \
+	   $(MEMORY_DIR)/free_tokens.c \
+	   $(MEMORY_DIR)/ft_free_array.c \
+	   $(MEMORY_DIR)/ft_free.c \
+	   $(MEMORY_DIR)/fts_malloc.c \
+	   $(UTILS_DIR)/ft_realloc_array.c \
+	   $(UTILS_DIR)/ft_strcat.c \
+	   $(UTILS_DIR)/ft_strcpy.c \
+	   $(UTILS_DIR)/fts_strdup.c \
+	   $(UTILS_DIR)/fts_strjoin.c \
+	   $(UTILS_DIR)/fts_strtrim.c \
+	   $(BUILTINS_DIR)/cd.c \
+	   $(BUILTINS_DIR)/echo.c \
+	   $(BUILTINS_DIR)/env.c \
+	   $(BUILTINS_DIR)/exit.c \
+	   $(BUILTINS_DIR)/export.c \
+	   $(BUILTINS_DIR)/pwd.c \
+	   $(BUILTINS_DIR)/unset.c \
+	   $(PARSING_DIR)/parser.c \
+	   $(PARSING_DIR)/parser_utils.c \
+	   $(PARSING_DIR)/tokenizer.c \
+	   $(PARSING_DIR)/tokenizer_utils.c \
+	   $(PARSING_DIR)/tokenizer_utils_2.c \
+	   $(PARSING_DIR)/tokenizer_utils_3.c \
+	   $(PARSING_DIR)/var_expansion.c \
+	   $(PARSING_DIR)/var_expansion_utils.c \
+	   $(PARSING_DIR)/validate_syntax.c \
+	   $(EXECUTION_DIR)/exec_builtin.c \
+	   $(EXECUTION_DIR)/exec.c \
+	   $(EXECUTION_DIR)/find_path.c \
+	   $(EXECUTION_DIR)/pipe_utils.c \
+	   $(EXECUTION_DIR)/pipe.c \
+	   $(EXECUTION_DIR)/redirect.c
 
 #.c to .o
 OBJS = $(SRCS:.c=.o)
