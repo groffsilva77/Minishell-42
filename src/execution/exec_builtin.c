@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 15:36:22 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/06 17:21:14 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/11 16:45:43 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 int	is_builtin(char *cmd)
 {
-	return (!ft_strncmp(cmd, "echo", 5) || !ft_strncmp(cmd, "cd", 3)
-		|| !ft_strncmp(cmd, "pwd", 4) || !ft_strncmp(cmd, "export", 7)
-		|| !ft_strncmp(cmd, "unset", 6) || !ft_strncmp(cmd, "env", 4)
-		|| !ft_strncmp(cmd, "exit", 5));
+	return (!ft_strcmp(cmd, "echo") || !ft_strcmp(cmd, "cd")
+		|| !ft_strcmp(cmd, "pwd") || !ft_strcmp(cmd, "export")
+		|| !ft_strcmp(cmd, "unset") || !ft_strcmp(cmd, "env")
+		|| !ft_strcmp(cmd, "exit"));
 }
 
 int	execute_builtin(t_command *cmd, t_shell *shell)
@@ -28,18 +28,18 @@ int	execute_builtin(t_command *cmd, t_shell *shell)
 		if (setup_redirections(cmd) < 0)
 			return (1);
 	if (ft_strcmp(cmd->args[0], "cd") == 0)
-		return (the_cd(cmd->args, shell));
+		return (the_cd(&cmd->args[0], shell));
 	if (ft_strcmp(cmd->args[0], "echo") == 0)
-		return (the_echo(cmd->args, shell));
+		return (the_echo(&cmd->args[0], shell));
 	if (ft_strcmp(cmd->args[0], "pwd") == 0)
 		return (the_pwd(shell));
 	if (ft_strcmp(cmd->args[0], "export") == 0)
-		return (the_export(cmd->args, shell));
+		return (the_export(&cmd->args[0], shell));
 	if (ft_strcmp(cmd->args[0], "unset") == 0)
-		return (the_unset(cmd->args, shell));
+		return (the_unset(&cmd->args[0], shell));
 	if (ft_strcmp(cmd->args[0], "env") == 0)
 		return (the_env(shell));
 	if (ft_strcmp(cmd->args[0], "exit") == 0)
-		return (the_exit(cmd->args, shell));
+		return (the_exit(&cmd->args[0], shell));
 	return (0);
 }

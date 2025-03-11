@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:53:16 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/08 15:39:03 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/11 17:43:50 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,9 @@ static int	validate_command(t_command *cmd)
 	return (1);
 }
 
-static void	execute_builtin_command(t_command *cmd, t_shell *shell)
+static int	execute_builtin_command(t_command *cmd, t_shell *shell)
 {
-	execute_builtin(cmd, shell);
-	exit(EXIT_SUCCESS);
+	return (execute_builtin(cmd, shell));
 }
 
 static void	handle_cmd_not_found(t_command *cmd)
@@ -62,12 +61,13 @@ static void	handle_execve_failure(t_command *cmd, char *path)
 void	execute_command(t_command *cmd, t_shell *shell)
 {
 	char	*path;
+	int		status;
 
 	if (!validate_command(cmd))
 		exit(EXIT_FAILURE);
 	if (is_builtin(cmd->args[0]))
 	{
-		execute_builtin_command(cmd, shell);
+		status = execute_builtin_command(cmd, shell);
 		return ;
 	}
 	path = find_command_path(cmd->args[0], shell->env_copy);

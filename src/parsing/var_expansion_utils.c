@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 17:59:29 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/08 18:43:31 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/11 16:41:57 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,21 +32,6 @@ char	*get_env_value(t_shell *shell, const char *var)
 	return (ft_strdup(""));
 }
 
-int	handle_quotes_state(char c, int	*in_squotes, int *in_dquotes)
-{
-	if (c == '\'' && !(*in_dquotes))
-	{
-		*in_squotes = !(*in_squotes);
-		return (1);
-	}
-	else if (c == '"' && !(*in_squotes))
-	{
-		*in_dquotes = !(*in_dquotes);
-		return (1);
-	}
-	return (0);
-}
-
 char	*expand_var(t_shell *shell, const char *input, size_t *i)
 {
 	size_t	start;
@@ -70,9 +55,7 @@ char	*expand_var(t_shell *shell, const char *input, size_t *i)
 	if (!var_name)
 		return (NULL);
 	ft_strlcpy(var_name, &input[start], len + 1);
-	printf("expand_var: var_name=%s\n", var_name);
 	value = get_env_value(shell, var_name);
-	printf("expand_var: value=%s\n", value ? value : "NULL");
 	free(var_name);
 	*i = start + len;
 	return (value);
@@ -83,9 +66,7 @@ int	expand_variable(t_shell *shell, const char *token, size_t *i, int j)
 	char	*value;
 	int		k;
 
-	printf("expand_variable: token=%s, i=%zu, j=%d\n", token, *i, j);
 	value = expand_var(shell, token, i);
-	printf("expand_variable: value=%s\n", value ? value : "NULL");
 	if (!value)
 		return (j);
 	k = 0;
@@ -101,37 +82,26 @@ char	*process_expansion(t_shell *shell, const char *token, size_t max_len,
 	size_t	i;
 	size_t	j;
 	int		in_squotes;
-	int		in_dquotes;
 
 	i = 0;
 	j = 0;
 	in_squotes = 0;
-	in_dquotes = 0;
-	printf("process_expansion: token=%s\n", token);
 	while (token[i] && j < max_len - 1)
 	{
-		if (token[i] == '\'' && !in_dquotes)
+		if (token[i] == '\'' && !in_squotes)
 		{
-			in_squotes = !in_squotes;
+			in_squotes = 1;
 			shell->expand[j++] = token[i++];
-			printf("process_expansion: in_squotes=%d\n", in_squotes);
 		}
-		else if (token[i] == '"' && !in_squotes)
+		else if (token[i] == '\'' && in_squotes)
 		{
-			in_dquotes = !in_dquotes;
+			in_squotes = 0;
 			shell->expand[j++] = token[i++];
-			printf("process_expansion: in_dquotes=%d\n", in_dquotes);
 		}
-		else if (token[i] == '$' && allow_expansion && !in_squotes)
-		{
-			printf("process_expansion: expanding at i=%zu, j=%zu\n", i, j);	
+		else if (token[i] == '$' && allow_expansion)
 			j = expand_variable(shell, token, &i, j);
-			printf("process_expansion: after expand, j=%zu, expand=%s\n", j, shell->expand);
-		}
 		else
 			shell->expand[j++] = token[i++];
 	}
-	shell->expand[j] = '\0';
-	printf("process_expansion: result=%s\n", shell->expand);
-	return (shell->expand);
+	return (shell->expand[j] = '\0', shell->expand);
 }

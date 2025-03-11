@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 17:46:45 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/08 15:46:35 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/11 17:12:42 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ t_command	*process_input(char *input, t_shell *shell)
 		return (NULL);
 	}
 	shell->commands = parse_tokens(tokens, shell);
+	execute_single_command(shell->commands, shell);
 	free_tokens(tokens);
 	return (shell->commands);
 }
@@ -60,14 +61,8 @@ static void	handle_input(t_shell *shell, char *input)
 		return ;
 	}
 	commands = process_input(input, shell);
-	if (!commands)
-	{
-		free(input);
-		return ;
-	}
-	execute_single_command(commands, shell);
-	free_commands(commands, shell);
-	free(input);
+	if (commands)
+		free_commands(commands, shell);
 	shell->expand[0] = '\0';
 }
 

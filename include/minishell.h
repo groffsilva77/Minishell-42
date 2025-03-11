@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:14:26 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/08 17:17:31 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/11 16:52:35 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,13 @@ typedef enum e_cmd_type {
 	CMD_HEREDOC
 }	t_cmd_type;
 
+typedef struct s_tokenize_data
+{
+	int	i;
+	int	word_start;
+	int	in_word;
+}	t_tokenize_data;
+
 typedef struct s_command {
 	char				**args;
 	char				*input_file;
@@ -46,6 +53,7 @@ typedef struct s_command {
 	int					heredoc_fd;
 	int					argument_count;
 	int					is_builtin;
+	char				*command;
 	t_cmd_type			type;
 	struct s_command	*next;
 }	t_command;
@@ -77,6 +85,14 @@ typedef struct s_token {
 	t_command		*cmd;
 }	t_token;
 
+typedef struct s_word_data
+{
+	const char	*input;
+	int			start;
+	int			len;
+	t_token		**tokens;
+}	t_word_data;
+
 void		handle_sigint(int sig);
 void		setup_signal_handlers(void);
 
@@ -94,7 +110,6 @@ int			is_operator(const char *token);
 int			validate_syntax(t_token *tokens, t_shell *shell);
 
 char		*get_env_value(t_shell *shell, const char *var);
-int			handle_quotes_state(char c, int	*in_squotes, int *in_dquotes);
 char		*expand_var(t_shell *shell, const char *input, size_t *i);
 int			expand_variable(t_shell *shell, const char *token, size_t *i,
 				int j);
@@ -103,17 +118,11 @@ char		*process_expansion(t_shell *shell, const char *token,
 char		*expand_tokens(t_shell *shell, const char *token,
 				int allow_expansion);
 
-int			process_single_quote(t_shell *shell, const char *input, int *i,
-				t_token **tokens);
-int			process_double_quote(t_shell *shell, const char *input, int *i,
-				t_token **tokens);
 int			is_whitespace(char c);
 void		add_token(t_token **tokens, const char *value, int in_squotes,
 				int in_dquotes);
 char		*copy_substr(const char *input, int start, int length);
 
-int			handle_quotes(t_shell *shell, const char *input, int *i,
-				t_token **tokens);
 void		hand_pipe(const char *input, int *i, t_token **tokens);
 void		handle_redirects(const char *input, int *i, t_token **tokens);
 void		hand_spc_chars(const char *input, int *i, int *start,
@@ -121,18 +130,12 @@ void		hand_spc_chars(const char *input, int *i, int *start,
 
 void		finalize_token(const char *input, int *i, int *start,
 				t_token **tokens);
-int			process_quotes(t_shell *shell, const char *input, int *i,
-				t_token **tokens);
 void		process_special_chars(const char *input, int *i, int *start,
 				t_token **tokens);
 void		handle_word(const char *input, int *i, int *start,
 				t_token **tokens);
-void		process_word(const char *input, int *i, int *start,
-				t_token **tokens);
 
 t_token		*tokenize(t_shell *shell, const char *input);
-void		process_whitespace(const char *input, int *i, int *start,
-				t_token **tokens);
 
 t_command	*create_command(void);
 void		parse_redirections(t_command *cmd, t_token **tokens);

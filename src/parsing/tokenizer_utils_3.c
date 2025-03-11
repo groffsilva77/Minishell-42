@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 18:22:26 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/08 15:38:29 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/11 17:17:26 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,13 @@ void	add_token(t_token **tokens, const char *value, int in_squotes,
 	new_token = malloc(sizeof(t_token));
 	if (!new_token)
 		return ;
-	new_token->value = ft_strdup(value);
+	if (!value)
+		new_token->value = ft_strdup("");
+	else
+		new_token->value = ft_strdup(value);
 	if (!value)
 	{
-		free(new_token);
+		return (free(new_token));
 		return ;
 	}
 	new_token->in_single_quotes = in_squotes;
@@ -39,6 +42,7 @@ void	add_token(t_token **tokens, const char *value, int in_squotes,
 			current = current->next;
 		current->next = new_token;
 	}
+	printf("token generated: %s\n", new_token->value);
 }
 
 int	is_whitespace(char c)
@@ -59,28 +63,4 @@ char	*copy_substr(const char *input, int start, int length)
 	ft_strncpy(substr, input + start, length);
 	substr[length] = '\0';
 	return (substr);
-}
-
-int	process_single_quote(t_shell *shell, const char *input, int *i,
-				t_token **tokens)
-{
-	(void)*input;
-	(void)*i;
-	add_token(tokens, shell->sbstr, 1, 0);
-	printf("process_single_quote: token=%s, in_squotes=1, in_dquotes=0\n", shell->sbstr);
-	free(shell->sbstr);
-	shell->sbstr = NULL;
-	return (1);
-}
-
-int	process_double_quote(t_shell *shell, const char *input, int *i,
-				t_token **tokens)
-{
-	(void)*input;
-	(void)*i;
-	add_token(tokens, shell->sbstr, 0, 1);
-	printf("process_double_quote: token=%s, in_squotes=0, in_dquotes=1\n", shell->sbstr);
-	free(shell->sbstr);
-	shell->sbstr = NULL;
-	return (1);
 }

@@ -6,15 +6,14 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 15:35:38 by ytavares          #+#    #+#             */
-/*   Updated: 2025/03/08 17:30:57 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/11 16:29:37 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	print_arguments(t_shell *shell, char **args, int i)
+static void	print_arguments(char **args, int i)
 {
-	(void)shell;
 	while (args[i])
 	{
 		ft_putstr_fd(args[i], STDOUT_FILENO);
@@ -41,13 +40,7 @@ int	the_echo(char **args, t_shell *shell)
 		newline = 0;
 		i++;
 	}
-	if (!args[i])
-	{
-		if (newline)
-			ft_putstr_fd("\n", STDOUT_FILENO);
-		return (shell->exit_status = 0, 0);
-	}
-	print_arguments(shell, args, i);
+	print_arguments(args, i);
 	if (newline)
 		ft_putstr_fd("\n", STDOUT_FILENO);
 	return (shell->exit_status = 0, 0);

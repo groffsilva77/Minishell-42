@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 14:26:49 by ytavares          #+#    #+#             */
-/*   Updated: 2025/03/08 20:21:04 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/11 16:47:07 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ t_command	*create_or_get_command(t_command *atl_cmd)
 {
 	if (!atl_cmd)
 		atl_cmd = create_command();
+	printf("maçã");
 	return (atl_cmd);
 }
 
@@ -26,27 +27,38 @@ t_command	*handle_pipe(t_command *commands, t_command **atl_cmd)
 	return (commands);
 }
 
-static char	*remove_quotes(const char *str)
+char	*remove_quotes(const char *str)
 {
 	char	*result;
 	size_t	i;
 	size_t	j;
-	char	outer_quote;
+	size_t	len;
+	char	quote;
 
-	result = malloc(ft_strlen(str) + 1);
+	if (!str)
+		return (NULL);
+	len = ft_strlen(str);
+	if (len < 2)
+		return (ft_strdup(str));
+	result = malloc(len + 1);
 	if (!result)
 		return (NULL);
 	i = 0;
 	j = 0;
-	outer_quote = 0;
-	if ((str[0] == '"' || str[0] == '\'') &&
-		str[0] == str[ft_strlen(str) - 1])
-		outer_quote = str[0];
-	while (str[i])
+	quote = 0;
+	while (i < len)
 	{
-		if ((i == 0 || i == ft_strlen(str) - 1) && str[i] == outer_quote)
-			;
-		result[j++] = str[i];
+		if (str[i] == '\'' || str[i] == '"')
+		{
+			if (!quote)
+				quote = str[i];
+			else if (quote == str[i])
+				quote = 0;
+			else
+				result[j++] = str[i];
+		}
+		else
+			result[j++] = str[i];
 		i++;
 	}
 	result[j] = '\0';
@@ -59,30 +71,29 @@ int	handle_arg(t_command **atl_cmd, t_token *tokens, t_shell *shell)
 	char	*expanded_value;
 	char	*clean_value;
 
-	printf("handle_arg: token=%s, in_squotes=%d, in_dquotes=%d\n", 
-           tokens->value, tokens->in_single_quotes, tokens->in_double_quotes);
+	if (!*atl_cmd)
+		*atl_cmd = create_command();
 	if (tokens->in_single_quotes)
 		expanded_value = ft_strdup(tokens->value);
 	else
 		expanded_value = expand_tokens(shell, tokens->value, 1);
-	printf("handle_arg: expanded_value=%s\n", expanded_value);
 	if (!expanded_value)
 		return (-1);
 	clean_value = remove_quotes(expanded_value);
-	printf("handle_arg: clean_value=%s\n", clean_value);
-	free(expanded_value);
-	*atl_cmd = create_or_get_command(*atl_cmd);
+	if (!clean_value)
+		return (free(expanded_value), -1);
 	temp = ft_realloc_array((*atl_cmd)->args, (*atl_cmd)->argument_count + 1,
 			clean_value, shell);
 	if (!temp)
 	{
 		ft_putstr_fd("Error: Memory allocation failed in realloc array\n", 2);
 		free(clean_value);
-		return (free((*atl_cmd)->args), (*atl_cmd)->args = NULL, -1);
+		return (free(expanded_value), free(clean_value), -1);
 	}
 	(*atl_cmd)->args = temp;
 	(*atl_cmd)->args[(*atl_cmd)->argument_count] = clean_value;
 	(*atl_cmd)->argument_count++;
+	free(expanded_value);
 	return ((*atl_cmd)->args[(*atl_cmd)->argument_count] = NULL, 0);
 }
 

@@ -6,55 +6,124 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 14:18:53 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/08 15:39:13 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/11 17:39:30 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	process_whitespace(const char *input, int *i, int *start,
-		t_token **tokens)
+void	process_quotes(char *word, int len, int *has_squotes, int *has_dquotes)
 {
-	char	*token;
+	int	i;
 
-	if (*i > *start)
+	i = -1;
+	*has_squotes = 0;
+	*has_dquotes = 0;
+	while (++i < len)
 	{
-		token = copy_substr(input, *start, *i - *start);
-		if (token)
+		if (word[i] == '\'')
+			*has_squotes = 1;
+		else if (word[i] == '"')
+			*has_dquotes = 1;
+	}
+}
+
+void	process_word(t_shell *shell, t_word_data *data)
+{
+	char	*word;
+	int		has_squotes;
+	int		has_dquotes;
+
+	(void)shell;
+	word = copy_substr(data->input, data->start, data->len);
+	if (!word)
+		return ;
+	process_quotes(word, data->len, &has_squotes, &has_dquotes);
+	if (has_squotes)
+		add_token(data->tokens, word, 1, 0);
+	else if (has_dquotes)
+		add_token(data->tokens, word, 0, 1);
+	else
+		add_token(data->tokens, word, 0, 0);
+	free(word);
+}
+
+void	handle_special_char(const char *input, int i, t_token **tokens)
+{
+	char	*special;
+
+	special = copy_substr(input, i, 1);
+	if ((input[i] == '<' && input[i + 1] == '<') || (input[i] == '>' && input[i + 1] == '>'))
+	{
+		special = copy_substr(input, i, 2);
+		add_token(tokens, special, 0, 0);
+		printf("special_token: %s\n", special);
+		free(special);
+		i++;
+	}
+	else
+	{
+		special = copy_substr(input, i, 1);
+		add_token(tokens, special, 0, 0);
+		printf("special_token: %s\n", special);
+		free(special);
+	}
+}
+
+void	process_current_char(t_shell *shell, const char *input,
+		t_tokenize_data *data, t_token **tokens)
+{
+	t_word_data	word_data;
+
+	if (!is_whitespace(input[data->i]) && !ft_strchr("|<>", input[data->i]))
+	{
+		if (!data->in_word)
 		{
-			add_token(tokens, token, 0, 0);
-			free(token);
+			data->word_start = data->i;
+			data->in_word = 1;
 		}
 	}
-	*start = ++(*i);
+	else if (ft_strchr("|<>", input[data->i]))
+	{
+		if (data->in_word)
+		{
+			word_data = (t_word_data){input, data->word_start,
+				data->i - data->word_start, tokens};
+			process_word(shell, &word_data);
+			data->in_word = 0;
+		}
+		handle_special_char(input, data->i, tokens);
+		data->i++;
+	}
+	else if (is_whitespace(input[data->i]) && data->in_word)
+	{
+		word_data = (t_word_data){input, data->word_start,
+			data->i - data->word_start, tokens};
+		process_word(shell, &word_data);
+		data->in_word = 0;
+	}
 }
 
 t_token	*tokenize(t_shell *shell, const char *input)
 {
-	t_token	*tokens;
-	int		i;
-	int		start;
+	t_token			*tokens;
+	t_tokenize_data	data;
+	t_word_data		word_data;
 
 	tokens = NULL;
-	i = 0;
-	start = 0;
-	printf("tokenize: full input=%s\n", input);
-	while (input[i])
+	data.i = 0;
+	data.word_start = 0;
+	data.in_word = 0;
+	while (input[data.i])
 	{
-		printf("tokenize: i=%d, char=%c\n", i, input[i]);
-		if (is_whitespace(input[i]))
-			process_whitespace(input, &i, &start, &tokens);
-		else if ((input[i] == '\'' || input[i] == '"') && i == start)
-		{
-			if (!process_quotes(shell, input, &i, &tokens))
-				return (free_tokens(tokens), NULL);
-			start = i;
-		}
-		else if (ft_strchr ("|<>", input[i]))
-			process_special_chars(input, &i, &start, &tokens);
-		else
-			handle_word(input, &i, &start, &tokens);
+		process_current_char(shell, input, &data, &tokens);
+		data.i++;
 	}
-	finalize_token(input, &i, &start, &tokens);
+	if (data.in_word)
+	{
+		word_data = (t_word_data){input, data.word_start,
+			data.i - data.word_start, &tokens};
+		process_word(shell, &word_data);
+	}
 	return (tokens);
 }
