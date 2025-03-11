@@ -6,7 +6,7 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 12:58:40 by ytavares          #+#    #+#             */
-/*   Updated: 2025/03/08 19:07:14 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/03/11 17:52:35 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,13 @@ void free_shell(t_shell *shell)
     if (shell->expand)
 	{
 		printf("free_shell: liberating expand=%p\n", shell->expand);
-        ft_free(shell, shell->expand);
+        free(shell->expand); //
 		shell->expand = NULL;
 	}
     if (shell->sbstr)
 	{
 		printf("free_shell: liberating sbstr=%p\n", shell->sbstr);
-        ft_free(shell, shell->sbstr);
+        free(shell->sbstr); //
 		shell->sbstr = NULL;
 	}
     if (shell->env_copy)
@@ -49,7 +49,6 @@ void free_shell(t_shell *shell)
 	printf("free_shell: liberating shell=%p\n", shell);
     free(shell);
 }
-
 
 char	**duplicate_env(char **env, t_shell *shell)
 {
@@ -77,7 +76,7 @@ char	**duplicate_env(char **env, t_shell *shell)
 		i++;
 	}
 	copy[i] = NULL;
-	return (copy);
+return (copy);
 }
 
 t_shell	*init_shell(char **env)
@@ -108,11 +107,9 @@ t_shell	*init_shell(char **env)
 	}
 	i = 0;
     while (shell->env_copy[i])
-    {
-        //printf("init_shell: env_copy[%d]=%s\n", i, shell->env_copy[i]);
+	{
         i++;
-    }
-    //printf("init_shell: total size=%d\n", i);
+	}
 	shell->exit_status = 0;
 	return (shell);
 }

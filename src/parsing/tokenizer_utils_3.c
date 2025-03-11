@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_utils_3.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 18:22:26 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/26 16:02:55 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/11 12:12:33 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <stdio.h>
 
 void	add_token(t_token **tokens, const char *value, int in_squotes,
 					int in_dquotes)
@@ -66,8 +67,11 @@ int	process_single_quote(t_shell *shell, const char *input, int *i,
 {
 	(void)*input;
 	(void)*i;
+	printf("process_single_quote: sbstr before add_token=%p\n", shell->sbstr);
 	add_token(tokens, shell->sbstr, 1, 0);
 	free(shell->sbstr);
+	shell->sbstr = NULL;
+	printf("process_single_quote: sbstr after free=%p\n", shell->sbstr);
 	return (1);
 }
 
@@ -80,7 +84,7 @@ int	process_double_quote(t_shell *shell, const char *input, int *i,
 	(void)*i;
 	expanded = expand_tokens(shell, shell->sbstr, 1);
 	if (!expanded)
-		return (free(shell->sbstr), 0);
+		return (free(shell->sbstr),shell->sbstr = NULL, 0);
 	add_token(tokens, expanded, 0, 1);
 	free(expanded);
 	free(shell->sbstr);

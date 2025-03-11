@@ -6,7 +6,7 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 14:14:15 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/07 13:07:24 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/03/11 15:35:25 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,5 +24,5 @@ int	main(int argc, char **argv, char **envp)
 	setup_signal_handlers();
 	shell_loop(shell);
 	free_shell(shell);
-	return (0);
+	return (shell->exit_status);
 }

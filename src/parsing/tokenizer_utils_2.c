@@ -6,7 +6,7 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 17:02:48 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/08 18:06:39 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/03/11 12:11:09 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,11 @@ int	handle_quotes(t_shell *shell, const char *input, int *i, t_token **tokens)
 		(*i)++;
 	if (input[*i] == quote)
 	{
+		printf("handle_quotes: sbstr before=%p\n", shell->sbstr);
+		if (shell->sbstr)
+			free(shell->sbstr);
 		shell->sbstr = copy_substr(input, start, *i - start);
+		printf("handle_quotes: sbstr after copy_substr=%p\n", shell->sbstr);
 		if (!shell->sbstr)
 			return (0);
 		(*i)++;
