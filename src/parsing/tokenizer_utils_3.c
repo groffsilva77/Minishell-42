@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 18:22:26 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/11 17:17:26 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/11 18:20:00 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ void	add_token(t_token **tokens, const char *value, int in_squotes,
 			current = current->next;
 		current->next = new_token;
 	}
-	printf("token generated: %s\n", new_token->value);
 }
 
 int	is_whitespace(char c)

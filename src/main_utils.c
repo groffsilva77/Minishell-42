@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 17:46:45 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/11 17:12:42 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/13 16:50:51 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,19 @@ t_command	*process_input(char *input, t_shell *shell)
 
 char	*get_user_input(void)
 {
-	char	*input;
+	char			*input;
+	struct termios	old_term;
+	struct termios	new_term;
 
+	tcgetattr(STDIN_FILENO, &old_term);
+	new_term = old_term;
+	new_term.c_lflag |= ISIG;
+	tcsetattr(STDIN_FILENO, TCSANOW, &new_term);
+	rl_on_new_line();
 	input = readline("minishell> ");
 	if (input && *input)
 		add_history(input);
+	tcsetattr(STDIN_FILENO, TCSANOW, &old_term);
 	return (input);
 }
 
@@ -64,6 +72,7 @@ static void	handle_input(t_shell *shell, char *input)
 	if (commands)
 		free_commands(commands, shell);
 	shell->expand[0] = '\0';
+	free(input);
 }
 
 void	shell_loop(t_shell *shell)
@@ -73,6 +82,9 @@ void	shell_loop(t_shell *shell)
 
 	while (1)
 	{
+		set_signal_state(0);
+		setup_signal_handlers();
+		rl_on_new_line();
 		input = get_user_input();
 		if (!input)
 		{
@@ -80,7 +92,12 @@ void	shell_loop(t_shell *shell)
 			store_exit = shell->exit_status;
 			free(shell);
 			exit(store_exit);
-			break ;
+		}
+		if (get_signal_state() == SIGINT)
+		{
+			shell->exit_status = 130;
+			free(input);
+			continue ;
 		}
 		handle_input(shell, input);
 	}

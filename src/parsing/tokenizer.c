@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 14:18:53 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/11 17:39:30 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/11 18:33:11 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,11 @@ void	handle_special_char(const char *input, int i, t_token **tokens)
 	char	*special;
 
 	special = copy_substr(input, i, 1);
-	if ((input[i] == '<' && input[i + 1] == '<') || (input[i] == '>' && input[i + 1] == '>'))
+	if ((input[i] == '<' && input[i + 1] == '<')
+		|| (input[i] == '>' && input[i + 1] == '>'))
 	{
 		special = copy_substr(input, i, 2);
 		add_token(tokens, special, 0, 0);
-		printf("special_token: %s\n", special);
 		free(special);
 		i++;
 	}
@@ -65,7 +65,6 @@ void	handle_special_char(const char *input, int i, t_token **tokens)
 	{
 		special = copy_substr(input, i, 1);
 		add_token(tokens, special, 0, 0);
-		printf("special_token: %s\n", special);
 		free(special);
 	}
 }

@@ -6,38 +6,11 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:59:35 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/07 14:52:53 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/13 16:24:27 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	handle_heredoc(t_command *cmd)
-{
-	char	*line;
-	char	*trimmed_line;
-
-	if (pipe(cmd->heredoc_pipe) == -1)
-		return (perror("heredoc pipe failed"), -1);
-	while (1)
-	{
-		line = readline("> ");
-		if (!line)
-			break ;
-		trimmed_line = fts_strtrim(line);
-		if (ft_strcmp(trimmed_line, cmd->heredoc_delim) == 0)
-		{
-			free(line);
-			free(trimmed_line);
-			break ;
-		}
-		write(cmd->heredoc_pipe[1], line, ft_strlen(line));
-		write(cmd->heredoc_pipe[1], "\n", 1);
-		free(line);
-		free(trimmed_line);
-	}
-	return (close(cmd->heredoc_pipe[1]), cmd->heredoc_pipe[0]);
-}
 
 int	handle_input_redirection(t_command *cmd)
 {
@@ -101,9 +74,4 @@ int	handle_redirections(t_command *cmd)
 			return (-1);
 	}
 	return (0);
-}
-
-int	setup_redirections(t_command *cmd)
-{
-	return (handle_redirections(cmd));
 }

@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:14:26 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/11 16:52:35 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/13 15:15:27 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 # include <sys/wait.h>
 # include <sys/stat.h>
 # include <errno.h>
+# include <termios.h>
+# include <asm-generic/signal-defs.h>
 # include <../readline/readline.h>
 # include <../readline/history.h>
 # include "../lib/libft/libft.h"
@@ -71,6 +73,7 @@ typedef struct s_shell
 	char		*expand;
 	char		**env_copy;
 	int			exit_status;
+	int			signal_received;
 	t_command	*commands;
 }	t_shell;
 
@@ -93,8 +96,10 @@ typedef struct s_word_data
 	t_token		**tokens;
 }	t_word_data;
 
-void		handle_sigint(int sig);
-void		setup_signal_handlers(void);
+void			setup_signal_handlers();
+void			sigint_handler(int sig);
+sig_atomic_t	get_signal_state(void);
+void			set_signal_state(int sig);
 
 void		child_process(t_command *cmd, int *fd_in, int *pipe_fd,
 				t_shell *shell);
@@ -124,7 +129,6 @@ void		add_token(t_token **tokens, const char *value, int in_squotes,
 char		*copy_substr(const char *input, int start, int length);
 
 void		hand_pipe(const char *input, int *i, t_token **tokens);
-void		handle_redirects(const char *input, int *i, t_token **tokens);
 void		hand_spc_chars(const char *input, int *i, int *start,
 				t_token **tokens);
 
@@ -144,17 +148,15 @@ void		add_command(t_command **commands, t_command *new_cmd);
 t_command	*create_or_get_command(t_command *atl_cmd);
 t_command	*handle_pipe(t_command *commands, t_command **atl_cmd);
 t_command	*parse_tokens(t_token *tokens, t_shell *shell);
-void		handle_redirection(t_command **atl_cmd, t_token **tokens);
 int			handle_arg(t_command **atl_cmd, t_token *tokens, t_shell *shell);
 
 void		execute_command(t_command *cmd, t_shell *shell);
 void		execute_pipeline(t_command *commands, t_shell *shell);
 void		execute_single_command(t_command *cmd, t_shell *shell);
 
-int			handle_heredoc(t_command *cmd);
+int			handle_heredoc(t_command *cmd, t_shell *shell);
 int			handle_input_redirection(t_command *cmd);
 int			handle_output_redirection(t_command *cmd);
-int			setup_redirections(t_command *cmd);
 int			handle_redirections(t_command *cmd);
 
 char		*resolve_absolute_path(const char *command);

@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 16:39:05 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/11 16:29:18 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/13 17:38:02 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,22 @@ static void	wait_children(t_shell *shell)
 	int	status;
 	int	last_pid;
 
+	signal(SIGINT, SIG_IGN);
 	last_pid = wait(&status);
 	while (last_pid > 0)
+	{
+		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+		{
+			shell->exit_status = 130;
+			write(1, "\n", 1);
+			rl_on_new_line();
+			rl_replace_line("", 0);
+		}
+		else if (WIFEXITED(status))
+			shell->exit_status = WEXITSTATUS(status);
 		last_pid = wait(&status);
-	if (WIFEXITED(status))
-		shell->exit_status = WEXITSTATUS(status);
+	}
+	signal(SIGINT, sigint_handler);
 }
 
 static void	execute_the_command(t_command *cmd, int *fd_in, t_shell *shell)
@@ -45,9 +56,12 @@ static void	execute_the_command(t_command *cmd, int *fd_in, t_shell *shell)
 	pipe_fd[1] = -1;
 	if (cmd->is_heredoc)
 	{
-		cmd->heredoc_fd = handle_heredoc(cmd);
+		cmd->heredoc_fd = handle_heredoc(cmd, shell);
 		if (cmd->heredoc_fd < 0)
-			exit(1);
+		{
+			shell->exit_status = 130;
+			return ;
+		}
 	}
 	if (cmd->next && pipe(pipe_fd) < 0)
 		return (perror("pipe"));

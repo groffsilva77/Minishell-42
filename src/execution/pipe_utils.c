@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:08:57 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/06 17:21:23 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/13 17:27:14 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static void	setup_pipes(t_command *cmd, int *fd_in, int *pipe_fd)
 void	child_process(t_command *cmd, int *fd_in, int *pipe_fd,
 			t_shell *shell)
 {
-	if (setup_redirections(cmd) < 0)
+	if (handle_redirections(cmd) < 0)
 		exit(1);
 	setup_heredoc(cmd);
 	setup_pipes(cmd, fd_in, pipe_fd);

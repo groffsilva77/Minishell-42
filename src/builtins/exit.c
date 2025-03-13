@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:22:31 by ytavares          #+#    #+#             */
-/*   Updated: 2025/02/25 14:04:56 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/03/12 16:16:13 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,7 @@ int	the_exit(char **args, t_shell *shell)
 	if (args[1])
 	{
 		if (!validate_exit_arg(args[1]))
-		{
 			shell->exit_status = 2;
-			exit(2);
-		}
 		if (args[2])
 		{
 			printf("exit: too many arguments\n");

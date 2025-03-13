@@ -56,7 +56,8 @@ SRCS = $(SRCS_DIR)/main.c \
 	   $(EXECUTION_DIR)/find_path.c \
 	   $(EXECUTION_DIR)/pipe_utils.c \
 	   $(EXECUTION_DIR)/pipe.c \
-	   $(EXECUTION_DIR)/redirect.c
+	   $(EXECUTION_DIR)/redirect.c \
+	   $(EXECUTION_DIR)/heredoc.c \
 
 #.c to .o
 OBJS = $(SRCS:.c=.o)
