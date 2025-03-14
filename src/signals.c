@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 17:55:28 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/13 17:34:48 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/14 15:23:16 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,14 @@
 sig_atomic_t	get_signal_state(void)
 {
 	static sig_atomic_t	signal_state = 0;
+
 	return (signal_state);
 }
 
 void	set_signal_state(int sig)
 {
 	static sig_atomic_t	signal_state = 0;
+
 	signal_state = sig;
 }
 

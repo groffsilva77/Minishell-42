@@ -6,16 +6,53 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 14:55:50 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/13 17:02:07 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/14 18:25:05 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	heredoc_child_process(int pipe_write_fd, char *delim)
+static int	process_heredoc_delimiter(char *delim)
 {
-	char			*line;
+	int		expand_vars;
+	size_t	len;
 
+	expand_vars = 1;
+	len = ft_strlen(delim);
+	if (len >= 2 && (delim[0] == '\'' || delim[0] == '"')
+		&& delim[0] == delim[len - 1])
+	{
+		delim[len - 1] = '\0';
+		ft_memmove(delim, delim + 1, len);
+		expand_vars = 0;
+	}
+	return (expand_vars);
+}
+
+static void	process_heredoc_line(char *line, int pipe_write_fd,
+				t_shell *shell, int	expand_vars)
+{
+	char	*expanded_line;
+
+	expanded_line = expand_tokens(shell, line, expand_vars);
+	free(line);
+	if (!expanded_line)
+	{
+		close(pipe_write_fd);
+		exit(1);
+	}
+	write(pipe_write_fd, expanded_line, ft_strlen(expanded_line));
+	write(pipe_write_fd, "\n", 1);
+	free(expanded_line);
+}
+
+static void	heredoc_child_process(int pipe_write_fd, char *delim,
+				t_shell *shell)
+{
+	char	*line;
+	int		expand_vars;
+
+	expand_vars = process_heredoc_delimiter(delim);
 	signal(SIGINT, SIG_DFL);
 	while (1)
 	{
@@ -31,9 +68,7 @@ static void	heredoc_child_process(int pipe_write_fd, char *delim)
 			close(pipe_write_fd);
 			exit(0);
 		}
-		write(pipe_write_fd, line, ft_strlen(line));
-		write(pipe_write_fd, "\n", 1);
-		free(line);
+		process_heredoc_line(line, pipe_write_fd, shell, expand_vars);
 	}
 }
 
@@ -80,7 +115,7 @@ int	handle_heredoc(t_command *cmd, t_shell *shell)
 	if (pid == 0)
 	{
 		close(cmd->heredoc_pipe[0]);
-		heredoc_child_process(cmd->heredoc_pipe[1], cmd->heredoc_delim);
+		heredoc_child_process(cmd->heredoc_pipe[1], cmd->heredoc_delim, shell);
 	}
 	else
 	{

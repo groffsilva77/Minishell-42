@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:14:26 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/13 15:15:27 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/14 16:43:10 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,6 +149,7 @@ t_command	*create_or_get_command(t_command *atl_cmd);
 t_command	*handle_pipe(t_command *commands, t_command **atl_cmd);
 t_command	*parse_tokens(t_token *tokens, t_shell *shell);
 int			handle_arg(t_command **atl_cmd, t_token *tokens, t_shell *shell);
+char		*remove_quotes(const char *str);
 
 void		execute_command(t_command *cmd, t_shell *shell);
 void		execute_pipeline(t_command *commands, t_shell *shell);
