@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 14:26:49 by ytavares          #+#    #+#             */
-/*   Updated: 2025/03/11 16:47:07 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/15 18:52:46 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ int	handle_arg(t_command **atl_cmd, t_token *tokens, t_shell *shell)
 
 	if (!*atl_cmd)
 		*atl_cmd = create_command();
+	if (!*atl_cmd)
+		return (-1);
 	if (tokens->in_single_quotes)
 		expanded_value = ft_strdup(tokens->value);
 	else
@@ -80,21 +82,21 @@ int	handle_arg(t_command **atl_cmd, t_token *tokens, t_shell *shell)
 	if (!expanded_value)
 		return (-1);
 	clean_value = remove_quotes(expanded_value);
+	free(expanded_value);
 	if (!clean_value)
-		return (free(expanded_value), -1);
+		return (-1);
 	temp = ft_realloc_array((*atl_cmd)->args, (*atl_cmd)->argument_count + 1,
 			clean_value, shell);
 	if (!temp)
 	{
 		ft_putstr_fd("Error: Memory allocation failed in realloc array\n", 2);
 		free(clean_value);
-		return (free(expanded_value), free(clean_value), -1);
+		return (-1);
 	}
 	(*atl_cmd)->args = temp;
-	(*atl_cmd)->args[(*atl_cmd)->argument_count] = clean_value;
 	(*atl_cmd)->argument_count++;
-	free(expanded_value);
-	return ((*atl_cmd)->args[(*atl_cmd)->argument_count] = NULL, 0);
+	free(clean_value);
+	return (0);
 }
 
 t_command	*parse_tokens(t_token *tokens, t_shell *shell)

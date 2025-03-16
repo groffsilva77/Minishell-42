@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:08:57 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/14 16:19:24 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/16 15:43:36 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ static void	setup_heredoc(t_command *cmd)
 {
 	if (cmd->is_heredoc && cmd->heredoc_fd != -1)
 	{
+		printf("Child setting up heredoc_fd %d\n", cmd->heredoc_fd);
 		if (dup2(cmd->heredoc_fd, STDIN_FILENO) < 0)
 		{
 			perror("heredoc dup2 failed\n");
@@ -23,6 +24,8 @@ static void	setup_heredoc(t_command *cmd)
 		}
 		close(cmd->heredoc_fd);
 	}
+	else if (cmd->is_heredoc)
+		printf("Child: heredoc_fd is %d, skipping setup\n", cmd->heredoc_fd);
 }
 
 static void	setup_pipes(t_command *cmd, int *fd_in, int *pipe_fd)
@@ -44,10 +47,28 @@ static void	setup_pipes(t_command *cmd, int *fd_in, int *pipe_fd)
 void	child_process(t_command *cmd, int *fd_in, int *pipe_fd,
 			t_shell *shell)
 {
+	int	i;
+
 	if (handle_redirections(cmd) < 0)
 		exit(1);
 	setup_heredoc(cmd);
 	setup_pipes(cmd, fd_in, pipe_fd);
+	i = 3;
+	while (i < 256)
+	{
+		if ((fd_in && *fd_in == i) || (pipe_fd && pipe_fd[1] == i)
+			|| (cmd->is_heredoc && cmd->heredoc_fd == i)
+			|| (cmd->input_file && cmd->input_fd == i)
+			|| (cmd->output_file && cmd->output_fd == i))
+		{
+			i++;
+			continue ;
+		}
+		close(i);
+		i++;
+	}
+	if (!cmd->args || !cmd->args[0])
+		exit(0);
 	execute_command(cmd, shell);
 	exit(shell->exit_status);
 }

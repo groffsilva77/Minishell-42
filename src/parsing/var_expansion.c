@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/19 15:17:54 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/14 15:47:12 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/15 16:06:37 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,5 @@ char	*expand_tokens(t_shell *shell, const char *token, int allow_expansion)
 	result = process_expansion(shell, token, max_len, allow_expansion);
 	if (!result)
 		return (NULL);
-	printf("Expanded token: %s\n", result);
 	return (ft_strdup(result));
 }

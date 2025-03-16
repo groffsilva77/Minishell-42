@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 16:06:21 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/05 17:57:52 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/16 16:01:39 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ t_command	*create_command(void)
 	if (!cmd)
 		return (NULL);
 	cmd->args = NULL;
+	cmd->heredoc_delims = NULL;
 	cmd->argument_count = 0;
 	cmd->is_heredoc = 0;
 	cmd->heredoc_fd = -1;
@@ -39,15 +40,15 @@ void	parse_redirections(t_command *cmd, t_token **tokens)
 {
 	if (!tokens || !(*tokens) || !(*tokens)->next)
 		return ;
+	if (ft_strncmp((*tokens)->value, "<", 1) == 0)
+	{
+		cmd->input_file = ft_strdup((*tokens)->next->value);
+		cmd->type = CMD_REDIR_IN;
+	}
 	if (ft_strncmp((*tokens)->value, "<<", 2) == 0)
 	{
 		cmd->heredoc_delim = ft_strdup((*tokens)->next->value);
 		cmd->is_heredoc = 1;
-	}
-	else if (ft_strncmp((*tokens)->value, "<", 1) == 0)
-	{
-		cmd->input_file = ft_strdup((*tokens)->next->value);
-		cmd->type = CMD_REDIR_IN;
 	}
 	else if (ft_strncmp((*tokens)->value, ">>", 2) == 0)
 	{	

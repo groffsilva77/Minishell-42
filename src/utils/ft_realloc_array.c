@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_realloc_array.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 16:15:22 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/02/20 16:07:45 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/03/15 18:38:00 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,17 @@ char	**ft_realloc_array(char **array, int new_size, char *new_value,
 		i++;
 	}
 	if (new_value)
+	{
 		new_array[i] = fts_strdup(shell, new_value);
+		if (!new_array[i])
+		{
+			free(new_array);
+			return (NULL);
+		}
+		i++;
+	}
 	new_array[i] = NULL;
 	if (array)
-		ft_free(shell, array);
+		free(array);
 	return (new_array);
 }

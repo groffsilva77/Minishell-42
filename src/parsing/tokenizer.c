@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 14:18:53 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/11 18:33:11 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/15 18:04:27 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ void	handle_special_char(const char *input, int i, t_token **tokens)
 {
 	char	*special;
 
-	special = copy_substr(input, i, 1);
 	if ((input[i] == '<' && input[i + 1] == '<')
 		|| (input[i] == '>' && input[i + 1] == '>'))
 	{

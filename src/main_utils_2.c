@@ -6,17 +6,29 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 12:58:40 by ytavares          #+#    #+#             */
-/*   Updated: 2025/03/04 16:53:25 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/15 17:33:08 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	free_shell(t_shell *shell)
+void	free_env(char **env_copy)
 {
 	int	i;
 
+	if (!env_copy)
+		return ;
 	i = 0;
+	while (env_copy[i])
+		free(env_copy[i++]);
+	free(env_copy);
+}
+
+void	free_shell(t_shell *shell)
+{
+	t_memory	*current;
+	t_memory	*next;
+
 	if (!shell)
 		return ;
 	if (shell->expand)
@@ -24,13 +36,15 @@ void	free_shell(t_shell *shell)
 	if (shell->sbstr)
 		free(shell->sbstr);
 	if (shell->env_copy)
+		free_env(shell->env_copy);
+	current = shell->memory;
+	while (current)
 	{
-		while (shell->env_copy[i])
-			free(shell->env_copy[i++]);
-		free(shell->env_copy);
+		next = current->next_ptr;
+		free(current);
+		current = next;
 	}
-	if (shell->memory)
-		free(shell->memory);
+	shell->memory = NULL;
 	free(shell);
 }
 

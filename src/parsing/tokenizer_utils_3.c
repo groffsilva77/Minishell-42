@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 18:22:26 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/11 18:20:00 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/15 16:34:31 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,10 @@ void	add_token(t_token **tokens, const char *value, int in_squotes,
 	if (!value)
 		new_token->value = ft_strdup("");
 	else
-		new_token->value = ft_strdup(value);
-	if (!value)
 	{
-		return (free(new_token));
-		return ;
+		new_token->value = ft_strdup(value);
+		if (!new_token->value)
+			return ;
 	}
 	new_token->in_single_quotes = in_squotes;
 	new_token->in_double_quotes = in_dquotes;

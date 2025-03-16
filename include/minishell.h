@@ -6,12 +6,14 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:14:26 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/14 16:43:10 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/16 14:12:53 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
+# define MAX_FD_TRACKED 256
 
 # include <stdlib.h>
 # include <unistd.h>
@@ -37,6 +39,13 @@ typedef enum e_cmd_type {
 	CMD_HEREDOC
 }	t_cmd_type;
 
+typedef struct s_fd_tracker
+{
+	int	fds[MAX_FD_TRACKED];
+	int	count;
+	int	initialized;
+}	t_fd_tracker;
+
 typedef struct s_tokenize_data
 {
 	int	i;
@@ -48,11 +57,14 @@ typedef struct s_command {
 	char				**args;
 	char				*input_file;
 	char				*output_file;
+	char				**heredoc_delims;
 	char				*heredoc_delim;
 	int					heredoc_pipe[2];
 	int					append_output;
 	int					is_heredoc;
 	int					heredoc_fd;
+	int					input_fd;
+	int					output_fd;
 	int					argument_count;
 	int					is_builtin;
 	char				*command;
@@ -68,13 +80,14 @@ typedef struct s_memory
 
 typedef struct s_shell
 {
-	t_memory	*memory;
-	char		*sbstr;
-	char		*expand;
-	char		**env_copy;
-	int			exit_status;
-	int			signal_received;
-	t_command	*commands;
+	t_memory		*memory;
+	t_fd_tracker	fd_tracker;
+	char			*sbstr;
+	char			*expand;
+	char			**env_copy;
+	int				exit_status;
+	int				signal_received;
+	t_command		*commands;
 }	t_shell;
 
 typedef struct s_token {
@@ -94,7 +107,15 @@ typedef struct s_word_data
 	int			start;
 	int			len;
 	t_token		**tokens;
-}	t_word_data;
+}	t_word_d;
+
+void			close_all_unused_fds(t_shell *shell, t_command *cmd);
+int				is_fd_tracked(t_shell *shell, int fd);
+void			init_fd_tracker(t_shell *shell);
+int				track_fd(t_shell *shell, int fd);
+void			untrack_fd(t_shell *shell, int fd);
+void			close_and_untrack_fd(t_shell *shell, int *fd);
+void			close_all_tracked_fds(t_shell *shell);
 
 void			setup_signal_handlers();
 void			sigint_handler(int sig);
@@ -104,10 +125,13 @@ void			set_signal_state(int sig);
 void		child_process(t_command *cmd, int *fd_in, int *pipe_fd,
 				t_shell *shell);
 
-void		free_tokens(t_token *tokens);
+void		free_shell(t_shell *shell);
+void		free_command_list(t_command *cmd_list);
+void		free_token_list(t_token *tokens);
+void		free_token(t_token *token);
 void		ft_free_array(char **array);
 void		*fts_malloc(t_shell *shell, size_t size);
-void		ft_free(t_shell *shell, void *ptr);
+void		ft_free(t_shell *shell);
 
 void		shell_loop(t_shell *shell);
 
@@ -164,7 +188,7 @@ char		*resolve_absolute_path(const char *command);
 char		*search_in_path(const char *command, char *path);
 char		*find_command_path(const char *command, char **envp);
 
-void		free_commands(t_command *commands, t_shell *shell);
+void		free_commands(t_command *commands);
 
 char		*fts_strdup(t_shell *shell, const char *s1);
 char		*fts_strjoin(t_shell *shell, char const *s1, char const *s2);

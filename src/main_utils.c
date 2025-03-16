@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 17:46:45 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/13 16:50:51 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/15 17:28:43 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ t_command	*process_input(char *input, t_shell *shell)
 		return (NULL);
 	}
 	shell->commands = parse_tokens(tokens, shell);
+	free_token_list(tokens);
 	execute_single_command(shell->commands, shell);
-	free_tokens(tokens);
 	return (shell->commands);
 }
 
@@ -70,7 +70,7 @@ static void	handle_input(t_shell *shell, char *input)
 	}
 	commands = process_input(input, shell);
 	if (commands)
-		free_commands(commands, shell);
+		free_command_list(commands);
 	shell->expand[0] = '\0';
 	free(input);
 }
@@ -90,7 +90,8 @@ void	shell_loop(t_shell *shell)
 		{
 			write(1, "exit\n", 5);
 			store_exit = shell->exit_status;
-			free(shell);
+			rl_clear_history();
+			free_shell(shell);
 			exit(store_exit);
 		}
 		if (get_signal_state() == SIGINT)

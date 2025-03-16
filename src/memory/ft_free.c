@@ -6,28 +6,26 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:16:34 by ytavares          #+#    #+#             */
-/*   Updated: 2025/02/14 18:27:33 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/15 18:25:33 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_free(t_shell *shell, void *ptr)
+void	ft_free(t_shell *shell)
 {
-	t_memory	*atl;
-	t_memory	*ant;
+	t_memory	*current;
+	t_memory	*next;
 
-	if (!ptr)
+	if (!shell)
 		return ;
-	ant = NULL;
-	atl = shell->memory;
-	while (atl)
-	{	
-		if (ant)
-			ant->next_ptr = atl->next_ptr;
-		return ;
-		ant = atl;
-		atl = atl->next_ptr;
+	current = shell->memory;
+	while (current)
+	{
+		next = current->next_ptr;
+		free(current->ptr_for_memory_block);
+		free(current);
+		current = next;
 	}
-	free(ptr);
+	shell->memory = NULL;
 }

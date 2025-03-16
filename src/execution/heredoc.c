@@ -6,11 +6,25 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 14:55:50 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/14 18:25:05 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/16 15:40:08 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	is_fd_tracked(t_shell *shell, int fd)
+{
+	int	i;
+
+	i = 0;
+	while (i < shell->fd_tracker.count)
+	{
+		if (shell->fd_tracker.fds[i] == fd)
+			return (1);
+		i++;
+	}
+	return (0);
+}
 
 static int	process_heredoc_delimiter(char *delim)
 {
@@ -58,18 +72,16 @@ static void	heredoc_child_process(int pipe_write_fd, char *delim,
 	{
 		line = readline("> ");
 		if (!line)
-		{
-			close(pipe_write_fd);
-			exit(0);
-		}
+			break ;
 		if (ft_strcmp(line, delim) == 0)
 		{
 			free(line);
-			close(pipe_write_fd);
-			exit(0);
+			break ;
 		}
 		process_heredoc_line(line, pipe_write_fd, shell, expand_vars);
 	}
+	close(pipe_write_fd);
+	exit(0);
 }
 
 static int	heredoc_parent_process(pid_t child_pid, int pipe_read_fd, t_shell *shell)
@@ -88,39 +100,50 @@ static int	heredoc_parent_process(pid_t child_pid, int pipe_read_fd, t_shell *sh
 	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
 	{
 		shell->exit_status = 130;
-		close(pipe_read_fd);
+		close_and_untrack_fd(shell, &pipe_read_fd);
 		set_signal_state(SIGINT);
 		ft_putchar_fd('\n', 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		return (-1);
 	}
+	printf("Returning heredoc_fd %d from parent\n", pipe_read_fd);
 	return (pipe_read_fd);
 }
 
 int	handle_heredoc(t_command *cmd, t_shell *shell)
 {
 	pid_t	pid;
+	int		result;
 
 	if (pipe(cmd->heredoc_pipe) == -1)
 		return (perror("heredoc pipe failed"), -1);
+	track_fd(shell, cmd->heredoc_pipe[0]);
+	track_fd(shell, cmd->heredoc_pipe[1]);	
 	pid = fork();
 	if (pid == -1)
 	{
 		perror("heredoc fork failed");
-		close(cmd->heredoc_pipe[0]);
-		close(cmd->heredoc_pipe[1]);
+		close_and_untrack_fd(shell, &cmd->heredoc_pipe[0]);
+		close_and_untrack_fd(shell, &cmd->heredoc_pipe[1]);
 		return (-1);
 	}
 	if (pid == 0)
 	{
-		close(cmd->heredoc_pipe[0]);
+		close_and_untrack_fd(shell, &cmd->heredoc_pipe[0]);
 		heredoc_child_process(cmd->heredoc_pipe[1], cmd->heredoc_delim, shell);
+		exit(1);
 	}
 	else
 	{
-		close(cmd->heredoc_pipe[1]);
-		return (heredoc_parent_process(pid, cmd->heredoc_pipe[0], shell));
+		close_and_untrack_fd(shell, &cmd->heredoc_pipe[1]);
+		result = heredoc_parent_process(pid, cmd->heredoc_pipe[0], shell);
+		if (result < 0)
+		{
+			close_and_untrack_fd(shell, &cmd->heredoc_pipe[0]);
+			return (-1);
+		}
+		cmd->heredoc_fd = result;
 	}
-	return (-1);
+	return (cmd->heredoc_fd);
 }
