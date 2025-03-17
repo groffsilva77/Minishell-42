@@ -59,6 +59,8 @@ SRCS = $(SRCS_DIR)/main.c \
 	   $(EXECUTION_DIR)/redirect.c \
 	   $(EXECUTION_DIR)/heredoc.c \
 	   $(EXECUTION_DIR)/track_fds.c \
+	   $(EXECUTION_DIR)/track_fds_utils.c \
+	   $(EXECUTION_DIR)/heredoc_utils.c \
 
 #.c to .o
 OBJS = $(SRCS:.c=.o)

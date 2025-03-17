@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:14:26 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/16 14:12:53 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/17 16:05:00 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,16 +53,23 @@ typedef struct s_tokenize_data
 	int	in_word;
 }	t_tokenize_data;
 
-typedef struct s_command {
+typedef struct s_delim
+{
+	char			*value;
+	struct s_delim	*next;
+}	t_delim;
+
+typedef struct s_command
+{
+	t_delim				*delim_list;
 	char				**args;
 	char				*input_file;
 	char				*output_file;
-	char				**heredoc_delims;
 	char				*heredoc_delim;
 	int					heredoc_pipe[2];
-	int					append_output;
 	int					is_heredoc;
 	int					heredoc_fd;
+	int					append_output;
 	int					input_fd;
 	int					output_fd;
 	int					argument_count;
@@ -107,7 +114,7 @@ typedef struct s_word_data
 	int			start;
 	int			len;
 	t_token		**tokens;
-}	t_word_d;
+}	t_word_data;
 
 void			close_all_unused_fds(t_shell *shell, t_command *cmd);
 int				is_fd_tracked(t_shell *shell, int fd);
@@ -179,6 +186,7 @@ void		execute_command(t_command *cmd, t_shell *shell);
 void		execute_pipeline(t_command *commands, t_shell *shell);
 void		execute_single_command(t_command *cmd, t_shell *shell);
 
+void		add_delim(t_command *cmd, char *delim_value);
 int			handle_heredoc(t_command *cmd, t_shell *shell);
 int			handle_input_redirection(t_command *cmd);
 int			handle_output_redirection(t_command *cmd);

@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 16:06:21 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/16 16:01:39 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/17 16:52:39 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ t_command	*create_command(void)
 	if (!cmd)
 		return (NULL);
 	cmd->args = NULL;
-	cmd->heredoc_delims = NULL;
 	cmd->argument_count = 0;
 	cmd->is_heredoc = 0;
 	cmd->heredoc_fd = -1;
