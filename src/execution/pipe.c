@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 16:39:05 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/16 15:42:30 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/17 12:47:20 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,6 @@ void	execute_single_command(t_command *cmd, t_shell *shell)
 	if (cmd->is_heredoc && !cmd->args)
 	{
 		cmd->heredoc_fd = handle_heredoc(cmd, shell);
-		printf("After handle_heredoc, heredoc_fd = %d\n", cmd->heredoc_fd);
 		if (cmd->heredoc_fd >= 0)
 			close_and_untrack_fd(shell, &cmd->heredoc_fd);
 		return ;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils_2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 12:58:40 by ytavares          #+#    #+#             */
-/*   Updated: 2025/03/15 17:33:08 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/17 18:30:44 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,6 @@ void	free_env(char **env_copy)
 
 void	free_shell(t_shell *shell)
 {
-	t_memory	*current;
-	t_memory	*next;
 
 	if (!shell)
 		return ;
@@ -36,15 +34,16 @@ void	free_shell(t_shell *shell)
 	if (shell->sbstr)
 		free(shell->sbstr);
 	if (shell->env_copy)
+	{	
 		free_env(shell->env_copy);
-	current = shell->memory;
-	while (current)
-	{
-		next = current->next_ptr;
-		free(current);
-		current = next;
+		shell->env_copy = NULL;
 	}
-	shell->memory = NULL;
+	if (shell->commands)
+	{
+		free_command_list(shell->commands);
+		shell->commands = NULL;
+	}
+	ft_free(shell);
 	free(shell);
 }
 
@@ -94,6 +93,7 @@ t_shell	*init_shell(char **env)
 		return (NULL);
 	}
 	shell->memory = NULL;
+	shell->commands = NULL;
 	shell->env_copy = duplicate_env(env);
 	if (!shell->env_copy)
 	{

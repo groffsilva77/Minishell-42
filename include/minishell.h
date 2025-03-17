@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:14:26 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/16 14:12:53 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/17 18:29:55 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,9 @@ void			set_signal_state(int sig);
 void		child_process(t_command *cmd, int *fd_in, int *pipe_fd,
 				t_shell *shell);
 
+void		free_env(char **env_copy);
 void		free_shell(t_shell *shell);
+void		cleanup_shell(t_shell *shell);
 void		free_command_list(t_command *cmd_list);
 void		free_token_list(t_token *tokens);
 void		free_token(t_token *token);

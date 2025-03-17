@@ -6,7 +6,7 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 14:26:49 by ytavares          #+#    #+#             */
-/*   Updated: 2025/03/16 19:43:20 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/03/17 12:40:49 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,17 +155,35 @@ t_command	*parse_tokens(t_token *tokens, t_shell *shell)
 	while (tokens)
 	{
 		if (ft_strncmp(tokens->value, "|", 1) == 0)
+		{
 			commands = handle_pipe(commands, &atl_cmd);
+			if (!commands)
+			{
+				if (atl_cmd)
+					free_commands(atl_cmd);
+				return (NULL);
+			}
+		}
 		else if (ft_strchr("<>", tokens->value[0]))
 		{
 			if (!tokens->next)
-				return (commands);
+			{
+				free_command_list(commands);
+				if (atl_cmd)
+					free_commands(atl_cmd);
+				return (NULL);
+			}
 			if (!atl_cmd)
 				atl_cmd = create_command();
 			parse_redirections(atl_cmd, &tokens);
 		}
 		else if (handle_arg(&atl_cmd, tokens, shell) == -1)
+		{
+			free_command_list(commands);
+			if (atl_cmd)
+				free_commands(atl_cmd);
 			return (NULL);
+		}
 		tokens = tokens->next;
 	}
 	if (atl_cmd)

@@ -6,7 +6,7 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:22:31 by ytavares          #+#    #+#             */
-/*   Updated: 2025/03/16 20:21:09 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/03/17 13:33:08 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ static int	validate_exit_arg(char *arg)
 int	the_exit(char **args, t_shell *shell)
 {
 	long	exit_code;
+	long	the_final_status;
 
 	printf("exit\n");
 	if (args[1])
@@ -52,7 +53,8 @@ int	the_exit(char **args, t_shell *shell)
 		exit_code = ft_atoi(args[1]);
 		shell->exit_status = exit_code % 256;
 	}
+	the_final_status = shell->exit_status;
 	rl_clear_history();
 	free_shell(shell);
-	exit(shell->exit_status);
+	exit(the_final_status);
 }
