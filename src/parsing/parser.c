@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 14:26:49 by ytavares          #+#    #+#             */
-/*   Updated: 2025/03/15 18:52:46 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/17 18:45:59 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ t_command	*create_or_get_command(t_command *atl_cmd)
 {
 	if (!atl_cmd)
 		atl_cmd = create_command();
-	printf("maçã");
 	return (atl_cmd);
 }
 
@@ -108,12 +107,13 @@ t_command	*parse_tokens(t_token *tokens, t_shell *shell)
 	atl_cmd = NULL;
 	while (tokens)
 	{
+		printf("Token: %s\n", tokens->value);
 		if (ft_strncmp(tokens->value, "|", 1) == 0)
 			commands = handle_pipe(commands, &atl_cmd);
 		else if (ft_strchr("<>", tokens->value[0]))
 		{
 			if (!tokens->next)
-				return (commands);
+				return (free(atl_cmd), NULL);
 			if (!atl_cmd)
 				atl_cmd = create_command();
 			parse_redirections(atl_cmd, &tokens);

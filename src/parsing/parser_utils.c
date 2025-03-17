@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 16:06:21 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/16 16:01:39 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/17 18:45:20 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ void	parse_redirections(t_command *cmd, t_token **tokens)
 {
 	if (!tokens || !(*tokens) || !(*tokens)->next)
 		return ;
+	printf("Parsing redirection: %s\n", (*tokens)->value);
 	if (ft_strncmp((*tokens)->value, "<", 1) == 0)
 	{
 		cmd->input_file = ft_strdup((*tokens)->next->value);
@@ -47,6 +48,13 @@ void	parse_redirections(t_command *cmd, t_token **tokens)
 	}
 	if (ft_strncmp((*tokens)->value, "<<", 2) == 0)
 	{
+		if (ft_strchr("<>", (*tokens)->next->value[0]))
+		{
+			printf("minishell: syntax error near unexpected token `%s'\n",
+				(*tokens)->next->value);
+			*tokens = NULL;
+			return ;
+		}
 		cmd->heredoc_delim = ft_strdup((*tokens)->next->value);
 		cmd->is_heredoc = 1;
 	}

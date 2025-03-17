@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:14:26 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/16 14:12:53 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/17 19:15:21 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,10 @@ typedef struct s_fd_tracker
 
 typedef struct s_tokenize_data
 {
-	int	i;
-	int	word_start;
-	int	in_word;
+	int		i;
+	int		word_start;
+	int		in_word;
+	char	quote;
 }	t_tokenize_data;
 
 typedef struct s_command {
@@ -107,7 +108,7 @@ typedef struct s_word_data
 	int			start;
 	int			len;
 	t_token		**tokens;
-}	t_word_d;
+}	t_word_data;
 
 void			close_all_unused_fds(t_shell *shell, t_command *cmd);
 int				is_fd_tracked(t_shell *shell, int fd);

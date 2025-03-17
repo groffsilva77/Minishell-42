@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:08:57 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/16 15:43:36 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/17 17:16:54 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,8 @@
 
 static void	setup_heredoc(t_command *cmd)
 {
-	if (cmd->is_heredoc && cmd->heredoc_fd != -1)
+	if (cmd->is_heredoc && cmd->heredoc_fd != -1 && !cmd->input_file)
 	{
-		printf("Child setting up heredoc_fd %d\n", cmd->heredoc_fd);
 		if (dup2(cmd->heredoc_fd, STDIN_FILENO) < 0)
 		{
 			perror("heredoc dup2 failed\n");
@@ -24,8 +23,6 @@ static void	setup_heredoc(t_command *cmd)
 		}
 		close(cmd->heredoc_fd);
 	}
-	else if (cmd->is_heredoc)
-		printf("Child: heredoc_fd is %d, skipping setup\n", cmd->heredoc_fd);
 }
 
 static void	setup_pipes(t_command *cmd, int *fd_in, int *pipe_fd)

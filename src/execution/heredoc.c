@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 14:55:50 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/16 15:40:08 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/17 16:57:20 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,6 @@ static int	heredoc_parent_process(pid_t child_pid, int pipe_read_fd, t_shell *sh
 		rl_replace_line("", 0);
 		return (-1);
 	}
-	printf("Returning heredoc_fd %d from parent\n", pipe_read_fd);
 	return (pipe_read_fd);
 }
 

@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 14:18:53 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/15 18:04:27 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/17 19:53:53 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,27 @@ void	process_current_char(t_shell *shell, const char *input,
 {
 	t_word_data	word_data;
 
-	if (!is_whitespace(input[data->i]) && !ft_strchr("|<>", input[data->i]))
+	if (input[data->i] == '\'' || input[data->i] == '"')
+	{
+		if (!data->quote)
+		{
+			data->quote = input[data->i];
+			if (!data->in_word)
+			{
+				data->word_start = data->i;
+				data->in_word = 1;
+			}
+		}
+		else if (data->quote == input[data->i])
+		{
+			data->quote = 0;
+			word_data = (t_word_data){input, data->word_start,
+                data->i - data->word_start + 1, tokens};
+			process_word(shell, &word_data);
+			data->in_word = 0;
+		}
+	}
+	if (!data->quote && !is_whitespace(input[data->i]) && !ft_strchr("|<>", input[data->i]))
 	{
 		if (!data->in_word)
 		{
@@ -81,7 +101,7 @@ void	process_current_char(t_shell *shell, const char *input,
 			data->in_word = 1;
 		}
 	}
-	else if (ft_strchr("|<>", input[data->i]))
+	else if (!data->quote && ft_strchr("|<>", input[data->i]))
 	{
 		if (data->in_word)
 		{
@@ -93,7 +113,7 @@ void	process_current_char(t_shell *shell, const char *input,
 		handle_special_char(input, data->i, tokens);
 		data->i++;
 	}
-	else if (is_whitespace(input[data->i]) && data->in_word)
+	else if (!data->quote && is_whitespace(input[data->i]) && data->in_word)
 	{
 		word_data = (t_word_data){input, data->word_start,
 			data->i - data->word_start, tokens};
@@ -112,6 +132,7 @@ t_token	*tokenize(t_shell *shell, const char *input)
 	data.i = 0;
 	data.word_start = 0;
 	data.in_word = 0;
+	data.quote = 0;
 	while (input[data.i])
 	{
 		process_current_char(shell, input, &data, &tokens);
@@ -123,5 +144,13 @@ t_token	*tokenize(t_shell *shell, const char *input)
 			data.i - data.word_start, &tokens};
 		process_word(shell, &word_data);
 	}
+	if (data.quote)
+    {
+        ft_putstr_fd("minishell: unexpected EOF while looking for matching `", 2);
+        ft_putchar_fd(data.quote, 2);
+        ft_putstr_fd("'\n", 2);
+        free_token_list(tokens);
+        return (NULL);
+    }
 	return (tokens);
 }

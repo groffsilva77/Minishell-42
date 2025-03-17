@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 13:01:41 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/16 15:19:03 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/17 16:57:27 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ int	track_fd(t_shell *shell, int fd)
 	if (shell->fd_tracker.count >= MAX_FD_TRACKED)
 		return (0);
 	shell->fd_tracker.fds[shell->fd_tracker.count++] = fd;
-	printf("Tracked FD %d\n", fd);
 	return (1);
 }
 
@@ -69,7 +68,6 @@ void	close_and_untrack_fd(t_shell *shell, int *fd)
 {
 	if (*fd >= 3)
 	{
-		printf("Closing FD %d\n", *fd);
 		close(*fd);
 		untrack_fd(shell, *fd);
 	}

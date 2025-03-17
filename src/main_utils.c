@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 17:46:45 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/15 17:28:43 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/17 18:44:19 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,18 @@ t_command	*process_input(char *input, t_shell *shell)
 		return (NULL);
 	if (!validate_syntax(tokens, shell))
 	{
-		shell->exit_status = 2;
+		free_token_list(tokens);
 		return (NULL);
 	}
 	shell->commands = parse_tokens(tokens, shell);
 	free_token_list(tokens);
-	execute_single_command(shell->commands, shell);
-	return (shell->commands);
+	if (shell->commands)
+	{
+		execute_single_command(shell->commands, shell);
+		return (shell->commands);
+	}
+	shell->exit_status = 2;
+	return (NULL);
 }
 
 char	*get_user_input(void)
@@ -71,6 +76,7 @@ static void	handle_input(t_shell *shell, char *input)
 	commands = process_input(input, shell);
 	if (commands)
 		free_command_list(commands);
+	shell->commands = NULL;
 	shell->expand[0] = '\0';
 	free(input);
 }
