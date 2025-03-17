@@ -6,7 +6,7 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 18:23:11 by ytavares          #+#    #+#             */
-/*   Updated: 2025/03/16 19:57:11 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/03/17 19:47:53 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ static int	change_directory(char *new_dir, t_shell *shell, char *atl_dir)
 	{
 		perror("cd");
 		shell->exit_status = 1;
-		//free(new_dir);
 		return (1);
 	}
 	else
@@ -63,7 +62,6 @@ static int	change_directory(char *new_dir, t_shell *shell, char *atl_dir)
 		if (!current_dir)
 		{
 			shell->exit_status = 1;
-			//free(new_dir);
 			return (1);
 		}
 		else
