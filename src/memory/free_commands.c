@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_commands.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 16:42:58 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/16 15:12:21 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/16 19:37:24 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	free_command_list(t_command *cmd_list)
 	t_command	*current;
 	t_command	*next;
 
-	cmd_list = NULL;
+	//cmd_list = NULL;
 	current = cmd_list;
 	while (current)
 	{

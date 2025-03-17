@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 18:23:11 by ytavares          #+#    #+#             */
-/*   Updated: 2025/02/28 10:57:45 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/16 19:57:11 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,14 @@ static void	update_env_var(t_shell *shell, const char *name, const char *val)
 {
 	int		i;
 	char	*new_var;
+	char	*temp;
 
 	i = 0;
-	new_var = ft_strjoin(ft_strjoin(name, "="), val);
+	temp = ft_strjoin(name, "=");
+	if (!temp)
+		return ;
+	new_var = ft_strjoin(temp, val);
+	free(temp);
 	if (!new_var)
 		return ;
 	while (shell->env_copy[i])
@@ -42,26 +47,36 @@ static void	update_env_var(t_shell *shell, const char *name, const char *val)
 static int	change_directory(char *new_dir, t_shell *shell, char *atl_dir)
 {
 	char	*current_dir;
-
+	int		result;
+	
+	result = 0;
 	if (chdir(new_dir) != 0)
 	{
 		perror("cd");
 		shell->exit_status = 1;
-		free(new_dir);
+		//free(new_dir);
 		return (1);
 	}
-	current_dir = getcwd(NULL, 0);
-	if (!current_dir)
+	else
 	{
-		shell->exit_status = 1;
-		free(new_dir);
-		return (1);
+		current_dir = getcwd(NULL, 0);
+		if (!current_dir)
+		{
+			shell->exit_status = 1;
+			//free(new_dir);
+			return (1);
+		}
+		else
+		{
+			update_env_var(shell, "OLDPWD", atl_dir);
+			update_env_var(shell, "PWD", new_dir);
+			free(current_dir);
+			shell->exit_status = 0;
+			return (0);	
+		}
 	}
-	update_env_var(shell, "OLDPWD", atl_dir);
-	update_env_var(shell, "PWD", new_dir);
-	free(current_dir);
-	shell->exit_status = 0;
-	return (0);
+	free(new_dir);
+	return (result);
 }
 
 static int	handle_no_args(t_shell *shell, char **new_path_dir)
@@ -90,6 +105,7 @@ int	the_cd(char **args, t_shell *shell)
 {
 	char	*new_path_dir;
 	char	store_atl_dir[1024];
+	int		the_result;
 
 	if (!shell || !args)
 		return (1);
@@ -109,8 +125,10 @@ int	the_cd(char **args, t_shell *shell)
 		if (!new_path_dir)
 		{
 			shell->exit_status = 1;
-			return (free(new_path_dir), 1);
+			return (1);
 		}
 	}
-	return (change_directory(new_path_dir, shell, store_atl_dir));
+	the_result = change_directory(new_path_dir, shell, store_atl_dir);
+	free(new_path_dir);
+	return (the_result);
 }

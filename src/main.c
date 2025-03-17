@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 14:14:15 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/16 14:25:43 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/16 19:34:48 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ void	cleanup_shell(t_shell *shell)
 {
 	t_command	*current;
 
-	debug_fd_tracker(shell);
 	current = shell->commands;
 	while (current)
 	{
