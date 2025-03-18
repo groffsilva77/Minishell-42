@@ -3,7 +3,7 @@ NAME = minishell
 
 #compile and flags
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3
+CFLAGS = -Wall -Wextra -Werror
 
 #include (.h)
 INCLUDES = -I$(INCLUDE_DIR) -I$(LIBFT_DIR)
@@ -59,6 +59,7 @@ SRCS = $(SRCS_DIR)/main.c \
 	   $(EXECUTION_DIR)/redirect.c \
 	   $(EXECUTION_DIR)/heredoc.c \
 	   $(EXECUTION_DIR)/track_fds.c \
+	   $(EXECUTION_DIR)/track_fds_utils.c \
 
 #.c to .o
 OBJS = $(SRCS:.c=.o)

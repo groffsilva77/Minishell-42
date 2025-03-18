@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:14:26 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/17 19:15:21 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/18 13:07:36 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,8 +157,6 @@ void		hand_pipe(const char *input, int *i, t_token **tokens);
 void		hand_spc_chars(const char *input, int *i, int *start,
 				t_token **tokens);
 
-void		finalize_token(const char *input, int *i, int *start,
-				t_token **tokens);
 void		process_special_chars(const char *input, int *i, int *start,
 				t_token **tokens);
 void		handle_word(const char *input, int *i, int *start,

@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 14:26:49 by ytavares          #+#    #+#             */
-/*   Updated: 2025/03/17 18:45:59 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/18 13:03:20 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,7 @@ char	*remove_quotes(const char *str)
 			result[j++] = str[i];
 		i++;
 	}
-	result[j] = '\0';
-	return (result);
+	return (result[j] = '\0', result);
 }
 
 int	handle_arg(t_command **atl_cmd, t_token *tokens, t_shell *shell)
@@ -87,15 +86,10 @@ int	handle_arg(t_command **atl_cmd, t_token *tokens, t_shell *shell)
 	temp = ft_realloc_array((*atl_cmd)->args, (*atl_cmd)->argument_count + 1,
 			clean_value, shell);
 	if (!temp)
-	{
-		ft_putstr_fd("Error: Memory allocation failed in realloc array\n", 2);
-		free(clean_value);
-		return (-1);
-	}
-	(*atl_cmd)->args = temp;
-	(*atl_cmd)->argument_count++;
-	free(clean_value);
-	return (0);
+		return (ft_putstr_fd("Error: Memory allocation failed in realloc array\n",
+			2), free(clean_value), -1);
+	return ((*atl_cmd)->args = temp, (*atl_cmd)->argument_count++,
+			free(clean_value), 0);
 }
 
 t_command	*parse_tokens(t_token *tokens, t_shell *shell)
@@ -107,7 +101,6 @@ t_command	*parse_tokens(t_token *tokens, t_shell *shell)
 	atl_cmd = NULL;
 	while (tokens)
 	{
-		printf("Token: %s\n", tokens->value);
 		if (ft_strncmp(tokens->value, "|", 1) == 0)
 			commands = handle_pipe(commands, &atl_cmd);
 		else if (ft_strchr("<>", tokens->value[0]))

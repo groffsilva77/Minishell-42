@@ -6,25 +6,11 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 14:55:50 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/17 16:57:20 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/18 13:03:56 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	is_fd_tracked(t_shell *shell, int fd)
-{
-	int	i;
-
-	i = 0;
-	while (i < shell->fd_tracker.count)
-	{
-		if (shell->fd_tracker.fds[i] == fd)
-			return (1);
-		i++;
-	}
-	return (0);
-}
 
 static int	process_heredoc_delimiter(char *delim)
 {

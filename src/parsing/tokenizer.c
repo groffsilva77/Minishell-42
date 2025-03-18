@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 14:18:53 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/17 19:53:53 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/18 12:11:18 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,15 +85,9 @@ void	process_current_char(t_shell *shell, const char *input,
 			}
 		}
 		else if (data->quote == input[data->i])
-		{
 			data->quote = 0;
-			word_data = (t_word_data){input, data->word_start,
-                data->i - data->word_start + 1, tokens};
-			process_word(shell, &word_data);
-			data->in_word = 0;
-		}
 	}
-	if (!data->quote && !is_whitespace(input[data->i]) && !ft_strchr("|<>", input[data->i]))
+	else if (!data->quote && !is_whitespace(input[data->i]) && !ft_strchr("|<>", input[data->i]))
 	{
 		if (!data->in_word)
 		{

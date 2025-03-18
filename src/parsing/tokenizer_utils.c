@@ -6,26 +6,11 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 13:42:32 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/11 16:46:12 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/18 13:07:29 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	finalize_token(const char *input, int *i, int *start, t_token **tokens)
-{
-	char	*token;
-
-	if (*i > *start)
-	{
-		token = copy_substr(input, *start, *i - *start);
-		if (token)
-		{
-			add_token(tokens, token, 0, 0);
-			free(token);
-		}
-	}
-}
 
 void	handle_word(const char *input, int *i, int *start, t_token **tokens)
 {
