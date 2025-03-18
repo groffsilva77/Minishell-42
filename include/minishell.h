@@ -6,7 +6,7 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:14:26 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/17 18:29:55 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/03/18 13:09:36 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ typedef struct s_word_data
 	int			start;
 	int			len;
 	t_token		**tokens;
-}	t_word_d;
+}	t_word_data;
 
 void			close_all_unused_fds(t_shell *shell, t_command *cmd);
 int				is_fd_tracked(t_shell *shell, int fd);

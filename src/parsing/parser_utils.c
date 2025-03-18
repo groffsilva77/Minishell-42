@@ -6,7 +6,7 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 16:06:21 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/17 12:30:25 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/03/18 13:58:40 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,18 @@ void	add_command(t_command **commands, t_command *new_cmd)
 			atl = atl->next;
 		atl->next = new_cmd;
 	}
+}
+
+t_command	*create_or_get_command(t_command *atl_cmd)
+{
+	if (!atl_cmd)
+		atl_cmd = create_command();
+	return (atl_cmd);
+}
+
+t_command	*handle_pipe(t_command *commands, t_command **atl_cmd)
+{
+	add_command(&commands, *atl_cmd);
+	*atl_cmd = NULL;
+	return (commands);
 }

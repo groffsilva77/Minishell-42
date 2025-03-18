@@ -6,7 +6,7 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 16:39:05 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/17 12:47:20 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/03/18 13:31:25 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static void	parent_process(int *fd_in, int *pipe_fd, t_shell *shell)
 		*fd_in = -1;
 }
 
-static void	wait_children(t_shell *shell)
+static void	wait_children(t_shell *shell) //
 {
 	int	status;
 	int	last_pid;
@@ -64,7 +64,7 @@ static void	wait_children(t_shell *shell)
 	signal(SIGINT, sigint_handler);
 }
 
-static void	execute_the_command(t_command *cmd, int *fd_in, t_shell *shell)
+static void	execute_the_command(t_command *cmd, int *fd_in, t_shell *shell) //
 {
 	int		pipe_fd[2];
 	pid_t	pid;
@@ -74,7 +74,6 @@ static void	execute_the_command(t_command *cmd, int *fd_in, t_shell *shell)
 	if (cmd->is_heredoc)
 	{
 		cmd->heredoc_fd = handle_heredoc(cmd, shell);
-		printf("After handle_heredoc, heredoc_fd = %d\n", cmd->heredoc_fd);
 		if (cmd->heredoc_fd < 0)
 		{
 			shell->exit_status = 130;
@@ -107,19 +106,16 @@ void	execute_pipeline(t_command *cmd, t_shell *shell)
 		execute_the_command(cmd, &fd_in, shell);
 		cmd = cmd->next;
 	}
-	printf("Before wait_children, tracked FDs: ");
-    for (int i = 0; i < shell->fd_tracker.count; i++)
-        printf("%d ", shell->fd_tracker.fds[i]);
-    printf("\n");
+	printf("Before wait_children, tracked FDs: "); //
+	for (int i = 0; i < shell->fd_tracker.count; i++) //
+        printf("%d ", shell->fd_tracker.fds[i]); //
+    printf("\n"); //
 	wait_children(shell);
 	current = cmd;
 	while (current)
 	{
 		if (current->is_heredoc && current->heredoc_fd >= 0)
-		{
 			close_and_untrack_fd(shell, &current->heredoc_fd);
-			printf("Closed heredoc_fd %d after wait\n", current->heredoc_fd);
-		}
 		current = current->next;
 	}
 }

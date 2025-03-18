@@ -6,23 +6,11 @@
 /*   By: ytavares <ytavares@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 14:14:15 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/16 19:34:48 by ytavares         ###   ########.fr       */
+/*   Updated: 2025/03/18 13:07:48 by ytavares         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	debug_fd_tracker(t_shell *shell)
-{
-	int	i;
-
-	printf("=== DEBUG: Descritores abertos no rastreador ===\n");
-	for (i = 0; i < shell->fd_tracker.count; i++)
-    {
-        printf("FD[%d]: %d\n", i, shell->fd_tracker.fds[i]);
-    }
-    printf("=== FIM DEBUG ===\n");
-}
 
 void	cleanup_shell(t_shell *shell)
 {
