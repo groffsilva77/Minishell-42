@@ -6,73 +6,17 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 14:18:53 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/18 12:11:18 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/19 17:08:40 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	process_quotes(char *word, int len, int *has_squotes, int *has_dquotes)
+static void	handle_word_characters(t_shell *shell, const char *input,
+					t_tokenize_data *data, t_token **tokens)
 {
-	int	i;
-
-	i = -1;
-	*has_squotes = 0;
-	*has_dquotes = 0;
-	while (++i < len)
-	{
-		if (word[i] == '\'')
-			*has_squotes = 1;
-		else if (word[i] == '"')
-			*has_dquotes = 1;
-	}
-}
-
-void	process_word(t_shell *shell, t_word_data *data)
-{
-	char	*word;
-	int		has_squotes;
-	int		has_dquotes;
-
 	(void)shell;
-	word = copy_substr(data->input, data->start, data->len);
-	if (!word)
-		return ;
-	process_quotes(word, data->len, &has_squotes, &has_dquotes);
-	if (has_squotes)
-		add_token(data->tokens, word, 1, 0);
-	else if (has_dquotes)
-		add_token(data->tokens, word, 0, 1);
-	else
-		add_token(data->tokens, word, 0, 0);
-	free(word);
-}
-
-void	handle_special_char(const char *input, int i, t_token **tokens)
-{
-	char	*special;
-
-	if ((input[i] == '<' && input[i + 1] == '<')
-		|| (input[i] == '>' && input[i + 1] == '>'))
-	{
-		special = copy_substr(input, i, 2);
-		add_token(tokens, special, 0, 0);
-		free(special);
-		i++;
-	}
-	else
-	{
-		special = copy_substr(input, i, 1);
-		add_token(tokens, special, 0, 0);
-		free(special);
-	}
-}
-
-void	process_current_char(t_shell *shell, const char *input,
-		t_tokenize_data *data, t_token **tokens)
-{
-	t_word_data	word_data;
-
+	(void)tokens;
 	if (input[data->i] == '\'' || input[data->i] == '"')
 	{
 		if (!data->quote)
@@ -87,7 +31,8 @@ void	process_current_char(t_shell *shell, const char *input,
 		else if (data->quote == input[data->i])
 			data->quote = 0;
 	}
-	else if (!data->quote && !is_whitespace(input[data->i]) && !ft_strchr("|<>", input[data->i]))
+	else if (!data->quote && !is_whitespace(input[data->i])
+		&& !ft_strchr("|<>", input[data->i]))
 	{
 		if (!data->in_word)
 		{
@@ -95,7 +40,14 @@ void	process_current_char(t_shell *shell, const char *input,
 			data->in_word = 1;
 		}
 	}
-	else if (!data->quote && ft_strchr("|<>", input[data->i]))
+}
+
+static void	handle_special_and_whitespace(t_shell *shell, const char *input,
+	t_tokenize_data *data, t_token **tokens)
+{
+	t_word_data	word_data;
+
+	if (!data->quote && ft_strchr("|<>", input[data->i]))
 	{
 		if (data->in_word)
 		{
@@ -116,21 +68,34 @@ void	process_current_char(t_shell *shell, const char *input,
 	}
 }
 
+void	process_current_char(t_shell *shell, const char *input,
+	t_tokenize_data *data, t_token **tokens)
+{
+	handle_word_characters(shell, input, data, tokens);
+	handle_special_and_whitespace(shell, input, data, tokens);
+}
+
+static void	init_tokenize_data(t_tokenize_data *data, t_token **tokens)
+{
+	*tokens = NULL;
+	data->i = 0;
+	data->word_start = 0;
+	data->in_word = 0;
+	data->quote = 0;
+}
+
 t_token	*tokenize(t_shell *shell, const char *input)
 {
 	t_token			*tokens;
 	t_tokenize_data	data;
 	t_word_data		word_data;
 
-	tokens = NULL;
-	data.i = 0;
-	data.word_start = 0;
-	data.in_word = 0;
-	data.quote = 0;
+	init_tokenize_data(&data, &tokens);
 	while (input[data.i])
 	{
 		process_current_char(shell, input, &data, &tokens);
-		data.i++;
+		if (input[data.i])
+			data.i++;
 	}
 	if (data.in_word)
 	{
@@ -139,12 +104,11 @@ t_token	*tokenize(t_shell *shell, const char *input)
 		process_word(shell, &word_data);
 	}
 	if (data.quote)
-    {
-        ft_putstr_fd("minishell: unexpected EOF while looking for matching `", 2);
-        ft_putchar_fd(data.quote, 2);
-        ft_putstr_fd("'\n", 2);
-        free_token_list(tokens);
-        return (NULL);
-    }
+	{
+		ft_putstr_fd("minishell: unexpected EOF while looking for matching `",
+			2);
+		ft_putchar_fd(data.quote, 2);
+		return (ft_putstr_fd("'\n", 2), free_token_list(tokens), NULL);
+	}
 	return (tokens);
 }

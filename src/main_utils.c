@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 17:46:45 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/17 18:44:19 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/19 12:06:13 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,18 @@ t_command	*process_input(char *input, t_shell *shell)
 	if (!validate_syntax(tokens, shell))
 	{
 		free_token_list(tokens);
+		shell->exit_status = 2;
 		return (NULL);
 	}
+	if (shell->commands)
+		free_command_list(shell->commands);
 	shell->commands = parse_tokens(tokens, shell);
 	free_token_list(tokens);
-	if (shell->commands)
-	{
-		execute_single_command(shell->commands, shell);
-		return (shell->commands);
-	}
-	shell->exit_status = 2;
+	if (!shell->commands)
+		return (shell->exit_status = 2, NULL);
+	execute_single_command(shell->commands, shell);
+	free_command_list(shell->commands);
+	shell->commands = NULL;
 	return (NULL);
 }
 
@@ -74,9 +76,6 @@ static void	handle_input(t_shell *shell, char *input)
 		return ;
 	}
 	commands = process_input(input, shell);
-	if (commands)
-		free_command_list(commands);
-	shell->commands = NULL;
 	shell->expand[0] = '\0';
 	free(input);
 }
@@ -84,7 +83,7 @@ static void	handle_input(t_shell *shell, char *input)
 void	shell_loop(t_shell *shell)
 {
 	char	*input;
-	int		store_exit;
+	int		exit_status;
 
 	while (1)
 	{
@@ -95,10 +94,9 @@ void	shell_loop(t_shell *shell)
 		if (!input)
 		{
 			write(1, "exit\n", 5);
-			store_exit = shell->exit_status;
-			rl_clear_history();
-			free_shell(shell);
-			exit(store_exit);
+			exit_status = shell->exit_status;
+			cleanup_shell(shell);
+			exit(exit_status);
 		}
 		if (get_signal_state() == SIGINT)
 		{

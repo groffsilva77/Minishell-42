@@ -6,32 +6,21 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 16:39:05 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/18 13:02:43 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/19 14:52:27 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	parent_process(int *fd_in, int *pipe_fd, t_shell *shell)
-{
-	if (*fd_in != -1)
-		close_and_untrack_fd(shell, fd_in);
-	if (pipe_fd[1] != -1)
-		close_and_untrack_fd(shell, &pipe_fd[1]);
-	if (pipe_fd[0] != -1)
-		*fd_in = pipe_fd[0];
-	else
-		*fd_in = -1;
-}
-
 static void	wait_children(t_shell *shell)
 {
 	int	status;
 	int	last_pid;
-	int	count = 0;
+	int	count;
 
 	signal(SIGINT, SIG_IGN);
 	last_pid = wait(&status);
+	count = 0;
 	while (last_pid > 0)
 	{
 		count++;
@@ -47,6 +36,20 @@ static void	wait_children(t_shell *shell)
 		last_pid = wait(&status);
 	}
 	signal(SIGINT, sigint_handler);
+}
+
+static void	setup_pipe_and_fork(t_command *cmd, int *pipe_fd,
+				t_shell *shell, pid_t *pid)
+{
+	if (cmd->next && pipe(pipe_fd) < 0)
+		return (perror("pipe"));
+	if (pipe_fd[0] != -1)
+		track_fd(shell, pipe_fd[0]);
+	if (pipe_fd[1] != -1)
+		track_fd(shell, pipe_fd[1]);
+	*pid = fork();
+	if (*pid < 0)
+		return (perror("fork"));
 }
 
 static void	execute_the_command(t_command *cmd, int *fd_in, t_shell *shell)
@@ -65,15 +68,7 @@ static void	execute_the_command(t_command *cmd, int *fd_in, t_shell *shell)
 			return ;
 		}
 	}
-	if (cmd->next && pipe(pipe_fd) < 0)
-		return (perror("pipe"));
-	if (pipe_fd[0] != -1)
-		track_fd(shell, pipe_fd[0]);
-	if (pipe_fd[1] != -1)
-		track_fd(shell, pipe_fd[1]);
-	pid = fork();
-	if (pid < 0)
-		return (perror("fork"));
+	setup_pipe_and_fork(cmd, pipe_fd, shell, &pid);
 	if (pid == 0)
 		child_process(cmd, fd_in, pipe_fd, shell);
 	else

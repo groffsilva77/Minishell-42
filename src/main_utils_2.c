@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 12:58:40 by ytavares          #+#    #+#             */
-/*   Updated: 2025/03/15 17:33:08 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/19 11:33:00 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,8 @@ void	free_shell(t_shell *shell)
 
 	if (!shell)
 		return ;
-	if (shell->expand)
-		free(shell->expand);
-	if (shell->sbstr)
-		free(shell->sbstr);
+	free(shell->expand);
+	free(shell->sbstr);
 	if (shell->env_copy)
 		free_env(shell->env_copy);
 	current = shell->memory;
@@ -94,6 +92,7 @@ t_shell	*init_shell(char **env)
 		return (NULL);
 	}
 	shell->memory = NULL;
+	shell->commands = NULL;
 	shell->env_copy = duplicate_env(env);
 	if (!shell->env_copy)
 	{
@@ -102,6 +101,5 @@ t_shell	*init_shell(char **env)
 		free(shell);
 		return (NULL);
 	}
-	shell->exit_status = 0;
-	return (shell);
+	return (shell->exit_status = 0, shell);
 }

@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 15:36:22 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/12 13:27:06 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/19 13:54:25 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ int	execute_builtin(t_command *cmd, t_shell *shell)
 	if (!cmd->args[0])
 		return (0);
 	if (cmd->output_file || cmd->input_file || cmd->is_heredoc)
-		if (handle_redirections(cmd) < 0)
-			return (1);
+		if (handle_redirections(cmd, shell) < 0)
+			exit_process(shell, 1);
 	if (ft_strcmp(cmd->args[0], "cd") == 0)
 		return (the_cd(&cmd->args[0], shell));
 	if (ft_strcmp(cmd->args[0], "echo") == 0)

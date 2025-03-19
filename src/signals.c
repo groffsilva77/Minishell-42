@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 17:55:28 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/14 15:23:16 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/19 15:33:16 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,4 +48,5 @@ void	setup_signal_handlers(void)
 	sigaction(SIGINT, &sig, NULL);
 	sig.sa_handler = SIG_IGN;
 	sigaction(SIGQUIT, &sig, NULL);
+	sigaction(SIGTERM, &sig, NULL);
 }

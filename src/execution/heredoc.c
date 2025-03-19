@@ -6,45 +6,11 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 14:55:50 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/18 13:03:56 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/19 16:42:18 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static int	process_heredoc_delimiter(char *delim)
-{
-	int		expand_vars;
-	size_t	len;
-
-	expand_vars = 1;
-	len = ft_strlen(delim);
-	if (len >= 2 && (delim[0] == '\'' || delim[0] == '"')
-		&& delim[0] == delim[len - 1])
-	{
-		delim[len - 1] = '\0';
-		ft_memmove(delim, delim + 1, len);
-		expand_vars = 0;
-	}
-	return (expand_vars);
-}
-
-static void	process_heredoc_line(char *line, int pipe_write_fd,
-				t_shell *shell, int	expand_vars)
-{
-	char	*expanded_line;
-
-	expanded_line = expand_tokens(shell, line, expand_vars);
-	free(line);
-	if (!expanded_line)
-	{
-		close(pipe_write_fd);
-		exit(1);
-	}
-	write(pipe_write_fd, expanded_line, ft_strlen(expanded_line));
-	write(pipe_write_fd, "\n", 1);
-	free(expanded_line);
-}
 
 static void	heredoc_child_process(int pipe_write_fd, char *delim,
 				t_shell *shell)
@@ -67,10 +33,11 @@ static void	heredoc_child_process(int pipe_write_fd, char *delim,
 		process_heredoc_line(line, pipe_write_fd, shell, expand_vars);
 	}
 	close(pipe_write_fd);
-	exit(0);
+	exit_process(shell, 0);
 }
 
-static int	heredoc_parent_process(pid_t child_pid, int pipe_read_fd, t_shell *shell)
+static int	heredoc_parent_process(pid_t child_pid, int pipe_read_fd,
+					t_shell *shell)
 {
 	int					status;
 	struct sigaction	old_act;
@@ -96,15 +63,10 @@ static int	heredoc_parent_process(pid_t child_pid, int pipe_read_fd, t_shell *sh
 	return (pipe_read_fd);
 }
 
-int	handle_heredoc(t_command *cmd, t_shell *shell)
+static int	start_heredoc_child(t_command *cmd, t_shell *shell)
 {
 	pid_t	pid;
-	int		result;
 
-	if (pipe(cmd->heredoc_pipe) == -1)
-		return (perror("heredoc pipe failed"), -1);
-	track_fd(shell, cmd->heredoc_pipe[0]);
-	track_fd(shell, cmd->heredoc_pipe[1]);	
 	pid = fork();
 	if (pid == -1)
 	{
@@ -117,18 +79,30 @@ int	handle_heredoc(t_command *cmd, t_shell *shell)
 	{
 		close_and_untrack_fd(shell, &cmd->heredoc_pipe[0]);
 		heredoc_child_process(cmd->heredoc_pipe[1], cmd->heredoc_delim, shell);
-		exit(1);
+		exit_process(shell, 1);
 	}
-	else
+	return (pid);
+}
+
+int	handle_heredoc(t_command *cmd, t_shell *shell)
+{
+	pid_t	pid;
+	int		result;
+
+	if (pipe(cmd->heredoc_pipe) == -1)
+		return (perror("heredoc pipe failed"), -1);
+	track_fd(shell, cmd->heredoc_pipe[0]);
+	track_fd(shell, cmd->heredoc_pipe[1]);
+	pid = start_heredoc_child(cmd, shell);
+	if (pid == -1)
+		return (-1);
+	close_and_untrack_fd(shell, &cmd->heredoc_pipe[1]);
+	result = heredoc_parent_process(pid, cmd->heredoc_pipe[0], shell);
+	if (result < 0)
 	{
-		close_and_untrack_fd(shell, &cmd->heredoc_pipe[1]);
-		result = heredoc_parent_process(pid, cmd->heredoc_pipe[0], shell);
-		if (result < 0)
-		{
-			close_and_untrack_fd(shell, &cmd->heredoc_pipe[0]);
-			return (-1);
-		}
-		cmd->heredoc_fd = result;
+		close_and_untrack_fd(shell, &cmd->heredoc_pipe[0]);
+		return (-1);
 	}
+	cmd->heredoc_fd = result;
 	return (cmd->heredoc_fd);
 }

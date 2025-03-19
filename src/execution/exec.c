@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:53:16 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/18 11:20:32 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/19 13:30:14 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static int	execute_builtin_command(t_command *cmd, t_shell *shell)
 	return (execute_builtin(cmd, shell));
 }
 
-static void	handle_cmd_not_found(t_command *cmd)
+static int	handle_cmd_not_found(t_command *cmd)
 {
 	struct stat	st;
 
@@ -41,10 +41,10 @@ static void	handle_cmd_not_found(t_command *cmd)
 	}
 	else
 		ft_putendl_fd(": command not found", 2);
-	exit(127);
+	return (127);
 }
 
-static void	handle_execve_failure(t_command *cmd, char *path)
+static int	handle_execve_failure(t_command *cmd, char *path)
 {
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(cmd->args[0], 2);
@@ -55,25 +55,26 @@ static void	handle_execve_failure(t_command *cmd, char *path)
 	else
 		ft_putendl_fd(": execve failed", 2);
 	free(path);
-	exit(126);
+	return (126);
 }
 
-void	execute_command(t_command *cmd, t_shell *shell)
+int	execute_command(t_command *cmd, t_shell *shell)
 {
 	char	*path;
 	int		status;
 
 	if (!validate_command(cmd))
-		exit(EXIT_FAILURE);
+		exit_process(shell, 127);
 	if (is_builtin(cmd->args[0]))
 	{
 		status = execute_builtin_command(cmd, shell);
-		return ;
+		return (status);
 	}
 	path = find_command_path(cmd->args[0], shell->env_copy);
 	if (!path)
-		handle_cmd_not_found(cmd);
+		return (handle_cmd_not_found(cmd));
 	if (execve(path, cmd->args, shell->env_copy) < 0)
-		handle_execve_failure(cmd, path);
+		return (handle_execve_failure(cmd, path));
 	free(path);
+	return (0);
 }

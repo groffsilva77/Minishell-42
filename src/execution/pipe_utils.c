@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:08:57 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/18 12:16:59 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/19 14:52:34 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,19 @@ static void	setup_pipes(t_command *cmd, int *fd_in, int *pipe_fd)
 		close(pipe_fd[0]);
 }
 
+void	exit_process(t_shell *shell, int exit_code)
+{
+	cleanup_shell(shell);
+	exit(exit_code);
+}
+
 void	child_process(t_command *cmd, int *fd_in, int *pipe_fd,
 			t_shell *shell)
 {
 	int	i;
 
-	if (handle_redirections(cmd) < 0)
-		exit(1);
+	if (handle_redirections(cmd, shell) < 0)
+		exit_process(shell, 1);
 	setup_heredoc(cmd);
 	setup_pipes(cmd, fd_in, pipe_fd);
 	i = 3;
@@ -65,7 +71,18 @@ void	child_process(t_command *cmd, int *fd_in, int *pipe_fd,
 		i++;
 	}
 	if (!cmd->args || !cmd->args[0])
-		exit(0);
-	execute_command(cmd, shell);
-	exit(shell->exit_status);
+		exit_process(shell, 0);
+	exit_process(shell, execute_command(cmd, shell));
+}
+
+void	parent_process(int *fd_in, int *pipe_fd, t_shell *shell)
+{
+	if (*fd_in != -1)
+		close_and_untrack_fd(shell, fd_in);
+	if (pipe_fd[1] != -1)
+		close_and_untrack_fd(shell, &pipe_fd[1]);
+	if (pipe_fd[0] != -1)
+		*fd_in = pipe_fd[0];
+	else
+		*fd_in = -1;
 }

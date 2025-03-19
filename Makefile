@@ -3,7 +3,7 @@ NAME = minishell
 
 #compile and flags
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g3
 
 #include (.h)
 INCLUDES = -I$(INCLUDE_DIR) -I$(LIBFT_DIR)
@@ -40,14 +40,15 @@ SRCS = $(SRCS_DIR)/main.c \
 	   $(BUILTINS_DIR)/env.c \
 	   $(BUILTINS_DIR)/exit.c \
 	   $(BUILTINS_DIR)/export.c \
+	   $(BUILTINS_DIR)/export_utils.c \
 	   $(BUILTINS_DIR)/pwd.c \
 	   $(BUILTINS_DIR)/unset.c \
+	   $(PARSING_DIR)/handle_the_arg.c \
 	   $(PARSING_DIR)/parser.c \
 	   $(PARSING_DIR)/parser_utils.c \
 	   $(PARSING_DIR)/tokenizer.c \
 	   $(PARSING_DIR)/tokenizer_utils.c \
 	   $(PARSING_DIR)/tokenizer_utils_2.c \
-	   $(PARSING_DIR)/tokenizer_utils_3.c \
 	   $(PARSING_DIR)/var_expansion.c \
 	   $(PARSING_DIR)/var_expansion_utils.c \
 	   $(PARSING_DIR)/validate_syntax.c \
@@ -58,6 +59,7 @@ SRCS = $(SRCS_DIR)/main.c \
 	   $(EXECUTION_DIR)/pipe.c \
 	   $(EXECUTION_DIR)/redirect.c \
 	   $(EXECUTION_DIR)/heredoc.c \
+	   $(EXECUTION_DIR)/heredoc_utils.c \
 	   $(EXECUTION_DIR)/track_fds.c \
 	   $(EXECUTION_DIR)/track_fds_utils.c \
 

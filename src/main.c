@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 14:14:15 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/17 16:57:18 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/19 17:04:39 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,16 @@ void	cleanup_shell(t_shell *shell)
 		current = current->next;
 	}
 	close_all_tracked_fds(shell);
-	free_command_list(shell->commands);
-	ft_free(shell);
+	if (shell->commands)
+		free_command_list(shell->commands);
+	free_shell(shell);
 	rl_clear_history();
 }
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_shell	*shell;
+	int		exit_status;
 
 	(void)argc;
 	(void)argv;
@@ -40,7 +42,8 @@ int	main(int argc, char **argv, char **envp)
 		return (1);
 	setup_signal_handlers();
 	init_fd_tracker(shell);
+	exit_status = shell->exit_status;
 	shell_loop(shell);
 	cleanup_shell(shell);
-	return (0);
+	return (exit_status);
 }

@@ -6,7 +6,7 @@
 /*   By: ggroff-d <ggroff-d@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 16:15:22 by ggroff-d          #+#    #+#             */
-/*   Updated: 2025/03/15 18:38:00 by ggroff-d         ###   ########.fr       */
+/*   Updated: 2025/03/19 11:33:08 by ggroff-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,7 @@ char	**ft_realloc_array(char **array, int new_size, char *new_value,
 	{
 		new_array[i] = fts_strdup(shell, new_value);
 		if (!new_array[i])
-		{
-			free(new_array);
-			return (NULL);
-		}
+			return (free(new_array), NULL);
 		i++;
 	}
 	new_array[i] = NULL;
